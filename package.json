@@ -1,0 +1,38 @@
+{
+  "name": "kat-client-proxies",
+  "version": "0.0.0",
+  "description": "A library of client proxies for various apis",
+  "main": "index.js",
+  "engines": {
+    "node": "^6.2.0"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Financial-Times/kat-client-proxies.git"
+  },
+  "keywords": [
+    "myft",
+    "api",
+    "client"
+  ],
+  "author": "kat@ft.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Financial-Times/kat-client-proxies/issues"
+  },
+  "homepage": "https://github.com/Financial-Times/kat-client-proxies#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "fetch-mock": "^5.5.0",
+    "isomorphic-fetch": "^2.2.1",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "@financial-times/n-logger": "^5.4.8",
+    "dotenv": "^2.0.0",
+    "fetch-retry-or-die": "0.0.4"
+  }
+}
