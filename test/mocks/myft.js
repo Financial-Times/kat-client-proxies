@@ -40,7 +40,7 @@ const getUrlMapping = [
 	{
 		matcher: `^${baseUrl}/license/${uuids.invalidLicence}/preference/email-digest/preferred/user`,
 		response : {
-			status: 404
+			body : []
 		}
 	},
 	{
