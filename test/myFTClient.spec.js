@@ -1,13 +1,14 @@
 'use-strict';
 
+const myFT = require('../index').myFTClient;
+
 const fetchMock = require('fetch-mock');
 const expect = require("chai").expect;
-const clientProxies = require('../index');
 const config = require('../lib/config');
 const mocks = require('./mocks');
 const errors = require('../lib/errors');
 const env = require('./env');
-const myFT = clientProxies.myFTClient;
+
 
 describe('myFT Client proxy', function () {
 
