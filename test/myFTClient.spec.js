@@ -14,7 +14,9 @@ const env = require('./env');
 
 describe('myFT Client proxy', function () {
 
-	if (env.MYFT_USE_MOCK_API) {
+	const mockAPI = env.MYFT_USE_MOCK_API;
+
+	if (mockAPI) {
 		mocks.registerMyFT();
 	}
 
@@ -49,12 +51,12 @@ describe('myFT Client proxy', function () {
 
 		it('Should get an array of users who have an EmailDigestPreference set', done => {
 			myFT.getUsersWithEmailDigestPreference(mocks.uuids.validLicence)
-			.then((users)=>{
+			.then(users=>{
 				expect(users).to.be.an.instanceof(Array);
-				expect(users).to.have.lengthOf(2);
-				users.forEach((user)=>{
-					expect(user).to.have.ownProperty('uuid');
-				});
+				if (mockAPI) {
+					expect(users).to.have.lengthOf(2);
+				}
+				expectOwnProperties(users, ['uuid']);
 				done();
 			})
 			.catch((err)=>{
@@ -85,7 +87,9 @@ describe('myFT Client proxy', function () {
 					expectOwnProperties(followResponse.user,['properties']);
 					expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
 					expect(followResponse.items).to.be.an.instanceof(Array);
-					expect(followResponse.items).to.have.lengthOf(5);
+					if (mockAPI) {
+							expect(followResponse.items).to.have.lengthOf(5);
+					}
 					expectOwnProperties(followResponse.items, ['uuid', 'name']);
 					done();
 				})
