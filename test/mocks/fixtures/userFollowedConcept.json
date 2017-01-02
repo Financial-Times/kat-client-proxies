@@ -1,0 +1,84 @@
+{
+  "user": {
+    "_id": 407764,
+    "labels": [
+      "User",
+      "Flagged"
+    ],
+    "properties": {
+      "nodeRank": 8,
+      "uuid": "9289e58a-2e61-42c7-a92f-4bfc170634e4"
+    }
+  },
+  "total": 5,
+  "items": [
+    {
+      "nodeRank": 133,
+      "name": "GB Airways",
+      "taxonomy": "organisations",
+      "uuid": "TnN0ZWluX09OX0FGVE1fT05fMTMxMTYz-T04=",
+      "_rel": {
+        "byTool": "KMT",
+        "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+        "created": 1480504389943,
+        "count": 1,
+        "updated": 1480504389943,
+        "byUser": "9289e58a-2e61-42c7-a92f-4bfc170634e4"
+      }
+    },
+    {
+      "nodeRank": 66986,
+      "name": "World",
+      "taxonomy": "sections",
+      "type": "Concept",
+      "uuid": "MQ==-U2VjdGlvbnM=",
+      "_rel": {
+        "created": 1480005819072,
+        "count": 1,
+        "updated": 1480005819072
+      }
+    },
+    {
+      "nodeRank": 12153,
+      "name": "Donald Trump",
+      "taxonomy": "people",
+      "uuid": "TnN0ZWluX1BOXzIwMDkwNjIzXzE2MTY=-UE4=",
+      "_rel": {
+        "byTool": "KMT",
+        "created": 1478779683484,
+        "count": 1,
+        "updated": 1478779683484,
+        "byUser": "9289e58a-2e61-42c7-a92f-4bfc170634e4"
+      }
+    },
+    {
+      "nodeRank": 996,
+      "name": "Bucharest",
+      "taxonomy": "regions",
+      "uuid": "TnN0ZWluX0dMX0FGVE1fR0xfMTk5ODA=-R0w=",
+      "_rel": {
+        "byTool": "KMT",
+        "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+        "created": 1478248058858,
+        "count": 1,
+        "updated": 1478248058858,
+        "byUser": "729e2a70-ee89-41fc-b0aa-c735bfd44a71"
+      }
+    },
+    {
+      "nodeRank": 1931,
+      "name": "Finland",
+      "taxonomy": "regions",
+      "uuid": "TnN0ZWluX0dMX0ZJ-R0w=",
+      "_rel": {
+        "byTool": "KMT",
+        "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+        "created": 1478104572623,
+        "count": 1,
+        "updated": 1478104572623,
+        "byUser": "2a41e5cb-491a-4192-a253-eda16533a0c6"
+      }
+    }
+	],
+  "count": 5
+}

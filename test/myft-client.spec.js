@@ -1,18 +1,22 @@
 'use-strict';
 
+const myFT = require('../lib/myFTClient');
+
 require('isomorphic-fetch');
 const fetchMock = require('fetch-mock');
 const expect = require("chai").expect;
 
 const clientProxies = require('../index');
 const config = require('../lib/config');
-const myFT = require('../lib/myft-client');
 const mocks = require('./mocks');
 const errors = require('../lib/errors');
+const env = require('./env');
 
 describe('myFT Client proxy', function () {
 
-	mocks.registerMyFT();
+	if (env.MYFT_USE_MOCK_API) {
+		mocks.registerMyFT();
+	}
 
 	this.timeout('30s');
 
@@ -21,6 +25,7 @@ describe('myFT Client proxy', function () {
 		it('Should get an EmailDigestPreference for a valid user uuid', done => {
 			myFT.getEmailDigestPreference(mocks.uuids.validUser)
 			.then((edp)=>{
+				expectOwnProperties(edp, ['uuid', 'name']);
 				expect(edp.name).to.equal('Digest email');
 				expect(edp.uuid).to.equal('email-digest');
 				done();
@@ -43,7 +48,7 @@ describe('myFT Client proxy', function () {
 		});
 
 		it('Should get an array of users who have an EmailDigestPreference set', done => {
-			myFT.getUsersWithEmailDigestPreference(mocks.uuids.validLicense)
+			myFT.getUsersWithEmailDigestPreference(mocks.uuids.validLicence)
 			.then((users)=>{
 				expect(users).to.be.an.instanceof(Array);
 				expect(users).to.have.lengthOf(2);
@@ -57,9 +62,50 @@ describe('myFT Client proxy', function () {
 			});
 		});
 
+		it('Should throw a NotFoundError error for an invalid licence uuid', done => {
+			myFT.getUsersWithEmailDigestPreference(mocks.uuids.invalidLicence)
+			.then((users)=>{
+				done('Nothing thrown');
+			})
+			.catch((err)=>{
+				expect(err).to.be.an.instanceof(errors.NotFoundError);
+				expect(err.name).to.equal('NotFoundError');
+				done();
+			});
+		});
+
 	});
 
 	describe('Followed concepts', function(){
 
+		it ('Should get an array of concepts followed by a user', done => {
+				myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
+				.then((followResponse)=>{
+					expectOwnProperties(followResponse,['user', 'items', 'total']);
+					expectOwnProperties(followResponse.user,['properties']);
+					expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
+					expect(followResponse.items).to.be.an.instanceof(Array);
+					expect(followResponse.items).to.have.lengthOf(5);
+					expectOwnProperties(followResponse.items, ['uuid', 'name']);
+					done();
+				})
+				.catch ((err)=>{
+					done(err);
+				});
+		});
+
 	});
+
 });
+
+function expectOwnProperties(thing, properties) {
+	properties.forEach(property=>{
+		if (thing instanceof Array){
+			thing.forEach((instance)=>{
+				expect(instance).to.have.ownProperty(property);
+			});
+		} else {
+			expect(thing).to.have.ownProperty(property);
+		}
+	});
+}

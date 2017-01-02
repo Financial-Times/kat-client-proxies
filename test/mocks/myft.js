@@ -17,15 +17,11 @@ function register() {
 	});
 }
 
-const validEmailDigestPreferences = '{"name":"Digest email","uuid":"email-digest","_rel":{"byTool":"KMT","created":1480504162182,"timezone":"Europe/London","count":1,"type":"daily","updated":1480504162182,"byUser":"8619e7a0-65b7-446b-9931-4197b3fe0cbf"}}';
-
-const validUsersArray = '[{"uuid":"09795e3b-d0ef-4e8e-b8ff-5dece7f29cf7"},{"uuid":"c099605f-94ea-40bb-b5ea-e666fd3996b9"}]';
-
 const getUrlMapping = [
 	{
 		matcher: `^${baseUrl}/user/${uuids.validUser}/preferred/preference/email-digest`,
 		response : {
-			body: validEmailDigestPreferences
+			body: require('./fixtures/EmailDigestPreference')
 		}
 	},
 	{
@@ -36,9 +32,21 @@ const getUrlMapping = [
 		}
 	},
 	{
-		matcher: `^${baseUrl}/license/${uuids.validLicense}/preference/email-digest/preferred/user`,
+		matcher: `^${baseUrl}/license/${uuids.validLicence}/preference/email-digest/preferred/user`,
 		response : {
-			body: validUsersArray
+			body: require('./fixtures/uuidArray')
+		}
+	},
+	{
+		matcher: `^${baseUrl}/license/${uuids.invalidLicence}/preference/email-digest/preferred/user`,
+		response : {
+			status: 404
+		}
+	},
+	{
+		matcher: `^${baseUrl}/user/${uuids.validUser}/followed/concept`,
+		response : {
+			body: require('./fixtures/userFollowedConcept')
 		}
 	}
 ];
