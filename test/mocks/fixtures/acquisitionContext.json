@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "signupContext": {
+        "accessLicenceId": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+        "allowedEmailDomains": [],
+        "restrictEmailDomains": false,
+        "blockedEmailDomains": [],
+        "restrictBlockedEmailDomains": false,
+        "signupWelcomeText": null
+      },
+      "barrierContext": {
+        "promptUserToJoin": false,
+        "subHeading": null,
+        "bodyText": null,
+        "redirectUrl": null,
+        "displaySignupUrl": false
+      },
+      "id": "70b5cae7-43c6-48c3-910a-7b1fb3b50308",
+      "name": "KAT Context name",
+      "allowedIPRanges": [],
+      "restrictIPRanges": false,
+      "displayName": "KAT Context displayName",
+      "logoUrl": null,
+      "marketable": true,
+      "lastUpdated": "2016-09-02T11:15:35.496Z"
+    }
+  ]
+}

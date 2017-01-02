@@ -9,6 +9,7 @@ const mocks = require('./mocks');
 const errors = require('../lib/errors');
 const env = require('./env');
 
+const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
 
 describe('myFT Client proxy', function () {
 
@@ -97,15 +98,3 @@ describe('myFT Client proxy', function () {
 	});
 
 });
-
-function expectOwnProperties(thing, properties) {
-	properties.forEach(property=>{
-		if (thing instanceof Array){
-			thing.forEach((instance)=>{
-				expect(instance).to.have.ownProperty(property);
-			});
-		} else {
-			expect(thing).to.have.ownProperty(property);
-		}
-	});
-}
