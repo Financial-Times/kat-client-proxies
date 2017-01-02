@@ -1,11 +1,13 @@
 'use-strict';
 
-const MYFT_USER_UUID = process.env.MYFT_USER_UUID;
-const MYFT_LICENCE_UUID = process.env.MYFT_LICENCE_UUID;
-const MYFT_USE_MOCK_API = process.env.MYFT_USE_MOCK_API || true;
+require('dotenv').config();
+
+const USE_MOCK_API = process.env.USE_MOCK_API === 'false' ? false : true;
+const USER_UUID = USE_MOCK_API ? null : process.env.USER_UUID ;
+const LICENCE_UUID = USE_MOCK_API ? null : process.env.LICENCE_UUID;
 
 module.exports = {
-	MYFT_USER_UUID,
-	MYFT_LICENCE_UUID,
-	MYFT_USE_MOCK_API
+	USER_UUID,
+	LICENCE_UUID,
+	USE_MOCK_API
 };

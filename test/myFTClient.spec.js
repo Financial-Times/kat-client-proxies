@@ -1,30 +1,25 @@
 'use-strict';
 
-const myFT = require('../lib/myFTClient');
-
-require('isomorphic-fetch');
 const fetchMock = require('fetch-mock');
 const expect = require("chai").expect;
-
 const clientProxies = require('../index');
 const config = require('../lib/config');
 const mocks = require('./mocks');
 const errors = require('../lib/errors');
 const env = require('./env');
+const myFT = clientProxies.myFTClient;
 
 describe('myFT Client proxy', function () {
 
-	const mockAPI = env.MYFT_USE_MOCK_API;
-
+	const mockAPI = env.USE_MOCK_API;
 	if (mockAPI) {
 		mocks.registerMyFT();
 	}
-
 	this.timeout('30s');
 
 	describe('Email preferences', function () {
 
-		it('Should get an EmailDigestPreference for a valid user uuid', done => {
+		it('Should get an EmailDigestPreference for a valid user uuid', (done) => {
 			myFT.getEmailDigestPreference(mocks.uuids.validUser)
 			.then((edp)=>{
 				expectOwnProperties(edp, ['uuid', 'name']);
@@ -51,7 +46,7 @@ describe('myFT Client proxy', function () {
 
 		it('Should get an array of users who have an EmailDigestPreference set', done => {
 			myFT.getUsersWithEmailDigestPreference(mocks.uuids.validLicence)
-			.then(users=>{
+			.then((users)=>{
 				expect(users).to.be.an.instanceof(Array);
 				if (mockAPI) {
 					expect(users).to.have.lengthOf(2);
@@ -64,15 +59,15 @@ describe('myFT Client proxy', function () {
 			});
 		});
 
-		it('Should throw a NotFoundError error for an invalid licence uuid', done => {
+		it('Should return an empty array for an invalid licence uuid', done => {
 			myFT.getUsersWithEmailDigestPreference(mocks.uuids.invalidLicence)
 			.then((users)=>{
-				done('Nothing thrown');
+				expect(users).to.be.an.instanceof(Array);
+				expect(users).to.have.lengthOf(0);
+				done();
 			})
 			.catch((err)=>{
-				expect(err).to.be.an.instanceof(errors.NotFoundError);
-				expect(err.name).to.equal('NotFoundError');
-				done();
+				done(err);
 			});
 		});
 
