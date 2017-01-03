@@ -3,10 +3,10 @@
 const fetchMock = require('fetch-mock');
 const config = require('../../lib/config');
 const env = require('../env');
+const uuids = require('./uuids');
 
 function register() {
 	urlMapping.forEach((mapping)=>{
-		console.log(mapping);
 		fetchMock.mock(
 				mapping.matcher,
 				mapping.response,
@@ -21,8 +21,11 @@ const urlMapping = [
 	{
 		matcher: `${env.FT_API_URL}`,
 		response : {
-			status: 401
+			status: 200
 		},
+		options : {
+			headers : {'X-API-KEY': uuids.validKey}
+		}
 	},
 	{
 		matcher: `${env.FT_API_URL}`,
@@ -30,8 +33,14 @@ const urlMapping = [
 			status: 401
 		},
 		options : {
-			headers : { headers }
+			headers : {'X-API-KEY': uuids.invalidKey}
 		}
+	},
+	{
+		matcher: `${env.FT_API_URL}`,
+		response : {
+			status: 401
+		},
 	}
 ];
 
