@@ -1,7 +1,7 @@
 'use strict';
 
 const uuids = require('./uuids');
-const registerMyFT = require('./myft');
+const registerMyFT = require('./myFT');
 const registerAcquisitionCtx = require('./acquisitionCtx');
 const registerstatusErrors = require('./statusErrors');
 

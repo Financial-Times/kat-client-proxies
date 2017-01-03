@@ -23,6 +23,15 @@ const urlMapping = [
 		response : {
 			status: 401
 		},
+	},
+	{
+		matcher: `${env.FT_API_URL}`,
+		response : {
+			status: 401
+		},
+		options : {
+			headers : { headers }
+		}
 	}
 ];
 
