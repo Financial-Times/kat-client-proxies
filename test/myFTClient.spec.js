@@ -6,7 +6,7 @@ const fetchMock = require('fetch-mock');
 const expect = require("chai").expect;
 const config = require('../lib/config');
 const mocks = require('./mocks');
-const errors = require('../lib/errors');
+const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
 
 const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
@@ -40,7 +40,7 @@ describe('myFT Client proxy', function () {
 				done('Nothing thrown');
 			})
 			.catch((err)=>{
-				expect(err).to.be.an.instanceof(errors.NotFoundError);
+				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
 				expect(err.name).to.equal('NotFoundError');
 				done();
 			});

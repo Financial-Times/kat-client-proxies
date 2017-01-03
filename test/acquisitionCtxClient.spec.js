@@ -6,7 +6,7 @@ const fetchMock = require('fetch-mock');
 const expect = require("chai").expect;
 const config = require('../lib/config');
 const mocks = require('./mocks');
-const errors = require('../lib/errors');
+const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
 
 const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
