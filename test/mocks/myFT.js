@@ -48,5 +48,11 @@ const getUrlMapping = [
 		response : {
 			body: require('./fixtures/userFollowedConcept')
 		}
+	},
+	{
+		matcher: `${baseUrl}/group/${uuids.validLicence}/followed/concept`,
+		response : {
+			body: require('./fixtures/groupFollowedConcept')
+		}
 	}
 ];

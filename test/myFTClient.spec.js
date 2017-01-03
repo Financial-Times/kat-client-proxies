@@ -95,6 +95,24 @@ describe('myFT Client proxy', function () {
 				});
 		});
 
+		it ('Should get an array of concepts followed by a group', done => {
+				myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
+				.then((followResponse)=>{
+					expectOwnProperties(followResponse,['group', 'items', 'total']);
+					expectOwnProperties(followResponse.group,['properties']);
+					expect(followResponse.group.properties.uuid).to.equal(mocks.uuids.validLicence);
+					expect(followResponse.items).to.be.an.instanceof(Array);
+					if (mockAPI) {
+							expect(followResponse.items).to.have.lengthOf(1);
+					}
+					expectOwnProperties(followResponse.items, ['uuid', 'name', 'taxonomy']);
+					done();
+				})
+				.catch ((err)=>{
+					done(err);
+				});
+		});
+
 	});
 
 });
