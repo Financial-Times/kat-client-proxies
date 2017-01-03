@@ -19,13 +19,13 @@ function register() {
 
 const getUrlMapping = [
 	{
-		matcher: `^${baseUrl}?access-licence-id=${uuids.validLicence}`,
+		matcher: `${baseUrl}?access-licence-id=${uuids.validLicence}`,
 		response : {
 			body: require('./fixtures/acquisitionContext')
 		}
 	},
 	{
-		matcher: `^${baseUrl}?access-licence-id=${uuids.invalidLicence}`,
+		matcher: `${baseUrl}?access-licence-id=${uuids.invalidLicence}`,
 		response : {
 			body: {items:[]}
 		}

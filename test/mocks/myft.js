@@ -19,32 +19,32 @@ function register() {
 
 const getUrlMapping = [
 	{
-		matcher: `^${baseUrl}/user/${uuids.validUser}/preferred/preference/email-digest`,
+		matcher: `${baseUrl}/user/${uuids.validUser}/preferred/preference/email-digest`,
 		response : {
 			body: require('./fixtures/EmailDigestPreference')
 		}
 	},
 	{
-		matcher: `^${baseUrl}/user/${uuids.invalidUser}/preferred/preference/email-digest`,
+		matcher: `${baseUrl}/user/${uuids.invalidUser}/preferred/preference/email-digest`,
 		response : {
 			body: null,
 			status: 404
 		}
 	},
 	{
-		matcher: `^${baseUrl}/license/${uuids.validLicence}/preference/email-digest/preferred/user`,
+		matcher: `${baseUrl}/license/${uuids.validLicence}/preference/email-digest/preferred/user`,
 		response : {
 			body: require('./fixtures/uuidArray')
 		}
 	},
 	{
-		matcher: `^${baseUrl}/license/${uuids.invalidLicence}/preference/email-digest/preferred/user`,
+		matcher: `${baseUrl}/license/${uuids.invalidLicence}/preference/email-digest/preferred/user`,
 		response : {
 			body : []
 		}
 	},
 	{
-		matcher: `^${baseUrl}/user/${uuids.validUser}/followed/concept`,
+		matcher: `${baseUrl}/user/${uuids.validUser}/followed/concept`,
 		response : {
 			body: require('./fixtures/userFollowedConcept')
 		}
