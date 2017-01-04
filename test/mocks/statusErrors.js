@@ -41,6 +41,12 @@ const urlMapping = [
 		response : {
 			status: 401
 		},
+	},
+	{
+		matcher: `${env.FT_API_URL}/doesNotExist`,
+		response : {
+			status: 404
+		},
 	}
 ];
 

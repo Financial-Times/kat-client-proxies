@@ -13,72 +13,90 @@ describe('Status Error Parser', function () {
 
 	mocks.registerstatusErrors();
 
-	it('Should throw an NotAuthorisedError without any headers', (done) => {
-		fetch(env.FT_API_URL)
-		.then(res => {
-			statusErrors.parse(res);
-			done(new Error('Should have thrown an exception'));
-		})
-		.then((res)=>{
-			done(new Error('Should have thrown an exception'));
-		})
-		.catch(err => {
-			expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
-			done();
-		})
-		.catch(err => {
-			done(err);
+	describe('NotAuthorisedError', function () {
+
+		it('Should throw an NotAuthorisedError without any headers', (done) => {
+			fetch(env.FT_API_URL)
+			.then(res => {
+				statusErrors.parse(res);
+				done(new Error('Should have thrown an exception'));
+			})
+			.catch(err => {
+				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				done();
+			})
+			.catch(err => {
+				done(err);
+			});
 		});
+
+		it('Should throw an NotAuthorisedError without an X-API-KEY', (done) => {
+			fetch(env.FT_API_URL, config.fetchOptions)
+			.then(res => {
+				statusErrors.parse(res);
+				done(new Error('Should have thrown an exception'));
+			})
+			.then((res)=>{
+				done(new Error('Should have thrown an exception'));
+			})
+			.catch(err => {
+				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				done();
+			})
+			.catch(err => {
+				done(err);
+			});
+		});
+
+		it('Should throw an NotAuthorisedError with an invalid X-API-KEY', (done) => {
+			fetch(env.FT_API_URL, { headers: {'X-API-KEY': uuids.invalidKey }} )
+			.then(res => {
+				statusErrors.parse(res);
+				done(new Error('Should have thrown an exception'));
+			})
+			.then((res)=>{
+				done(new Error('Should have thrown an exception'));
+			})
+			.catch(err => {
+				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				done();
+			})
+			.catch(err => {
+				done(err);
+			});
+		});
+
+		it('Should not throw an NotAuthorisedError with a valid X-API-KEY', (done) => {
+			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':uuids.validKey}) });
+			fetch(env.FT_API_URL, options)
+			.then(res => {
+				statusErrors.parse(res);
+				done();
+			})
+			.catch(err => {
+				done(err);
+			});
+		});
+
 	});
 
-	it('Should throw an NotAuthorisedError without an X-API-KEY', (done) => {
-		fetch(env.FT_API_URL, config.fetchOptions)
-		.then(res => {
-			statusErrors.parse(res);
-			done(new Error('Should have thrown an exception'));
-		})
-		.then((res)=>{
-			done(new Error('Should have thrown an exception'));
-		})
-		.catch(err => {
-			expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
-			done();
-		})
-		.catch(err => {
-			done(err);
+	describe('NotFoundError', function () {
+
+		it('Should throw an NotFoundError when something doesn\'t exist', (done) => {
+			fetch(`${env.FT_API_URL}/doesNotExist`)
+			.then(res => {
+				statusErrors.parse(res);
+				done(new Error('Should have thrown an exception'));
+			})
+			.catch(err => {
+				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
+				done();
+			})
+			.catch(err => {
+				done(err);
+			});
 		});
+
+
 	});
-
-	it('Should throw an NotAuthorisedError with an invalid X-API-KEY', (done) => {
-		fetch(env.FT_API_URL, { headers: {'X-API-KEY': uuids.invalidKey }} )
-		.then(res => {
-			return statusErrors.parse(res);
-			done(new Error('Should have thrown an exception'));
-		})
-		.then((res)=>{
-			done(new Error('Should have thrown an exception'));
-		})
-		.catch(err => {
-			expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
-			done();
-		})
-		.catch(err => {
-			done(err);
-		});
-	});
-
-
-	it('Should not throw an NotAuthorisedError with a valid X-API-KEY', (done) => {
-		const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':uuids.validKey}) });
-		fetch(env.FT_API_URL, options)
-		.then(res => {
-			statusErrors.parse(res);
-			done();
-		})
-		.catch(err => {
-			done(err);
-		});
-	});
-
-
 });
