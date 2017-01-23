@@ -9,13 +9,23 @@ const uuids = require('./mocks/uuids');
 
 describe('Status Error Parser', function () {
 
+	const mockAPI = env.USE_MOCK_API;
+
+	before(function() {
+		mocks.registerStatusErrors();
+  });
 	this.timeout('3s');
 
-	mocks.registerstatusErrors();
+	after(function() {
+		if (mockAPI) {
+		require('fetch-mock').restore();
+		}
+  });
+
 
 	describe('NotAuthorisedError', function () {
 
-		it('Should throw an NotAuthorisedError without any headers', (done) => {
+		it('Should throw an NotAuthorisedError without any headers', function(done) {
 			fetch(env.FT_API_URL)
 			.then(res => {
 				statusErrors.parse(res);
@@ -30,7 +40,7 @@ describe('Status Error Parser', function () {
 			});
 		});
 
-		it('Should throw an NotAuthorisedError without an X-API-KEY', (done) => {
+		it('Should throw an NotAuthorisedError without an X-API-KEY', function(done) {
 			fetch(env.FT_API_URL, config.fetchOptions)
 			.then(res => {
 				statusErrors.parse(res);
@@ -48,7 +58,7 @@ describe('Status Error Parser', function () {
 			});
 		});
 
-		it('Should throw an NotAuthorisedError with an invalid X-API-KEY', (done) => {
+		it('Should throw an NotAuthorisedError with an invalid X-API-KEY', function(done) {
 			fetch(env.FT_API_URL, { headers: {'X-API-KEY': uuids.invalidKey }} )
 			.then(res => {
 				statusErrors.parse(res);
@@ -66,7 +76,7 @@ describe('Status Error Parser', function () {
 			});
 		});
 
-		it('Should not throw an NotAuthorisedError with a valid X-API-KEY', (done) => {
+		it('Should not throw an NotAuthorisedError with a valid X-API-KEY', function(done) {
 			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':uuids.validKey}) });
 			fetch(env.FT_API_URL, options)
 			.then(res => {
@@ -82,7 +92,7 @@ describe('Status Error Parser', function () {
 
 	describe('NotFoundError', function () {
 
-		it('Should throw an NotFoundError when something doesn\'t exist', (done) => {
+		it('Should throw an NotFoundError when something doesn\'t exist', function(done) {
 			fetch(`${env.FT_API_URL}/doesNotExist`)
 			.then(res => {
 				statusErrors.parse(res);

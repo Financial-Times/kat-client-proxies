@@ -1,11 +1,9 @@
 'use-strict';
 
 const acqCtx = require('../index').acquisitionCtxClient;
-
-const fetchMock = require('fetch-mock');
+const mocks = require('./mocks');
 const expect = require("chai").expect;
 const config = require('../lib/config');
-const mocks = require('./mocks');
 const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
 
@@ -15,10 +13,19 @@ const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
 describe('Acquisition Context Service Client', function () {
 
 	const mockAPI = env.USE_MOCK_API;
-	if (mockAPI) {
-		mocks.registerAcquisitionCtx();
-	}
-	this.timeout('30s');
+
+	before(function() {
+		if (mockAPI) {
+			mocks.registerAcquisitionCtx();
+		}
+	});
+	this.timeout('3s');
+
+	after(function() {
+		if (mockAPI) {
+			require('fetch-mock').restore();
+		}
+	});
 
 	describe('getContexts', function () {
 

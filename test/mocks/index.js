@@ -3,11 +3,11 @@
 const uuids = require('./uuids');
 const registerMyFT = require('./myFT');
 const registerAcquisitionCtx = require('./acquisitionCtx');
-const registerstatusErrors = require('./statusErrors');
+const registerStatusErrors = require('./statusErrors');
 
 module.exports = {
 	uuids,
 	registerMyFT,
 	registerAcquisitionCtx,
-	registerstatusErrors,
+	registerStatusErrors,
 };

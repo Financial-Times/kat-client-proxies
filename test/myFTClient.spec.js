@@ -1,11 +1,9 @@
 'use-strict';
 
 const myFT = require('../index').myFTClient;
-
-const fetchMock = require('fetch-mock');
+const mocks = require('./mocks');
 const expect = require("chai").expect;
 const config = require('../lib/config');
-const mocks = require('./mocks');
 const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
 
@@ -14,10 +12,19 @@ const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
 describe('myFT Client proxy', function () {
 
 	const mockAPI = env.USE_MOCK_API;
-	if (mockAPI) {
-		mocks.registerMyFT();
-	}
-	this.timeout('30s');
+
+	before(function() {
+		if (mockAPI) {
+			mocks.registerStatusErrors();
+		}
+  });
+	this.timeout('3s');
+
+	after(function() {
+		if (mockAPI) {
+			require('fetch-mock').restore();
+		}
+  });
 
 	describe('Email preferences', function () {
 
@@ -111,6 +118,25 @@ describe('myFT Client proxy', function () {
 				.catch ((err)=>{
 					done(err);
 				});
+		});
+
+	});
+
+	describe('Licence management', function(){
+
+		it ('Should get users registered to a licence', done=> {
+			myFT.getUsersForLicence(mocks.uuids.validLicence)
+			.then(usersResponse=>{
+				console.log(usersResponse);
+				expectOwnProperties(usersResponse, ['license', 'total', 'items']);
+				expect(usersResponse.items).to.be.an.instanceof(Array);
+				expectOwnProperties(usersResponse.items, ['uuid']);
+				// expect(usersResponse.items.length).to.be.atLeast(1);
+				done();
+			})
+			.catch (err => {
+				done(err);
+			});
 		});
 
 	});

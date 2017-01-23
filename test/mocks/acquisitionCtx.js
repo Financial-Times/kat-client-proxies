@@ -1,7 +1,5 @@
 'use-strict';
 
-
-const fetchMock = require('fetch-mock');
 const log = require('@financial-times/n-logger').default;
 const uuids = require('./uuids');
 const baseUrl = require('../../lib/config').acqCtxURL;
@@ -9,6 +7,7 @@ const baseUrl = require('../../lib/config').acqCtxURL;
 module.exports=register;
 
 function register() {
+	const fetchMock = require('fetch-mock');
 	getUrlMapping.forEach((mapping)=>{
 		fetchMock.mock(
 				mapping.matcher,

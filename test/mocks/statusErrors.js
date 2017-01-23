@@ -1,11 +1,11 @@
 'use strict';
 
-const fetchMock = require('fetch-mock');
 const config = require('../../lib/config');
 const env = require('../env');
 const uuids = require('./uuids');
 
 function register() {
+	const fetchMock = require('fetch-mock');
 	urlMapping.forEach((mapping)=>{
 		fetchMock.mock(
 				mapping.matcher,
