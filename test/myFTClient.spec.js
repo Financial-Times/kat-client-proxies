@@ -15,7 +15,7 @@ describe('myFT Client proxy', function () {
 
 	before(function() {
 		if (mockAPI) {
-			mocks.registerStatusErrors();
+			mocks.registerMyFT();
 		}
   });
 	this.timeout('3s');
@@ -127,11 +127,10 @@ describe('myFT Client proxy', function () {
 		it ('Should get users registered to a licence', done=> {
 			myFT.getUsersForLicence(mocks.uuids.validLicence)
 			.then(usersResponse=>{
-				console.log(usersResponse);
 				expectOwnProperties(usersResponse, ['license', 'total', 'items']);
 				expect(usersResponse.items).to.be.an.instanceof(Array);
 				expectOwnProperties(usersResponse.items, ['uuid']);
-				// expect(usersResponse.items.length).to.be.atLeast(1);
+				expect(usersResponse.items.length).to.be.at.least(1);
 				done();
 			})
 			.catch (err => {

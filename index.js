@@ -5,8 +5,10 @@ require('isomorphic-fetch');
 
 const myFTClient = require('./lib/myFTClient');
 const acquisitionCtxClient = require('./lib/acquisitionCtxClient');
+const userProfileClient = require('./lib/userProfileClient');
 
 module.exports={
 	myFTClient,
-	acquisitionCtxClient
+	acquisitionCtxClient,
+	userProfileClient
 };

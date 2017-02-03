@@ -1,0 +1,68 @@
+{
+  "license": {
+    "_id": 44590501,
+    "labels": [
+      "License"
+    ],
+    "properties": {
+      "kmtRegistrationDate": 1476454102636,
+      "updated": 1476454102851,
+      "uuid": "8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+    }
+  },
+  "total": 5,
+  "items": [
+    {
+      "uuid": "9289e58a-2e61-42c7-a92f-4bfc170634e4",
+      "_rel": {
+        "byTool": "KAT",
+        "created": 1478789739788,
+        "count": 1,
+        "updated": 1478789739788,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    },
+    {
+      "uuid": "40c48260-0f57-4017-a7e4-90e71902f74c",
+      "_rel": {
+        "byTool": "KAT",
+        "created": 1473677240014,
+        "count": 2,
+        "updated": 1476921639615,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    },
+    {
+      "nodeRank": 8,
+      "uuid": "2e0f0540-c517-41bb-9843-3f46f5ba1708",
+      "_rel": {
+        "byTool": "KMT",
+        "created": 1473677239949,
+        "count": 1,
+        "updated": 1473677239949,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    },
+    {
+      "uuid": "78dac1ba-d84f-4bf6-861f-cc1c37e754d4",
+      "_rel": {
+        "byTool": "KMT",
+        "created": 1473677239877,
+        "count": 1,
+        "updated": 1473677239877,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    },
+    {
+      "uuid": "653971cb-0e4b-4f42-8315-5485f3d1025d",
+      "_rel": {
+        "byTool": "KMT",
+        "created": 1473677239787,
+        "count": 1,
+        "updated": 1473677239787,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    }
+  ],
+  "count": 5
+}
