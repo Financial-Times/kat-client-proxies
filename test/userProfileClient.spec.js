@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const userProfile = require('../index').userProfileClient;
 const mocks = require('./mocks');

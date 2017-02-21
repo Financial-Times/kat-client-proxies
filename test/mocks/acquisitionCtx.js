@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const log = require('@financial-times/n-logger').default;
 const uuids = require('./uuids');

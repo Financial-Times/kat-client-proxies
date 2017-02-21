@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const myFT = require('../index').myFTClient;
 const mocks = require('./mocks');

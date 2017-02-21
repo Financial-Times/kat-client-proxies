@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const acqCtx = require('../index').acquisitionCtxClient;
 const mocks = require('./mocks');
