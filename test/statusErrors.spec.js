@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const mocks = require('./mocks');
 const config = require('../lib/config');
 const statusErrors = require('../lib/statusErrors');

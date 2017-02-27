@@ -40,19 +40,6 @@ describe('User Profile Service Client', function () {
 				done(err);
 			});
 		});
-
-		// it('Should get an empty Acquisition Context list for a invalid licence uuid', (done) => {
-		// 	acqCtx.getContexts({'access-licence-id':mocks.uuids.invalidLicence})
-		// 	.then((ctxList)=>{
-		// 		expect(ctxList).to.be.an.instanceof(Array);
-		// 		expect(ctxList).to.have.lengthOf(0);
-		// 		done();
-		// 	})
-		// 	.catch((err)=>{
-		// 		done(err);
-		// 	});
-		// });
-
 	});
 
 });

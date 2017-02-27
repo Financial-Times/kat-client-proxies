@@ -2,7 +2,7 @@
 
 const myFT = require('../index').myFTClient;
 const mocks = require('./mocks');
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const config = require('../lib/config');
 const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
