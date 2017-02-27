@@ -1,0 +1,40 @@
+{
+  "accessLicences": [
+    {
+      "id": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+      "creationDateTime": "2015-11-30T14:53:32.795Z",
+      "products": [
+        {
+          "code": "P2",
+          "name": "FT.com Premium"
+        }
+      ],
+      "issueReason": "Complimentary Access",
+      "links": [
+        {
+          "rel": "complimentary",
+          "href": "https://test.com/1234567890",
+          "id": "CA-12345678"
+        }
+      ],
+      "status": "active",
+      "seatLimit": 99999,
+      "ipAccessEnabled": false,
+      "ipAccessAddresses": [],
+      "lastUpdatedDateTime": "2017-02-27T16:21:22.296Z",
+      "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+      "seatsHref": [
+        {
+          "rel": "seats",
+          "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/seats"
+        }
+      ],
+      "adminsHref": [
+        {
+          "rel": "administrators",
+          "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/administrators"
+        }
+      ]
+    }
+	]
+}
