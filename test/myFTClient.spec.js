@@ -26,6 +26,11 @@ describe('myFT Client proxy', function () {
 		}
   });
 
+	it ('should have default properties', function(){
+		expectOwnProperties(myFT.followedProperties, ['byTool','byUser']);
+		expect(myFT.entityProperties[config.toolDateIdentifier]).to.be.a('string');
+	});
+
 	describe('Email preferences', function () {
 
 		it('Should get an EmailDigestPreference for a valid user uuid', (done) => {
@@ -123,6 +128,31 @@ describe('myFT Client proxy', function () {
 	});
 
 	describe('Licence management', function(){
+
+		it ('Should be able to get a valid licence', done=> {
+			myFT.getLicence(mocks.uuids.validLicence)
+			.then(resp=>{
+				console.log(JSON.stringify(resp));
+				expectOwnProperties(resp, ['uuid', '_rel']);
+				expect(resp.uuid).to.equal(mocks.uuids.validLicence);
+				done();
+			})
+			.catch (err => {
+				done(err);
+			});
+		});
+
+		it ('Should throw a NotFoundError for an invalid licence', done=> {
+			myFT.getLicence(mocks.uuids.invalidLicence)
+			.then(resp=>{
+				done(new Error(`Shouldn't have got a resp:${JSON.stringify(resp)}`));
+			})
+			.catch (err => {
+				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
+				done();
+			});
+		});
+
 
 		it ('Should get users registered to a licence', done=> {
 			myFT.getUsersForLicence(mocks.uuids.validLicence)
