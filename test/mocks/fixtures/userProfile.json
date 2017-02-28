@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "9289e58a-2e61-42c7-a92f-4bfc170634e4",
+      "email": null,
+      "title": null,
+      "firstName": null,
+      "lastName": null,
+      "primaryTelephone": null,
+      "homeAddress": {
+        "line1": null,
+        "line2": null,
+        "townCity": null,
+        "state": null,
+        "postcode": null,
+        "country": null
+      },
+      "marketing": {
+        "ftByEmail": false,
+        "ftByPost": false
+      },
+      "demographics": {
+        "industry": null,
+        "position": null,
+        "responsibility": null
+      },
+      "jobTitle": null,
+      "href": "/users/9289e58a-2e61-42c7-a92f-4bfc170634e4"
+    }
+  ]
+}

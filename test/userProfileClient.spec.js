@@ -16,7 +16,7 @@ describe('User Profile Service Client', function () {
 
 	before(function() {
 		if (mockAPI) {
-			// mocks.registeruserProfile();
+			mocks.registerUserProfile();
 		}
 	});
 	this.timeout('3s');
@@ -39,6 +39,17 @@ describe('User Profile Service Client', function () {
 			.catch((err)=>{
 				done(err);
 			});
+		});
+	});
+
+	it('Should get a null for an invalid email address', (done) => {
+		userProfile.getUUID(mocks.uuids.invalidUserEmail)
+		.then((userProfile)=>{
+			expect(userProfile).to.be.null;
+			done();
+		})
+		.catch((err)=>{
+			done(err);
 		});
 	});
 
