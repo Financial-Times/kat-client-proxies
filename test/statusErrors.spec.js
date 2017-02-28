@@ -35,7 +35,7 @@ describe('Status Error Parser', function () {
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
-				console.log(JSON.stringify({err}));
+				// console.log(JSON.stringify({err}));
 				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
 				done();
 			})
