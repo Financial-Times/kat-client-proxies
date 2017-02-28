@@ -12,26 +12,30 @@ describe('Status Error Parser', function () {
 	const mockAPI = env.USE_MOCK_API;
 
 	before(function() {
-		mocks.registerStatusErrors();
-  });
+		if (mockAPI) {
+			mocks.registerStatusErrors();
+		}
+	});
 	this.timeout('3s');
 
 	after(function() {
 		if (mockAPI) {
-		require('fetch-mock').restore();
+			require('fetch-mock').restore();
 		}
   });
 
+	let baseUrl = config.myFTURL;
 
 	describe('NotAuthorisedError', function () {
 
 		it('Should throw an NotAuthorisedError without any headers', function(done) {
-			fetch(env.FT_API_URL)
+			fetch(baseUrl)
 			.then(res => {
 				statusErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
+				console.log(JSON.stringify({err}));
 				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
 				done();
 			})
@@ -41,7 +45,7 @@ describe('Status Error Parser', function () {
 		});
 
 		it('Should throw an NotAuthorisedError without an X-API-KEY', function(done) {
-			fetch(env.FT_API_URL, config.fetchOptions)
+			fetch(baseUrl, config.fetchOptions)
 			.then(res => {
 				statusErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
@@ -59,7 +63,7 @@ describe('Status Error Parser', function () {
 		});
 
 		it('Should throw an NotAuthorisedError with an invalid X-API-KEY', function(done) {
-			fetch(env.FT_API_URL, { headers: {'X-API-KEY': uuids.invalidKey }} )
+			fetch(baseUrl, { headers: {'X-API-KEY': uuids.invalidKey }} )
 			.then(res => {
 				statusErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
@@ -76,12 +80,17 @@ describe('Status Error Parser', function () {
 			});
 		});
 
-		it('Should not throw an NotAuthorisedError with a valid X-API-KEY', function(done) {
-			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':uuids.validKey}) });
-			fetch(env.FT_API_URL, options)
+		it('should not throw an NotAuthorisedError with a valid X-API-KEY', function(done) {
+			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':config.myFTKey}) });
+			fetch(baseUrl, options)
 			.then(res => {
-				statusErrors.parse(res);
-				done();
+				try {
+					statusErrors.parse(res);
+					done();
+				} catch (err){
+					expect(err).to.not.be.an.instanceof(statusErrors.NotAuthorisedError);
+					done();
+				}
 			})
 			.catch(err => {
 				done(err);
@@ -93,7 +102,8 @@ describe('Status Error Parser', function () {
 	describe('NotFoundError', function () {
 
 		it('Should throw an NotFoundError when something doesn\'t exist', function(done) {
-			fetch(`${env.FT_API_URL}/doesNotExist`)
+			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':config.myFTKey}) });
+			fetch(`${baseUrl}/doesNotExist`, options)
 			.then(res => {
 				statusErrors.parse(res);
 				done(new Error('Should have thrown an exception'));

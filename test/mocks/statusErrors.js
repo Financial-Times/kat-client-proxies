@@ -19,16 +19,16 @@ const headers = Object.assign({}, config.fetchOptions.headers);
 
 const urlMapping = [
 	{
-		matcher: `${env.FT_API_URL}`,
+		matcher: `${config.myFTURL}`,
 		response : {
 			status: 200
 		},
 		options : {
-			headers : {'X-API-KEY': uuids.validKey}
+			headers : {'X-API-KEY': config.myFTKey}
 		}
 	},
 	{
-		matcher: `${env.FT_API_URL}`,
+		matcher: `${config.myFTURL}`,
 		response : {
 			status: 401
 		},
@@ -37,13 +37,13 @@ const urlMapping = [
 		}
 	},
 	{
-		matcher: `${env.FT_API_URL}`,
+		matcher: `${config.myFTURL}`,
 		response : {
 			status: 401
 		},
 	},
 	{
-		matcher: `${env.FT_API_URL}/doesNotExist`,
+		matcher: `${config.myFTURL}/doesNotExist`,
 		response : {
 			status: 404
 		},
