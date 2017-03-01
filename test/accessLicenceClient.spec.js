@@ -31,7 +31,7 @@ describe('Access Licence Service Client', function () {
 		it('Should get a list of Licence IDs for a valid UUID', (done) => {
 			accessLicence.getLicences({userid:mocks.uuids.validUser})
 			.then((licences)=>{
-				// console.log(JSON.stringify(licences));
+				console.log(JSON.stringify(licences));
 				expect(licences).to.be.an('array');
 				licences.forEach(licence=>{
 					expect(licence).to.have.ownProperty('id');
@@ -46,7 +46,7 @@ describe('Access Licence Service Client', function () {
 		it('Should get an empty array for a invalid user UUID', (done) => {
 			accessLicence.getLicences({userid:mocks.uuids.invalidUser})
 			.then((licences)=>{
-				// console.log(JSON.stringify(licences));
+				console.log(JSON.stringify(licences));
 				expect(licences).to.be.an('array');
 				expect(licences).to.have.lengthOf(0);
 				done();
