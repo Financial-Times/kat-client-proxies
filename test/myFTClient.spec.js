@@ -6,6 +6,7 @@ const expect = require('chai').expect;
 const config = require('../lib/config');
 const statusErrors = require('../lib/statusErrors');
 const env = require('./env');
+const uuid = require('uuid');
 
 const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
 
@@ -33,11 +34,28 @@ describe('myFT Client proxy', function () {
 
 	describe('Email preferences', function () {
 
+		it('Should set an EmailDigestPreference for a valid user uuid', (done) => {
+			let edpPref = { type: "daily", timezone:"Europe/London", byTool: "KAT", byUser: "8619e7a0-65b7-446b-9931-4197b3fe0cbf", isTest:true};
+			myFT.setEmailDigestPreference(mocks.uuids.validUser, edpPref)
+			.then((res)=>{
+				console.log(res);
+				myFT.getEmailDigestPreference(mocks.uuids.validUser)
+				.then((edp)=>{
+					expectOwnProperties(edp, ['uuid']);
+					expect(edp.uuid).to.equal('email-digest');
+					expect(edp["_rel"].isTest).to.equal(true);
+					done();
+				});
+			})
+			.catch((err)=>{
+				done(err);
+			});
+		});
+
 		it('Should get an EmailDigestPreference for a valid user uuid', (done) => {
 			myFT.getEmailDigestPreference(mocks.uuids.validUser)
 			.then((edp)=>{
-				expectOwnProperties(edp, ['uuid', 'name']);
-				expect(edp.name).to.equal('Digest email');
+				expectOwnProperties(edp, ['uuid']);
 				expect(edp.uuid).to.equal('email-digest');
 				done();
 			})
@@ -84,50 +102,28 @@ describe('myFT Client proxy', function () {
 				done(err);
 			});
 		});
-
-	});
-
-	describe('Followed concepts', function(){
-
-		it ('Should get an array of concepts followed by a user', done => {
-				myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
-				.then((followResponse)=>{
-					expectOwnProperties(followResponse,['user', 'items', 'total']);
-					expectOwnProperties(followResponse.user,['properties']);
-					expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
-					expect(followResponse.items).to.be.an.instanceof(Array);
-					if (mockAPI) {
-							expect(followResponse.items).to.have.lengthOf(5);
-					}
-					expectOwnProperties(followResponse.items, ['uuid', 'name']);
-					done();
-				})
-				.catch ((err)=>{
-					done(err);
-				});
-		});
-
-		it ('Should get an array of concepts followed by a group', done => {
-				myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
-				.then((followResponse)=>{
-					expectOwnProperties(followResponse,['group', 'items', 'total']);
-					expectOwnProperties(followResponse.group,['properties']);
-					expect(followResponse.group.properties.uuid).to.equal(mocks.uuids.validLicence);
-					expect(followResponse.items).to.be.an.instanceof(Array);
-					if (mockAPI) {
-							expect(followResponse.items).to.have.lengthOf(1);
-					}
-					expectOwnProperties(followResponse.items, ['uuid', 'name', 'taxonomy']);
-					done();
-				})
-				.catch ((err)=>{
-					done(err);
-				});
-		});
-
 	});
 
 	describe('Licence management', function(){
+		let userId = uuid();
+
+		it ('Should be able to add users to a licence', done=> {
+			myFT.addUsersToLicence(mocks.uuids.validLicence, userId)
+			.then(addResponse=>{
+				expect(addResponse).to.be.an.instanceof(Array);
+				myFT.getUsersForLicence(mocks.uuids.validLicence)
+				.then(getResponse=>{
+					expectOwnProperties(getResponse.items, ['uuid']);
+					expect(getResponse.items.length).to.be.at.least(1);
+					let users = getResponse.items.map(user=>user.uuid);
+					expect(users.indexOf(userId)).to.be.at.least(0);
+					done();
+				});
+			})
+			.catch(err => {
+				done(err);
+			});
+		});
 
 		it ('Should be able to get a valid licence', done=> {
 			myFT.getLicence(mocks.uuids.validLicence)
@@ -153,7 +149,6 @@ describe('myFT Client proxy', function () {
 			});
 		});
 
-
 		it ('Should get users registered to a licence', done=> {
 			myFT.getUsersForLicence(mocks.uuids.validLicence)
 			.then(usersResponse=>{
@@ -167,7 +162,65 @@ describe('myFT Client proxy', function () {
 				done(err);
 			});
 		});
+	});
 
+
+	describe('Followed concepts', function(){
+		it ('Should get an array of concepts followed by a user', done => {
+			myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
+			.then((followResponse)=>{
+				expectOwnProperties(followResponse,['user', 'items', 'total']);
+				expectOwnProperties(followResponse.user,['properties']);
+				expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
+				expect(followResponse.items).to.be.an.instanceof(Array);
+				if (mockAPI) {
+						expect(followResponse.items).to.have.lengthOf(5);
+				}
+				expectOwnProperties(followResponse.items, ['uuid']);
+				done();
+			})
+			.catch ((err)=>{
+				done(err);
+			});
+		});
+
+		it ('Should set and get concepts followed by a group', done => {
+			let relProps = myFT.followedProperties;
+			relProps.isTest = true;
+			relProps.byTool = 'myFTClient.spec';
+			myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, uuid(), relProps)
+			.then(()=>{
+				myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
+				.then((followResponse)=>{
+					console.log(JSON.stringify(followResponse));
+					expectOwnProperties(followResponse,['group', 'items', 'total']);
+					expectOwnProperties(followResponse.group,['properties']);
+					expect(followResponse.group.properties.uuid).to.equal(mocks.uuids.validLicence);
+					expect(followResponse.items).to.be.an.instanceof(Array);
+					if (mockAPI) {
+							expect(followResponse.items).to.have.lengthOf(1);
+					}
+					expectOwnProperties(followResponse.items, ['uuid']);
+					done();
+				});
+			})
+			.catch ((err)=>{
+				done(err);
+			});
+		});
+
+		it ('Can elect to follow some topics on behalf of a valid user', function(done){
+			let relProps = myFT.followedProperties;
+			relProps.isTest = true;
+			relProps.byTool = 'myFTClient.spec';
+			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, uuid(), relProps )
+			.then(addResp=>{
+				expect(addResp).to.be.an('array');
+				done();
+			}).catch(error=>{
+				done(error);
+			});
+		});
 	});
 
 });
