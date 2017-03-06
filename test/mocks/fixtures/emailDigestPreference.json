@@ -7,7 +7,8 @@
     "timezone": "Europe/London",
     "count": 1,
     "type": "daily",
+    "isTest": true,
     "updated": 1480504162182,
-    "byUser": "8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+    "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
   }
 }

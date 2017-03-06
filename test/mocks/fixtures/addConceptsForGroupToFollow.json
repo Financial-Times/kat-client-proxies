@@ -1,0 +1,14 @@
+[
+  {
+    "rel": {
+      "type": "followed",
+      "properties": {
+        "byTool": "myFTClient.spec",
+        "isTest": true,
+        "created": 1488795991267,
+        "count": 2,
+        "updated": 1488796001478
+      }
+    }
+  }
+]

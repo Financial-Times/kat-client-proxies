@@ -33,12 +33,10 @@ describe('myFT Client proxy', function () {
 	});
 
 	describe('Email preferences', function () {
-
 		it('Should set an EmailDigestPreference for a valid user uuid', (done) => {
 			let edpPref = { type: "daily", timezone:"Europe/London", byTool: "KAT", byUser: "8619e7a0-65b7-446b-9931-4197b3fe0cbf", isTest:true};
 			myFT.setEmailDigestPreference(mocks.uuids.validUser, edpPref)
 			.then((res)=>{
-				console.log(res);
 				myFT.getEmailDigestPreference(mocks.uuids.validUser)
 				.then((edp)=>{
 					expectOwnProperties(edp, ['uuid']);
@@ -116,7 +114,9 @@ describe('myFT Client proxy', function () {
 					expectOwnProperties(getResponse.items, ['uuid']);
 					expect(getResponse.items.length).to.be.at.least(1);
 					let users = getResponse.items.map(user=>user.uuid);
-					expect(users.indexOf(userId)).to.be.at.least(0);
+					if (!mockAPI) {
+						expect(users.indexOf(userId)).to.be.at.least(0);
+					};
 					done();
 				});
 			})
@@ -192,7 +192,6 @@ describe('myFT Client proxy', function () {
 			.then(()=>{
 				myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
 				.then((followResponse)=>{
-					console.log(JSON.stringify(followResponse));
 					expectOwnProperties(followResponse,['group', 'items', 'total']);
 					expectOwnProperties(followResponse.group,['properties']);
 					expect(followResponse.group.properties.uuid).to.equal(mocks.uuids.validLicence);
@@ -201,6 +200,9 @@ describe('myFT Client proxy', function () {
 							expect(followResponse.items).to.have.lengthOf(1);
 					}
 					expectOwnProperties(followResponse.items, ['uuid']);
+					followResponse.items.forEach(item=> {
+						expect(item.uuid).to.be.a('string');
+					});
 					done();
 				});
 			})
@@ -216,6 +218,15 @@ describe('myFT Client proxy', function () {
 			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, uuid(), relProps )
 			.then(addResp=>{
 				expect(addResp).to.be.an('array');
+				console.log(JSON.stringify(addResp));
+				addResp.forEach(resp=>{
+					expectOwnProperties(resp, ['rel']);
+					expectOwnProperties(resp.rel, ['properties', 'type']);
+				});
+				if (mockAPI) {
+					expect(addResp[0].rel.properties.byTool).to.equal(relProps.byTool);
+					expect(addResp[0].rel.properties.isTest).to.equal(relProps.isTest);
+				}
 				done();
 			}).catch(error=>{
 				done(error);

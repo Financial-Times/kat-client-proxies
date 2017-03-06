@@ -11,7 +11,16 @@ function register() {
 	getUrlMapping.forEach((mapping)=>{
 		fetchMock.mock(
 				mapping.matcher,
-				mapping.response
+				mapping.response,
+				{method:'GET'}
+		);
+	});
+
+	postUrlMapping.forEach((mapping)=>{
+		fetchMock.mock(
+				mapping.matcher,
+				mapping.response,
+				{method:'POST'}
 		);
 	});
 }
@@ -20,7 +29,7 @@ const getUrlMapping = [
 	{
 		matcher: `${baseUrl}/user/${uuids.validUser}/preferred/preference/email-digest`,
 		response : {
-			body: require('./fixtures/EmailDigestPreference')
+			body: require('./fixtures/emailDigestPreference')
 		}
 	},
 	{
@@ -59,7 +68,45 @@ const getUrlMapping = [
 		response : {
 			body: require('./fixtures/getLicenceMembers')
 		}
+	},
+	{
+		matcher: `${baseUrl}/license/${uuids.validLicence}`,
+		response : {
+			body: require('./fixtures/getLicence')
+		}
+	},
+	{
+		matcher: `${baseUrl}/license/${uuids.invalidLicence}`,
+		response : {
+			body: null,
+			status: 404
+		}
+	},
+];
+
+const postUrlMapping = [
+	{
+		matcher: `${baseUrl}/user/${uuids.validUser}/followed/concept`,
+		response : {
+			body: require('./fixtures/addConceptsForUserToFollow')
+		}
+	},
+	{
+		matcher: `${baseUrl}/user/${uuids.validUser}/preferred/preference`,
+		response : {
+			body: require('./fixtures/setPreferredPreference')
+		}
+	},
+	{
+		matcher: `${baseUrl}/license/${uuids.validLicence}/member/user`,
+		response : {
+			body: require('./fixtures/addUserToLicence')
+		}
+	},
+	{
+		matcher: `${baseUrl}/group/${uuids.validLicence}/followed/concept`,
+		response : {
+			body: require('./fixtures/addConceptsForGroupToFollow')
+		}
 	}
-
-
 ];
