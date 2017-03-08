@@ -7,6 +7,7 @@
     "node": "^6.2.0"
   },
   "scripts": {
+    "lint": "./node_modules/.bin/eslint lib",
     "test": "mocha test"
   },
   "repository": {
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/Financial-Times/kat-client-proxies#readme",
   "devDependencies": {
+    "eslint": "~3.7.1",
     "chai": "^3.5.0",
     "fetch-mock": "^5.5.0",
     "isomorphic-fetch": "^2.2.1",
