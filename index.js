@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config({silent: true});
-require('isomorphic-fetch');
+require('fetch-retry-or-die');
 
 const myFTClient = require('./lib/myFTClient');
 const acquisitionCtxClient = require('./lib/acquisitionCtxClient');
