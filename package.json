@@ -36,6 +36,7 @@
   "dependencies": {
     "@financial-times/n-logger": "^5.4.8",
     "dotenv": "^2.0.0",
-    "fetch-retry-or-die": "0.0.4"
+    "fetch-retry-or-die": "0.0.4",
+    "aws-sdk": "^2.5.4"
   }
 }
