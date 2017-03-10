@@ -37,7 +37,7 @@ describe('myFT Client proxy', function () {
 			let edpPref = { type: "daily", timezone:"Europe/London", byTool: "KAT", byUser: "8619e7a0-65b7-446b-9931-4197b3fe0cbf", isTest:true};
 			myFT.setEmailDigestPreference(mocks.uuids.validUser, edpPref)
 			.then((res)=>{
-				myFT.getEmailDigestPreference(mocks.uuids.validUser)
+				return myFT.getEmailDigestPreference(mocks.uuids.validUser)
 				.then((edp)=>{
 					expectOwnProperties(edp, ['uuid']);
 					expect(edp.uuid).to.equal('email-digest');
@@ -109,7 +109,7 @@ describe('myFT Client proxy', function () {
 			myFT.addUsersToLicence(mocks.uuids.validLicence, userId)
 			.then(addResponse=>{
 				expect(addResponse).to.be.an.instanceof(Array);
-				myFT.getUsersForLicence(mocks.uuids.validLicence)
+				return myFT.getUsersForLicence(mocks.uuids.validLicence)
 				.then(getResponse=>{
 					expectOwnProperties(getResponse.items, ['uuid']);
 					expect(getResponse.items.length).to.be.at.least(1);
@@ -164,20 +164,22 @@ describe('myFT Client proxy', function () {
 		});
 	});
 
-
 	describe('Followed concepts', function(){
 		it ('Should get an array of concepts followed by a user', done => {
-			myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
-			.then((followResponse)=>{
-				expectOwnProperties(followResponse,['user', 'items', 'total']);
-				expectOwnProperties(followResponse.user,['properties']);
-				expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
-				expect(followResponse.items).to.be.an.instanceof(Array);
-				if (mockAPI) {
-						expect(followResponse.items).to.have.lengthOf(5);
-				}
-				expectOwnProperties(followResponse.items, ['uuid']);
-				done();
+			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, mocks.uuids.concept)
+			.then(()=>{
+				return myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
+				.then((followResponse)=>{
+					expectOwnProperties(followResponse,['user', 'items', 'total']);
+					expectOwnProperties(followResponse.user,['properties']);
+					expect(followResponse.user.properties.uuid).to.equal(mocks.uuids.validUser);
+					expect(followResponse.items).to.be.an.instanceof(Array);
+					if (mockAPI) {
+							expect(followResponse.items).to.have.lengthOf(5);
+					}
+					expectOwnProperties(followResponse.items, ['uuid']);
+					done();
+				});
 			})
 			.catch ((err)=>{
 				done(err);
@@ -188,9 +190,9 @@ describe('myFT Client proxy', function () {
 			let relProps = myFT.followedProperties;
 			relProps.isTest = true;
 			relProps.byTool = 'myFTClient.spec';
-			myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, uuid(), relProps)
+			myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, mocks.uuids.concept, relProps)
 			.then(()=>{
-				myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
+				return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
 				.then((followResponse)=>{
 					expectOwnProperties(followResponse,['group', 'items', 'total']);
 					expectOwnProperties(followResponse.group,['properties']);
@@ -215,10 +217,9 @@ describe('myFT Client proxy', function () {
 			let relProps = myFT.followedProperties;
 			relProps.isTest = true;
 			relProps.byTool = 'myFTClient.spec';
-			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, uuid(), relProps )
+			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, mocks.uuids.concept, relProps )
 			.then(addResp=>{
 				expect(addResp).to.be.an('array');
-				console.log(JSON.stringify(addResp));
 				addResp.forEach(resp=>{
 					expectOwnProperties(resp, ['rel']);
 					expectOwnProperties(resp.rel, ['properties', 'type']);
@@ -232,6 +233,33 @@ describe('myFT Client proxy', function () {
 				done(error);
 			});
 		});
-	});
 
+		it ('Can remove follow topics on behalf of a valid user', function(done){
+			let relProps = myFT.followedProperties;
+			relProps.isTest = true;
+			relProps.byTool = 'myFTClient.spec';
+			myFT.addConceptsFollowedByUser(mocks.uuids.validUser, mocks.uuids.concept, relProps )
+			.then(addResp=>{
+				return myFT.removeConceptsFollowedByUser(mocks.uuids.validUser, mocks.uuids.concept)
+				.then(removeResp=>{
+					return myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
+					.then(conceptsResp=>{
+						if (!mockAPI){
+							let conceptIds = conceptsResp.items.map(item=>item.uuid);
+							expect(conceptIds.indexOf(mocks.uuids.concept)).to.equal(-1);
+						}
+						done();
+					})
+					.catch(error=>{
+						expect(error).to.be.an.instanceof(statusErrors.NotFoundError);
+						done();
+					});
+				});
+			})
+			.catch(error=>{
+				done(error);
+			});
+		});
+
+	});
 });
