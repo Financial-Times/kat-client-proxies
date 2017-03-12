@@ -15,6 +15,8 @@ const invalidKey = '08032ca5-9197-4b3b-8810-0a81d31c1eb8';
 const validUserEmail = env.USER_EMAIL || 'dan.murphy@ft.com';
 const invalidUserEmail = env.INVALID_EMAIL || 'v.lenin@ft.com';
 
+const concept = 'TnN0ZWluX09OX0ZvcnR1bmVDb21wYW55X0FBUEw=-T04=';
+
 module.exports = {
 	validUser,
 	validUserEmail,
@@ -23,5 +25,6 @@ module.exports = {
 	invalidLicence,
 	validKey,
 	invalidKey,
-	invalidUserEmail
+	invalidUserEmail,
+	concept
 };

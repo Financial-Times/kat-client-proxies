@@ -1,0 +1,17 @@
+[
+  {
+    "rel": {
+      "type": "preferred",
+      "properties": {
+        "byTool": "KAT",
+        "isTest": true,
+        "created": 1480504162182,
+        "timezone": "Europe/London",
+        "count": 11,
+        "type": "daily",
+        "updated": 1480504162182,
+        "byUser": "2e0f0540-c517-41bb-9843-3f46f5ba1708"
+      }
+    }
+  }
+]
