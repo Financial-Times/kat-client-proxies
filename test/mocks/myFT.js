@@ -31,6 +31,19 @@ const getUrlMapping = [
 		}
 	},
 	{
+		matcher: `${baseUrl}/user/${uuids.validUser}/preferred/preference`,
+		response : {
+			body: require('./fixtures/EmailDigestPreference')
+		}
+	},
+	{
+		matcher: `${baseUrl}/user/${uuids.invalidUser}/preferred/preference`,
+		response : {
+			body: null,
+			status: 404
+		}
+	},
+	{
 		matcher: `${baseUrl}/license/${uuids.validLicence}/preference/email-digest/preferred/user`,
 		response : {
 			body: require('./fixtures/uuidArray')
@@ -56,6 +69,12 @@ const getUrlMapping = [
 	},
 	{
 		matcher: `${baseUrl}/license/${uuids.validLicence}/member/user`,
+		response : {
+			body: require('./fixtures/getLicenceMembers')
+		}
+	},
+	{
+		matcher: `${baseUrl}/license/${uuids.validLicence}/member/user?page=1&limit=500`,
 		response : {
 			body: require('./fixtures/getLicenceMembers')
 		}
