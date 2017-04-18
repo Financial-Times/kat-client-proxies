@@ -1,7 +1,7 @@
 'use strict';
 
-const config = require('../../lib/config');
-const env = require('../env');
+const config = require('./../../lib/helpers/config');
+const env = require('./../env');
 const uuids = require('./uuids');
 
 function register() {

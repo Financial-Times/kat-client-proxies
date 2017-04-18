@@ -1,10 +1,10 @@
 'use strict';
 
-const myFT = require('../index').myFTClient;
+const myFT = require('./../index').myFTClient;
 const mocks = require('./mocks');
 const expect = require('chai').expect;
-const config = require('../lib/config');
-const statusErrors = require('../lib/statusErrors');
+const config = require('./../lib/helpers/config');
+const clientErrors = require('./../lib/clientErrors');
 const env = require('./env');
 const uuid = require('uuid');
 
@@ -70,7 +70,7 @@ describe('myFT Client proxy', function () {
 				done('Nothing thrown');
 			})
 			.catch((err)=>{
-				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
+				expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
 				expect(err.name).to.equal('NotFoundError');
 				done();
 			});
@@ -146,7 +146,7 @@ describe('myFT Client proxy', function () {
 				done(new Error(`Shouldn't have got a resp:${JSON.stringify(resp)}`));
 			})
 			.catch (err => {
-				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
+				expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
 				done();
 			});
 		});

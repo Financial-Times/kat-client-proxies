@@ -1,10 +1,10 @@
 'use strict';
 
-const acqCtx = require('../index').acquisitionCtxClient;
+const acqCtx = require('./../index').acquisitionCtxClient;
 const mocks = require('./mocks');
 const expect = require("chai").expect;
-const config = require('../lib/config');
-const statusErrors = require('../lib/statusErrors');
+const config = require('./../lib/helpers/config');
+const clientErrors = require('./../lib/clientErrors');
 const env = require('./env');
 
 const expectOwnProperties = require('./expectExtensions').expectOwnProperties;

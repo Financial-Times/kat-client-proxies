@@ -2,8 +2,8 @@
 
 const expect = require('chai').expect;
 const mocks = require('./mocks');
-const config = require('../lib/config');
-const statusErrors = require('../lib/statusErrors');
+const config = require('./../lib/helpers/config');
+const clientErrors = require('./../lib/clientErrors');
 const env = require('./env');
 const uuids = require('./mocks/uuids');
 
@@ -13,7 +13,7 @@ describe('Status Error Parser', function () {
 
 	before(function() {
 		if (mockAPI) {
-			mocks.registerStatusErrors();
+			mocks.registerClientErrors();
 		}
 	});
 	this.timeout('3s');
@@ -31,12 +31,12 @@ describe('Status Error Parser', function () {
 		it('Should throw an NotAuthorisedError without any headers', function(done) {
 			fetch(baseUrl)
 			.then(res => {
-				statusErrors.parse(res);
+        clientErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
 				// console.log(JSON.stringify({err}));
-				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				expect(err).to.be.an.instanceof(clientErrors.NotAuthorisedError);
 				done();
 			})
 			.catch(err => {
@@ -47,14 +47,14 @@ describe('Status Error Parser', function () {
 		it('Should throw an NotAuthorisedError without an X-API-KEY', function(done) {
 			fetch(baseUrl, config.fetchOptions)
 			.then(res => {
-				statusErrors.parse(res);
+        clientErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
 			})
 			.then((res)=>{
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
-				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				expect(err).to.be.an.instanceof(clientErrors.NotAuthorisedError);
 				done();
 			})
 			.catch(err => {
@@ -65,14 +65,14 @@ describe('Status Error Parser', function () {
 		it('Should throw an NotAuthorisedError with an invalid X-API-KEY', function(done) {
 			fetch(baseUrl, { headers: {'X-API-KEY': uuids.invalidKey }} )
 			.then(res => {
-				statusErrors.parse(res);
+        clientErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
 			})
 			.then((res)=>{
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
-				expect(err).to.be.an.instanceof(statusErrors.NotAuthorisedError);
+				expect(err).to.be.an.instanceof(clientErrors.NotAuthorisedError);
 				done();
 			})
 			.catch(err => {
@@ -85,10 +85,10 @@ describe('Status Error Parser', function () {
 			fetch(baseUrl, options)
 			.then(res => {
 				try {
-					statusErrors.parse(res);
+          clientErrors.parse(res);
 					done();
 				} catch (err){
-					expect(err).to.not.be.an.instanceof(statusErrors.NotAuthorisedError);
+					expect(err).to.not.be.an.instanceof(clientErrors.NotAuthorisedError);
 					done();
 				}
 			})
@@ -105,11 +105,11 @@ describe('Status Error Parser', function () {
 			const options = Object.assign({}, config.fetchOptions, { headers: Object.assign({}, config.fetchOptions.headers, {'X-API-KEY':config.myFTKey}) });
 			fetch(`${baseUrl}/doesNotExist`, options)
 			.then(res => {
-				statusErrors.parse(res);
+        clientErrors.parse(res);
 				done(new Error('Should have thrown an exception'));
 			})
 			.catch(err => {
-				expect(err).to.be.an.instanceof(statusErrors.NotFoundError);
+				expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
 				done();
 			})
 			.catch(err => {

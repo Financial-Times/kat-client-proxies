@@ -2,7 +2,7 @@
 
 const log = require('@financial-times/n-logger').default;
 const uuids = require('./uuids');
-const baseUrl = require('../../lib/config').myFTURL;
+const baseUrl = require('./../../lib/helpers/config').myFTURL;
 
 module.exports=register;
 

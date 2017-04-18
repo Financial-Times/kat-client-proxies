@@ -2,7 +2,7 @@
 
 const log = require('@financial-times/n-logger').default;
 const uuids = require('./uuids');
-const baseUrl = require('../../lib/config').acqCtxURL;
+const baseUrl = require('./../../lib/helpers/config').acqCtxURL;
 
 module.exports=register;
 
