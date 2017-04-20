@@ -2,26 +2,24 @@
 
 const proxies = require('./../index');
 const myFT = proxies.myFTClient;
-const mocks = require('./helpers/mocks');
+const uuids = require('./mocks/uuids');
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
-//const config = require('./../lib/helpers/config');
+const config = require('./../lib/helpers/config');
 const clientErrors = proxies.clientErrors;
 const env = require('./helpers/env');
 const uuid = require('uuid');
 const mockAPI = env.USE_MOCK_API;
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
+const baseUrl = config.myFTURL;
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
   const logMessages = [];
 
   before(done => {
-    if (mockAPI) {
-      mocks.registerMyFT();
-    }
-
     logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
       logMessages.push(params);
     });
@@ -47,10 +45,20 @@ describe('myFT Client proxy', () => {
   describe('Email preferences', () => {
 
     it('Should set an EmailDigestPreference for a valid user uuid', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/user/${uuids.validUser}/preferred/preference`)
+          .reply(200, () => ({}));
+
+        nock(baseUrl)
+          .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
+          .reply(200, () => require('./mocks/fixtures/EmailDigestPreference'));
+      }
+
       const edpPref = Object.assign({}, myFT.digestProperties, {isTest: true});
 
-      myFT.setEmailDigestPreference(mocks.uuids.validUser, edpPref)
-        .then(() => myFT.getEmailDigestPreference(mocks.uuids.validUser))
+      myFT.setEmailDigestPreference(uuids.validUser, edpPref)
+        .then(() => myFT.getEmailDigestPreference(uuids.validUser))
         .then(edp => {
           expectOwnProperties(edp, ['uuid']);
           expect(edp.uuid).to.equal('email-digest');
@@ -62,7 +70,13 @@ describe('myFT Client proxy', () => {
     });
 
     it('Should get an EmailDigestPreference for a valid user uuid', done => {
-      myFT.getEmailDigestPreference(mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
+          .reply(200, () => require('./mocks/fixtures/EmailDigestPreference'));
+      }
+
+      myFT.getEmailDigestPreference(uuids.validUser)
         .then(edp => {
           expectOwnProperties(edp, ['uuid']);
           expect(edp.uuid).to.equal('email-digest');
@@ -73,7 +87,13 @@ describe('myFT Client proxy', () => {
     });
 
     it('Should throw a NotFoundError error for EmailDigestPreference for an invalid user uuid', done => {
-      myFT.getEmailDigestPreference(mocks.uuids.invalidUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/user/${uuids.invalidUser}/preferred/preference/email-digest`)
+          .reply(404, () => null);
+      }
+
+      myFT.getEmailDigestPreference(uuids.invalidUser)
         .then(() => {
           done(new Error('Nothing thrown'));
         })
@@ -85,7 +105,7 @@ describe('myFT Client proxy', () => {
     });
 
   //  it('Should get an array of users who have an EmailDigestPreference set', done => {
-  //    myFT.getUsersWithEmailDigestPreference(mocks.uuids.validLicence)
+  //    myFT.getUsersWithEmailDigestPreference(uuids.validLicence)
   //      .then(users => {
   //        expect(users).to.be.an('array');
   //        if (mockAPI) {
@@ -99,7 +119,7 @@ describe('myFT Client proxy', () => {
   //  });
   //
   //  it('Should return an empty array for an invalid licence uuid', done => {
-  //    myFT.getUsersWithEmailDigestPreference(mocks.uuids.invalidLicence)
+  //    myFT.getUsersWithEmailDigestPreference(uuids.invalidLicence)
   //      .then(users => {
   //        expect(users).to.be.an('array');
   //        expect(users).to.have.lengthOf(0);
@@ -113,11 +133,21 @@ describe('myFT Client proxy', () => {
 
   describe('Licence management', () => {
     it ('Should be able to remove users from a licence', done => {
-      myFT.removeUsersFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/license/${uuids.validLicence}/member/user`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(404, () => null);
+      }
+
+      myFT.removeUsersFromLicence(uuids.validLicence, uuids.validUser)
         .then(res => {
           expect(res).to.be.an('object');
 
-          return myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser);
+          return myFT.getUserFromLicence(uuids.validLicence, uuids.validUser);
         })
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
@@ -131,17 +161,27 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to add users to a licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/license/${uuids.validLicence}/member/user`)
+          .reply(200, () => ([]));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
+      }
+
       const relProps = Object.assign({}, myFT.membershipProperties);
 
-      myFT.addUsersToLicence(mocks.uuids.validLicence, mocks.uuids.validUser, relProps)
+      myFT.addUsersToLicence(uuids.validLicence, uuids.validUser, relProps)
         .then(addResponse => {
           expect(addResponse).to.be.an('array');
 
-          return myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser);
+          return myFT.getUserFromLicence(uuids.validLicence, uuids.validUser);
         })
         .then(getResponse => {
           expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(mocks.uuids.validUser);
+          expect(getResponse.uuid).to.equal(uuids.validUser);
 
           done();
         })
@@ -149,11 +189,21 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to remove users from a group', done => {
-      myFT.removeUsersFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/group/${uuids.validLicence}/member/user`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(404, () => null);
+      }
+
+      myFT.removeUsersFromGroup(uuids.validLicence, uuids.validUser)
         .then(res => {
           expect(res).to.be.an('object');
 
-          return myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser);
+          return myFT.getUserFromGroup(uuids.validLicence, uuids.validUser);
         })
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
@@ -167,17 +217,27 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to add users to a group', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/group/${uuids.validLicence}/member/user`)
+          .reply(200, () => ([]));
+
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
+      }
+
       const relProps = Object.assign({}, myFT.membershipProperties);
 
-      myFT.addUsersToGroup(mocks.uuids.validLicence, mocks.uuids.validUser, relProps)
+      myFT.addUsersToGroup(uuids.validLicence, uuids.validUser, relProps)
         .then(addResponse => {
           expect(addResponse).to.be.an('array');
 
-          return myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser);
+          return myFT.getUserFromGroup(uuids.validLicence, uuids.validUser);
         })
         .then(getResponse => {
           expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(mocks.uuids.validUser);
+          expect(getResponse.uuid).to.equal(uuids.validUser);
 
           done();
         })
@@ -185,11 +245,21 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to remove groups from a licence', done => {
-      myFT.removeGroupsFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/license/${uuids.validLicence}/member/group`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/group/${uuids.validLicence}`)
+          .reply(404, () => null);
+      }
+
+      myFT.removeGroupsFromLicence(uuids.validLicence, uuids.validLicence)
         .then(res => {
           expect(res).to.be.an('object');
 
-          return myFT.getGroupFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence);
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
         })
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
@@ -203,17 +273,27 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to add groups to a licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/license/${uuids.validLicence}/member/group`)
+          .reply(200, () => ([]));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/group/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getGroupFromLicence'));
+      }
+
       const relProps = Object.assign({}, myFT.membershipProperties);
 
-      myFT.addGroupsToLicence(mocks.uuids.validLicence, mocks.uuids.validLicence, relProps)
+      myFT.addGroupsToLicence(uuids.validLicence, uuids.validLicence, relProps)
         .then(addResponse => {
           expect(addResponse).to.be.an('array');
 
-          return myFT.getGroupFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence);
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
         })
         .then(getResponse => {
           expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(mocks.uuids.validLicence);
+          expect(getResponse.uuid).to.equal(uuids.validLicence);
 
           done();
         })
@@ -221,10 +301,16 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should be able to get a valid licence', done => {
-      myFT.getLicence(mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getLicence'));
+      }
+
+      myFT.getLicence(uuids.validLicence)
         .then(resp => {
           expectOwnProperties(resp, ['uuid', '_rel']);
-          expect(resp.uuid).to.equal(mocks.uuids.validLicence);
+          expect(resp.uuid).to.equal(uuids.validLicence);
 
           done();
         })
@@ -232,7 +318,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should throw a NotFoundError for an invalid licence', done => {
-      myFT.getLicence(mocks.uuids.invalidLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.invalidLicence}`)
+          .reply(404, () => null);
+      }
+
+      myFT.getLicence(uuids.invalidLicence)
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
@@ -244,10 +336,16 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get user registered to a licence', done => {
-      myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
+      }
+
+      myFT.getUserFromLicence(uuids.validLicence, uuids.validUser)
         .then(resp => {
           expectOwnProperties(resp, ['uuid', '_rel']);
-          expect(resp.uuid).to.equal(mocks.uuids.validUser);
+          expect(resp.uuid).to.equal(uuids.validUser);
 
           done();
         })
@@ -255,7 +353,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should throw a NotFoundError for an invalid licence user', done => {
-      myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.invalidUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/user/${uuids.invalidUser}`)
+          .reply(404, () => null);
+      }
+
+      myFT.getUserFromLicence(uuids.validLicence, uuids.invalidUser)
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
@@ -267,10 +371,16 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get user registered to a group', done => {
-      myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
+      }
+
+      myFT.getUserFromGroup(uuids.validLicence, uuids.validUser)
         .then(resp => {
           expectOwnProperties(resp, ['uuid', '_rel']);
-          expect(resp.uuid).to.equal(mocks.uuids.validUser);
+          expect(resp.uuid).to.equal(uuids.validUser);
 
           done();
         })
@@ -278,7 +388,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should throw a NotFoundError for an invalid group user', done => {
-      myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.invalidUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/member/user/${uuids.invalidUser}`)
+          .reply(404, () => null);
+      }
+
+      myFT.getUserFromGroup(uuids.validLicence, uuids.invalidUser)
         .then(resp => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
@@ -290,7 +406,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get users registered to a licence', done => {
-      myFT.getUsersForLicence(mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/user?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/getLicenceMembers'));
+      }
+
+      myFT.getUsersForLicence(uuids.validLicence)
         .then(usersResponse => {
           expect(usersResponse).to.be.an('array');
           expectOwnProperties(usersResponse, ['uuid']);
@@ -302,7 +424,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get users registered to a group', done => {
-      myFT.getUsersForGroup(mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/member/user?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/getLicenceMembers'));
+      }
+
+      myFT.getUsersForGroup(uuids.validLicence)
         .then(usersResponse => {
           expect(usersResponse).to.be.an('array');
           expectOwnProperties(usersResponse, ['uuid']);
@@ -314,7 +442,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get groups registered to a licence', done => {
-      myFT.getGroupsForLicence(mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}/member/group?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/getLicenceGroupMembers'));
+      }
+
+      myFT.getGroupsForLicence(uuids.validLicence)
         .then(groupsResponse => {
           expect(groupsResponse).to.be.an('array');
           expectOwnProperties(groupsResponse, ['uuid']);
@@ -332,7 +466,13 @@ describe('myFT Client proxy', () => {
     const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
     it ('Should get an array of concepts followed by a user', done => {
-      myFT.getConceptsFollowedByUser(mocks.uuids.validUser)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
+      }
+
+      myFT.getConceptsFollowedByUser(uuids.validUser)
         .then(followResponse => {
           expect(followResponse).to.be.an('array');
 
@@ -348,7 +488,13 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should get an array of concepts followed by a group', done => {
-      myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence)
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
+      }
+
+      myFT.getConceptsFollowedByGroup(uuids.validLicence)
         .then(followResponse => {
           expect(followResponse).to.be.an('array');
 
@@ -364,12 +510,22 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should remove and get concepts followed by a group', done => {
-      myFT.removeConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items)
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/group/${uuids.validLicence}/followed/concept`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .reply(200, () => ([]));
+      }
+
+      myFT.removeConceptsFollowedByGroup(uuids.validLicence, groupConcepts.items)
         .then(addResp => {
           expect(addResp).to.be.an('object');
           expect(addResp.status).to.equal(204);
 
-          return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence);
+          return myFT.getConceptsFollowedByGroup(uuids.validLicence);
         })
         .then(followResponse => {
           expect(followResponse).to.be.an('array');
@@ -380,11 +536,21 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should set and get concepts followed by a group', done => {
-      myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items, relProps)
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/group/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
+          .reply(200, () => ([]));
+
+        nock(baseUrl)
+          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
+      }
+
+      myFT.addConceptsFollowedByGroup(uuids.validLicence, groupConcepts.items, relProps)
         .then(addResp => {
           expect(addResp).to.be.an('array');
 
-          return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence);
+          return myFT.getConceptsFollowedByGroup(uuids.validLicence);
         })
         .then(followResponse => {
           expect(followResponse).to.be.an('array');
@@ -401,12 +567,22 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should remove and get concepts followed by a user', done => {
-      myFT.removeConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items)
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/user/${uuids.validUser}/followed/concept`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .reply(200, () => ([]));
+      }
+
+      myFT.removeConceptsFollowedByUser(uuids.validUser, userConcepts.items)
         .then(addResp => {
           expect(addResp).to.be.an('object');
           expect(addResp.status).to.equal(204);
 
-          return myFT.getConceptsFollowedByUser(mocks.uuids.validUser);
+          return myFT.getConceptsFollowedByUser(uuids.validUser);
         })
         .then(followResponse => {
           expect(followResponse).to.be.an('array');
@@ -417,11 +593,21 @@ describe('myFT Client proxy', () => {
     });
 
     it ('Should set and get concepts followed by a user', done => {
-      myFT.addConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items, relProps)
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/user/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
+          .reply(200, () => ([]));
+
+        nock(baseUrl)
+          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
+      }
+
+      myFT.addConceptsFollowedByUser(uuids.validUser, userConcepts.items, relProps)
         .then(addResp => {
           expect(addResp).to.be.an('array');
 
-          return myFT.getConceptsFollowedByUser(mocks.uuids.validUser);
+          return myFT.getConceptsFollowedByUser(uuids.validUser);
         })
         .then(followResponse => {
           expect(followResponse).to.be.an('array');

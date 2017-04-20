@@ -2,9 +2,10 @@
 
 const proxies = require('./../index');
 const expect = require('chai').expect;
-const mocks = require('./helpers/mocks');
+const uuids = require('./mocks/uuids');
 const config = require('./../lib/helpers/config');
 const sinon = require('sinon');
+const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const clientErrors = proxies.clientErrors;
 const env = require('./helpers/env');
@@ -18,10 +19,6 @@ describe('Status Error Parser', () => {
   const logMessages = [];
 
   before(done => {
-    if (mockAPI) {
-      mocks.registerClientErrors();
-    }
-
     logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
       logMessages.push(params);
     });
@@ -42,6 +39,12 @@ describe('Status Error Parser', () => {
   describe('NotAuthorisedError', () => {
 
     it('Should throw an NotAuthorisedError without any headers', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get('')
+          .reply(401, () => null);
+      }
+
       fetch(baseUrl)
         .then(res => {
           clientErrors.parse(res);
@@ -57,6 +60,12 @@ describe('Status Error Parser', () => {
     });
 
     it('Should throw an NotAuthorisedError without an X-API-KEY', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get('')
+          .reply(401, () => null);
+      }
+
       fetch(baseUrl, config.fetchOptions)
         .then(res => {
           clientErrors.parse(res);
@@ -72,7 +81,13 @@ describe('Status Error Parser', () => {
     });
 
     it('Should throw an NotAuthorisedError with an invalid X-API-KEY', done => {
-      fetch(baseUrl, { headers: {'X-API-KEY': mocks.uuids.invalidKey }} )
+      if (mockAPI) {
+        nock(baseUrl)
+          .get('')
+          .reply(401, () => null);
+      }
+
+      fetch(baseUrl, { headers: {'X-API-KEY': uuids.invalidKey }} )
         .then(res => {
           clientErrors.parse(res);
 
@@ -87,6 +102,12 @@ describe('Status Error Parser', () => {
     });
 
     it('Should not throw an NotAuthorisedError with a valid X-API-KEY', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get('')
+          .reply(200, () => null);
+      }
+
       fetch(baseUrl, fetchOpt)
         .then(res => {
           try {
@@ -105,6 +126,12 @@ describe('Status Error Parser', () => {
   describe('NotFoundError', () => {
 
     it("Should throw an NotFoundError when something doesn't exist", done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get('/doesNotExist')
+          .reply(404, () => null);
+      }
+
       fetch(`${baseUrl}/doesNotExist`, fetchOpt)
         .then(res => {
           clientErrors.parse(res);
@@ -124,6 +151,12 @@ describe('Status Error Parser', () => {
   if (mockAPI) {
     describe('BadRequestError', () => {
       it('Should throw an BadRequestError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/invalidPath')
+            .reply(400, () => null);
+        }
+
         fetch(`${baseUrl}/invalidPath`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -141,6 +174,12 @@ describe('Status Error Parser', () => {
 
     describe('InternalServerError', () => {
       it('Should throw an InternalServerError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/serverError')
+            .reply(500, () => null);
+        }
+
         fetch(`${baseUrl}/serverError`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -158,6 +197,12 @@ describe('Status Error Parser', () => {
 
     describe('BadGatewayError', () => {
       it('Should throw an BadGatewayError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/badGateway')
+            .reply(502, () => null);
+        }
+
         fetch(`${baseUrl}/badGateway`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -175,6 +220,12 @@ describe('Status Error Parser', () => {
 
     describe('ServiceUnavailableError', () => {
       it('Should throw an ServiceUnavailableError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/serviceUnavailable')
+            .reply(503, () => null);
+        }
+
         fetch(`${baseUrl}/serviceUnavailable`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -192,6 +243,12 @@ describe('Status Error Parser', () => {
 
     describe('RedirectionError', () => {
       it('Should throw an RedirectionError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/redirect')
+            .reply(304, () => null);
+        }
+
         fetch(`${baseUrl}/redirect`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -209,6 +266,12 @@ describe('Status Error Parser', () => {
 
     describe('ClientError', () => {
       it('Should throw an ClientError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/clientError')
+            .reply(405, () => null);
+        }
+
         fetch(`${baseUrl}/clientError`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
@@ -226,6 +289,12 @@ describe('Status Error Parser', () => {
 
     describe('ServerError', () => {
       it('Should throw an ServerError', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .get('/otherServerError')
+            .reply(501, () => null);
+        }
+
         fetch(`${baseUrl}/otherServerError`, fetchOpt)
           .then(res => {
             clientErrors.parse(res);
