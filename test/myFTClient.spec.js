@@ -51,7 +51,7 @@ describe('myFT Client proxy', () => {
 
         nock(baseUrl)
           .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
-          .reply(200, () => require('./mocks/fixtures/EmailDigestPreference'));
+          .reply(200, () => require('./mocks/fixtures/emailDigestPreference'));
       }
 
       const edpPref = Object.assign({}, myFT.digestProperties, {isTest: true});
@@ -72,7 +72,7 @@ describe('myFT Client proxy', () => {
       if (mockAPI) {
         nock(baseUrl)
           .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
-          .reply(200, () => require('./mocks/fixtures/EmailDigestPreference'));
+          .reply(200, () => require('./mocks/fixtures/emailDigestPreference'));
       }
 
       myFT.getEmailDigestPreference(uuids.validUser)
