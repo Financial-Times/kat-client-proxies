@@ -1,0 +1,12 @@
+{
+  "name": "KMT Test License",
+  "kmtRegistrationDate": 1476437354312,
+  "updated": 1476437354498,
+  "uuid": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+  "_rel": {
+    "member": {
+      "user": {"total": 12},
+      "group": {"total": 1}
+    }
+  }
+}

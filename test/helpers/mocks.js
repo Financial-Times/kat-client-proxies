@@ -1,10 +1,9 @@
 'use strict';
 
-require('dotenv').config({silent: true});
-
 const fs = require('fs');
+const path = require('path');
 const paths = [
-	`${__dirname}/lib`
+  path.join(__dirname, '..', 'mocks')
 ];
 
 paths.forEach(path => {

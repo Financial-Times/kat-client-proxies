@@ -1,0 +1,27 @@
+{
+  "license": {
+    "_id": 44590501,
+    "labels": [
+      "License"
+    ],
+    "properties": {
+      "kmtRegistrationDate": 1476454102636,
+      "updated": 1476454102851,
+      "uuid": "8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+    }
+  },
+  "total": 1,
+  "items": [
+    {
+      "uuid": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+      "_rel": {
+        "byTool": "KMT",
+        "created": 1473687050327,
+        "count": 1,
+        "updated": 1473687050327,
+        "byUser": "a5c52a9d-3953-490a-bf3d-3f1c76537475"
+      }
+    }
+  ],
+  "count": 1
+}
