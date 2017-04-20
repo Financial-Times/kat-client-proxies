@@ -46,7 +46,7 @@ describe('myFT Client proxy', () => {
 
   describe('Email preferences', () => {
 
-    it('Should set an EmailDigestPreference for a valid user uuid', done => {// TODO: test on local myFT
+    it('Should set an EmailDigestPreference for a valid user uuid', done => {
       const edpPref = Object.assign({}, myFT.digestProperties, {isTest: true});
 
       myFT.setEmailDigestPreference(mocks.uuids.validUser, edpPref)
@@ -112,30 +112,10 @@ describe('myFT Client proxy', () => {
   });
 
   describe('Licence management', () => {
-
-    it ('Should be able to add users to a licence', done => {// TODO: test on local myFT
-      const userId = mockAPI ? mocks.uuids.validUser : uuid();
-      const relProps = Object.assign({}, myFT.membershipProperties);
-
-      myFT.addUsersToLicence(mocks.uuids.validLicence, userId, relProps)
-        .then(addResponse => {
-          expect(addResponse).to.be.an('object');
-
-          return myFT.getUserFromLicence(mocks.uuids.validLicence, userId);
-        })
-        .then(getResponse => {
-          expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(userId);
-
-          done();
-        })
-        .catch(done);
-    });
-
-    it ('Should be able to remove users to a licence', done => {// TODO: test on local myFT
+    it ('Should be able to remove users from a licence', done => {
       myFT.removeUsersFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser)
         .then(res => {
-          //expect(res).to.be.an('object');// maybe null??
+          expect(res).to.be.an('object');
 
           return myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser);
         })
@@ -150,29 +130,28 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should be able to add users to a group', done => {// TODO: test on local myFT
-      const userId = mockAPI ? mocks.uuids.validUser : uuid();
+    it ('Should be able to add users to a licence', done => {
       const relProps = Object.assign({}, myFT.membershipProperties);
 
-      myFT.addUsersToGroup(mocks.uuids.validLicence, userId, relProps)
+      myFT.addUsersToLicence(mocks.uuids.validLicence, mocks.uuids.validUser, relProps)
         .then(addResponse => {
-          expect(addResponse).to.be.an('object');
+          expect(addResponse).to.be.an('array');
 
-          return myFT.getUserFromGroup(mocks.uuids.validLicence, userId);
+          return myFT.getUserFromLicence(mocks.uuids.validLicence, mocks.uuids.validUser);
         })
         .then(getResponse => {
           expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(userId);
+          expect(getResponse.uuid).to.equal(mocks.uuids.validUser);
 
           done();
         })
         .catch(done);
     });
 
-    it ('Should be able to remove users to a group', done => {// TODO: test on local myFT
+    it ('Should be able to remove users from a group', done => {
       myFT.removeUsersFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser)
         .then(res => {
-          //expect(res).to.be.an('object');// maybe null??
+          expect(res).to.be.an('object');
 
           return myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser);
         })
@@ -187,28 +166,28 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should be able to add groups to a licence', done => {// TODO: test on local myFT
+    it ('Should be able to add users to a group', done => {
       const relProps = Object.assign({}, myFT.membershipProperties);
 
-      myFT.addGroupsToLicence(mocks.uuids.validLicence, mocks.uuids.validLicence, relProps)
+      myFT.addUsersToGroup(mocks.uuids.validLicence, mocks.uuids.validUser, relProps)
         .then(addResponse => {
-          expect(addResponse).to.be.an('object');
+          expect(addResponse).to.be.an('array');
 
-          return myFT.getGroupFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence);
+          return myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser);
         })
         .then(getResponse => {
           expectOwnProperties(getResponse, ['uuid', '_rel']);
-          expect(getResponse.uuid).to.equal(mocks.uuids.validLicence);
+          expect(getResponse.uuid).to.equal(mocks.uuids.validUser);
 
           done();
         })
         .catch(done);
     });
 
-    it ('Should be able to remove groups to a licence', done => {// TODO: test on local myFT
+    it ('Should be able to remove groups from a licence', done => {
       myFT.removeGroupsFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence)
         .then(res => {
-          //expect(res).to.be.an('object');// maybe null??
+          expect(res).to.be.an('object');
 
           return myFT.getGroupFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence);
         })
@@ -217,6 +196,24 @@ describe('myFT Client proxy', () => {
         })
         .catch(err => {
           expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should be able to add groups to a licence', done => {
+      const relProps = Object.assign({}, myFT.membershipProperties);
+
+      myFT.addGroupsToLicence(mocks.uuids.validLicence, mocks.uuids.validLicence, relProps)
+        .then(addResponse => {
+          expect(addResponse).to.be.an('array');
+
+          return myFT.getGroupFromLicence(mocks.uuids.validLicence, mocks.uuids.validLicence);
+        })
+        .then(getResponse => {
+          expectOwnProperties(getResponse, ['uuid', '_rel']);
+          expect(getResponse.uuid).to.equal(mocks.uuids.validLicence);
 
           done();
         })
@@ -268,7 +265,6 @@ describe('myFT Client proxy', () => {
           done();
         });
     });
-
 
     it ('Should get user registered to a group', done => {
       myFT.getUserFromGroup(mocks.uuids.validLicence, mocks.uuids.validUser)
@@ -367,10 +363,26 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should set and get concepts followed by a group', done => {
-      myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items, relProps)// TODO: test on local myFT
+    it ('Should remove and get concepts followed by a group', done => {
+      myFT.removeConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items)
         .then(addResp => {
           expect(addResp).to.be.an('object');
+          expect(addResp.status).to.equal(204);
+
+          return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence);
+        })
+        .then(followResponse => {
+          expect(followResponse).to.be.an('array');
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should set and get concepts followed by a group', done => {
+      myFT.addConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items, relProps)
+        .then(addResp => {
+          expect(addResp).to.be.an('array');
 
           return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence);
         })
@@ -388,10 +400,26 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should set and get concepts followed by a user', done => {
-      myFT.addConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items, relProps)// TODO: test on local myFT
+    it ('Should remove and get concepts followed by a user', done => {
+      myFT.removeConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items)
         .then(addResp => {
           expect(addResp).to.be.an('object');
+          expect(addResp.status).to.equal(204);
+
+          return myFT.getConceptsFollowedByUser(mocks.uuids.validUser);
+        })
+        .then(followResponse => {
+          expect(followResponse).to.be.an('array');
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should set and get concepts followed by a user', done => {
+      myFT.addConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items, relProps)
+        .then(addResp => {
+          expect(addResp).to.be.an('array');
 
           return myFT.getConceptsFollowedByUser(mocks.uuids.validUser);
         })
@@ -403,38 +431,6 @@ describe('myFT Client proxy', () => {
           }
 
           expectOwnProperties(followResponse, ['uuid']);
-
-          done();
-        })
-        .catch(done);
-    });
-
-    it ('Should remove and get concepts followed by a group', done => {
-      myFT.removeConceptsFollowedByGroup(mocks.uuids.validLicence, groupConcepts.items)// TODO: test on local myFT
-        .then(addResp => {
-          //expect(addResp).to.be.an('object');// maybe null??
-
-          return myFT.getConceptsFollowedByGroup(mocks.uuids.validLicence);
-        })
-        .then(followResponse => {
-          expect(followResponse).to.be.an('array');
-          expect(followResponse).to.have.lengthOf(0);
-
-          done();
-        })
-        .catch(done);
-    });
-
-    it ('Should remove and get concepts followed by a user', done => {
-      myFT.removeConceptsFollowedByUser(mocks.uuids.validUser, userConcepts.items)// TODO: test on local myFT
-        .then(addResp => {
-          //expect(addResp).to.be.an('object');// maybe null??
-
-          return myFT.getConceptsFollowedByUser(mocks.uuids.validUser);
-        })
-        .then(followResponse => {
-          expect(followResponse).to.be.an('array');
-          expect(followResponse).to.have.lengthOf(0);
 
           done();
         })

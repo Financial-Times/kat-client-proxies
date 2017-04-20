@@ -42,6 +42,7 @@ describe('Access Licence Service Client', () => {
       accessLicence.getLicences({userid: mocks.uuids.validUser})
         .then(licences => {
           expect(licences).to.be.an('array');
+          expect(licences.length).to.be.at.least(1);
           expectOwnProperties(licences, ['id']);
 
           done();
@@ -67,6 +68,7 @@ describe('Access Licence Service Client', () => {
       accessLicence.getSeats(mocks.uuids.validLicence)
         .then(seats => {
           expect(seats).to.be.an('array');
+          expect(seats.length).to.be.at.least(1);
           expectOwnProperties(seats, ['userId', 'accessLicenceId']);
 
           done();

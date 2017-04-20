@@ -62,11 +62,26 @@ const getUrlMapping = [
   //    body: []
   //  }
   //},
+  {//'Should be able to remove users from a licence'
+    method: 'delete',
+    matcher: `/license/${uuids.validLicence}/member/user`,
+    response: {
+      body: {}
+    }
+  },
+  {//'Should be able to add remove to a licence - GET'
+    method: 'get',
+    matcher: `/license/${uuids.validLicence}/member/user/${uuids.validUser}`,
+    response: {
+      body: null,
+      status: 404
+    }
+  },
   {//'Should be able to add users to a licence'
     method: 'post',
     matcher: `/license/${uuids.validLicence}/member/user`,
     response: {
-      body: {}
+      body: []
     }
   },
   {//'Should be able to add users to a licence - GET'
@@ -76,16 +91,16 @@ const getUrlMapping = [
       body: require('./fixtures/getUserFromLicence')
     }
   },
-  {//'Should be able to remove users to a licence'
+  {//'Should be able to remove users from a group'
     method: 'delete',
-    matcher: `/license/${uuids.validLicence}/member/user`,
+    matcher: `/group/${uuids.validLicence}/member/user`,
     response: {
-      body: null
+      body: {}
     }
   },
-  {//'Should be able to add remove to a licence - GET'
+  {//'Should be able to remove users from a group - GET'
     method: 'get',
-    matcher: `/license/${uuids.validLicence}/member/user/${uuids.validUser}`,
+    matcher: `/group/${uuids.validLicence}/member/user/${uuids.validUser}`,
     response: {
       body: null,
       status: 404
@@ -95,7 +110,7 @@ const getUrlMapping = [
     method: 'post',
     matcher: `/group/${uuids.validLicence}/member/user`,
     response: {
-      body: {}
+      body: []
     }
   },
   {//'Should be able to add users to a group - GET'
@@ -105,16 +120,16 @@ const getUrlMapping = [
       body: require('./fixtures/getUserFromLicence')
     }
   },
-  {//'Should be able to remove users to a group'
+  {//'Should be able to remove groups from a licence'
     method: 'delete',
-    matcher: `/group/${uuids.validLicence}/member/user`,
+    matcher: `/license/${uuids.validLicence}/member/group`,
     response: {
-      body: null
+      body: {}
     }
   },
-  {//'Should be able to add remove to a group - GET'
+  {//'Should be able to remove groups from a licence - GET'
     method: 'get',
-    matcher: `/group/${uuids.validLicence}/member/user/${uuids.validUser}`,
+    matcher: `/license/${uuids.validLicence}/member/group/${uuids.validLicence}`,
     response: {
       body: null,
       status: 404
@@ -124,7 +139,7 @@ const getUrlMapping = [
     method: 'post',
     matcher: `/license/${uuids.validLicence}/member/group`,
     response: {
-      body: {}
+      body: []
     }
   },
   {//'Should be able to add groups to a licence - GET'
@@ -132,21 +147,6 @@ const getUrlMapping = [
     matcher: `/license/${uuids.validLicence}/member/group/${uuids.validLicence}`,
     response: {
       body: require('./fixtures/getGroupFromLicence')
-    }
-  },
-  {//'Should be able to remove users to a licence'
-    method: 'delete',
-    matcher: `/license/${uuids.validLicence}/member/group`,
-    response: {
-      body: null
-    }
-  },
-  {//'Should be able to add remove to a licence - GET'
-    method: 'get',
-    matcher: `/license/${uuids.validLicence}/member/group/${uuids.validLicence}`,
-    response: {
-      body: null,
-      status: 404
     }
   },
   {//'Should be able to get a valid licence'
@@ -194,76 +194,6 @@ const getUrlMapping = [
       status: 404
     }
   },
-  {//'Should get an array of concepts followed by a user'
-    method: 'get',
-    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
-    response: {
-      body: require('./fixtures/userFollowedConcept')
-    }
-  },
-  {//'Should get an array of concepts followed by a group'
-    method: 'get',
-    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
-    response: {
-      body: require('./fixtures/groupFollowedConcept')
-    }
-  },
-  {//'Should set and get concepts followed by a group'
-    method: 'post',
-    matcher: `/group/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
-    response: {
-      body: {}
-    }
-  },
-  {//'Should set and get concepts followed by a group - GET'
-    method: 'get',
-    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
-    response: {
-      body: require('./fixtures/groupFollowedConcept')
-    }
-  },
-  {//'Should set and get concepts followed by a user'
-    method: 'post',
-    matcher: `/user/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
-    response: {
-      body: {}
-    }
-  },
-  {//'Should set and get concepts followed by a user - GET'
-    method: 'get',
-    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
-    response: {
-      body: require('./fixtures/userFollowedConcept')
-    }
-  },
-  {//'Should remove and get concepts followed by a group'
-    method: 'delete',
-    matcher: `/group/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
-    response: {
-      body: {}
-    }
-  },
-  {//'Should remove and get concepts followed by a group - GET'
-    method: 'get',
-    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
-    response: {
-      body: []
-    }
-  },
-  {//'Should remove and get concepts followed by a user'
-    method: 'delete',
-    matcher: `/user/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
-    response: {
-      body: {}
-    }
-  },
-  {//'Should remove and get concepts followed by a user - GET'
-    method: 'get',
-    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
-    response: {
-      body: []
-    }
-  },
   {//'Should get users registered to a licence'
     method: 'get',
     matcher: `/license/${uuids.validLicence}/member/user?page=1&limit=500`,
@@ -283,6 +213,78 @@ const getUrlMapping = [
     matcher: `/license/${uuids.validLicence}/member/group?page=1&limit=500`,
     response: {
       body: require('./fixtures/getLicenceGroupMembers')
+    }
+  },
+  {//'Should get an array of concepts followed by a user'
+    method: 'get',
+    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
+    response: {
+      body: require('./fixtures/userFollowedConcept')
+    }
+  },
+  {//'Should get an array of concepts followed by a group'
+    method: 'get',
+    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
+    response: {
+      body: require('./fixtures/groupFollowedConcept')
+    }
+  },
+  {//'Should remove and get concepts followed by a group'
+    method: 'delete',
+    matcher: `/group/${uuids.validLicence}/followed/concept`,
+    response: {
+      body: {},
+      status: 204
+    }
+  },
+  {//'Should remove and get concepts followed by a group - GET'
+    method: 'get',
+    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
+    response: {
+      body: []
+    }
+  },
+  {//'Should set and get concepts followed by a group'
+    method: 'post',
+    matcher: `/group/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
+    response: {
+      body: []
+    }
+  },
+  {//'Should set and get concepts followed by a group - GET'
+    method: 'get',
+    matcher: `/group/${uuids.validLicence}/followed/concept?page=1&limit=500`,
+    response: {
+      body: require('./fixtures/groupFollowedConcept')
+    }
+  },
+  {//'Should remove and get concepts followed by a user'
+    method: 'delete',
+    matcher: `/user/${uuids.validUser}/followed/concept`,
+    response: {
+      body: {},
+      status: 204
+    }
+  },
+  {//'Should remove and get concepts followed by a user - GET'
+    method: 'get',
+    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
+    response: {
+      body: []
+    }
+  },
+  {//'Should set and get concepts followed by a user'
+    method: 'post',
+    matcher: `/user/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`,
+    response: {
+      body: []
+    }
+  },
+  {//'Should set and get concepts followed by a user - GET'
+    method: 'get',
+    matcher: `/user/${uuids.validUser}/followed/concept?page=1&limit=500`,
+    response: {
+      body: require('./fixtures/userFollowedConcept')
     }
   }
 ];
