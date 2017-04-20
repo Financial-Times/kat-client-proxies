@@ -10,7 +10,6 @@ const logger = require('@financial-times/n-logger').default;
 const config = require('./../lib/helpers/config');
 const clientErrors = proxies.clientErrors;
 const env = require('./helpers/env');
-const uuid = require('uuid');
 const mockAPI = env.USE_MOCK_API;
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const baseUrl = config.myFTURL;
