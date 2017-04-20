@@ -103,31 +103,6 @@ describe('myFT Client proxy', () => {
         });
     });
 
-  //  it('Should get an array of users who have an EmailDigestPreference set', done => {
-  //    myFT.getUsersWithEmailDigestPreference(uuids.validLicence)
-  //      .then(users => {
-  //        expect(users).to.be.an('array');
-  //        if (mockAPI) {
-  //          expect(users).to.have.lengthOf(2);
-  //        }
-  //        expectOwnProperties(users, ['uuid']);
-  //
-  //        done();
-  //      })
-  //      .catch(done);
-  //  });
-  //
-  //  it('Should return an empty array for an invalid licence uuid', done => {
-  //    myFT.getUsersWithEmailDigestPreference(uuids.invalidLicence)
-  //      .then(users => {
-  //        expect(users).to.be.an('array');
-  //        expect(users).to.have.lengthOf(0);
-  //
-  //        done();
-  //      })
-  //      .catch(done);
-  //  });
-
   });
 
   describe('Licence management', () => {
