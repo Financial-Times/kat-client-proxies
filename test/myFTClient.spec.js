@@ -274,6 +274,63 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
+    it ('Should be able to add a licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/license`)
+          .reply(200, () => ({}));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getLicence'));
+      }
+
+      myFT.addLicence(uuids.validLicence)
+        .then(resp => {
+          expect(resp).to.be.an('object');
+
+          return myFT.getLicence(uuids.validLicence);
+        })
+        .then(resp => {
+          expectOwnProperties(resp, ['uuid', '_rel']);
+          expect(resp.uuid).to.equal(uuids.validLicence);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should be able to update a licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .put(`/license/${uuids.validLicence}`)
+          .reply(200, () => ({}));
+
+        nock(baseUrl)
+          .get(`/license/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getLicence'));
+      }
+      const regDate = new Date().getTime();
+
+      myFT.updateLicence(uuids.validLicence, {"kmtRegistrationDate": regDate})
+        .then(resp => {
+          expect(resp).to.be.an('object');
+
+          return myFT.getLicence(uuids.validLicence);
+        })
+        .then(resp => {
+          expectOwnProperties(resp, ['uuid', '_rel']);
+          expect(resp.uuid).to.equal(uuids.validLicence);
+
+          if (mockAPI !== true) {
+            expect(resp.kmtRegistrationDate).to.equal(regDate);
+          }
+
+          done();
+        })
+        .catch(done);
+    });
+
     it ('Should be able to get a valid licence', done => {
       if (mockAPI) {
         nock(baseUrl)
