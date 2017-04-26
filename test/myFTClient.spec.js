@@ -145,7 +145,7 @@ describe('myFT Client proxy', () => {
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
-      const relProps = Object.assign({}, myFT.membershipProperties);
+      const relProps = Object.assign({}, myFT.relationshipProperties);
 
       myFT.addUsersToLicence(uuids.validLicence, uuids.validUser, relProps)
         .then(addResponse => {
@@ -201,7 +201,7 @@ describe('myFT Client proxy', () => {
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
-      const relProps = Object.assign({}, myFT.membershipProperties);
+      const relProps = Object.assign({}, myFT.relationshipProperties);
 
       myFT.addUsersToGroup(uuids.validLicence, uuids.validUser, relProps)
         .then(addResponse => {
@@ -257,7 +257,7 @@ describe('myFT Client proxy', () => {
           .reply(200, () => require('./mocks/fixtures/getGroupFromLicence'));
       }
 
-      const relProps = Object.assign({}, myFT.membershipProperties);
+      const relProps = Object.assign({}, myFT.relationshipProperties);
 
       myFT.addGroupsToLicence(uuids.validLicence, uuids.validLicence, relProps)
         .then(addResponse => {

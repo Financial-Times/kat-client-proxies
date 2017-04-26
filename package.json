@@ -28,10 +28,8 @@
   "devDependencies": {
     "eslint": "~3.7.1",
     "chai": "^3.5.0",
-    "fetch-mock": "^5.5.0",
     "nock": "^9.0.13",
     "sinon": "^2.1.0",
-    "isomorphic-fetch": "^2.2.1",
     "mocha": "^3.2.0",
 		"uuid": "^3.0.1"
   },
