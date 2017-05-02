@@ -46,7 +46,7 @@ describe('myFT Client proxy', () => {
     it('Should set an EmailDigestPreference for a valid user uuid', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/user/${uuids.validUser}/preferred/preference`)
+          .post(`/user/preferred/preference?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(200, () => ({}));
 
         nock(baseUrl)
@@ -109,7 +109,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove users from a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/license/${uuids.validLicence}/member/user`)
+          .delete(`/license/${uuids.validLicence}/member/user?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
@@ -120,6 +120,7 @@ describe('myFT Client proxy', () => {
       myFT.removeUsersFromLicence(uuids.validLicence, uuids.validUser)
         .then(res => {
           expect(res).to.be.an('object');
+          expect(res.status).to.equal(204);
 
           return myFT.getUserFromLicence(uuids.validLicence, uuids.validUser);
         })
@@ -137,7 +138,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add users to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/license/${uuids.validLicence}/member/user`)
+          .post(`/license/${uuids.validLicence}/member/user?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
@@ -165,7 +166,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove users from a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/group/${uuids.validLicence}/member/user`)
+          .delete(`/group/${uuids.validLicence}/member/user?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
@@ -176,6 +177,7 @@ describe('myFT Client proxy', () => {
       myFT.removeUsersFromGroup(uuids.validLicence, uuids.validUser)
         .then(res => {
           expect(res).to.be.an('object');
+          expect(res.status).to.equal(204);
 
           return myFT.getUserFromGroup(uuids.validLicence, uuids.validUser);
         })
@@ -193,7 +195,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add users to a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/group/${uuids.validLicence}/member/user`)
+          .post(`/group/${uuids.validLicence}/member/user?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
@@ -221,7 +223,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove groups from a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/license/${uuids.validLicence}/member/group`)
+          .delete(`/license/${uuids.validLicence}/member/group?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
@@ -232,6 +234,7 @@ describe('myFT Client proxy', () => {
       myFT.removeGroupsFromLicence(uuids.validLicence, uuids.validLicence)
         .then(res => {
           expect(res).to.be.an('object');
+          expect(res.status).to.equal(204);
 
           return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
         })
@@ -249,7 +252,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add groups to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/license/${uuids.validLicence}/member/group`)
+          .post(`/license/${uuids.validLicence}/member/group?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
@@ -543,7 +546,7 @@ describe('myFT Client proxy', () => {
     it ('Should remove and get concepts followed by a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/group/${uuids.validLicence}/followed/concept`)
+          .delete(`/group/${uuids.validLicence}/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
@@ -600,7 +603,7 @@ describe('myFT Client proxy', () => {
     it ('Should remove and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/user/${uuids.validUser}/followed/concept`)
+          .delete(`/user/${uuids.validUser}/followed/concept?noEvent=${config.myFtNoEvent}&waitForPurge=${config.myFtWaitForPurgeAdd}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)

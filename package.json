@@ -37,6 +37,8 @@
     "@financial-times/n-logger": "^5.4.8",
     "dotenv": "^2.0.0",
     "fetch-retry-or-die": "0.0.4",
+    "signed-aws-es-fetch": "^1.3.0",
+    "bluebird": "^3.4.1",
     "aws-sdk": "^2.5.4"
   }
 }
