@@ -26,7 +26,7 @@ describe('Acquisition Context Service Client', () => {
 
   after(done => {
     if (mockAPI) {
-      require('nock').cleanAll();
+      nock.cleanAll();
     }
 
     logMessageStub.restore();

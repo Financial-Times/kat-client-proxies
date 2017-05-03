@@ -28,7 +28,7 @@ describe('Status Error Parser', () => {
 
   after(done => {
     if (mockAPI) {
-      require('nock').cleanAll();
+      nock.cleanAll();
     }
 
     logMessageStub.restore();

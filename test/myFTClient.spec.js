@@ -28,7 +28,7 @@ describe('myFT Client proxy', () => {
 
   after(done => {
     if (mockAPI) {
-      require('nock').cleanAll();
+      nock.cleanAll();
     }
 
     logMessageStub.restore();
