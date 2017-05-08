@@ -10,7 +10,7 @@ const logger = require('@financial-times/n-logger').default;
 const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = require('./../lib/helpers/config').accLicenceURL;
+const baseUrl = require('./../lib/helpers/config').ALS_API_URL;
 
 describe('Access Licence Service Client', () => {
   let logMessageStub;

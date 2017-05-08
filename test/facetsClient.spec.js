@@ -10,7 +10,7 @@ const helpers = require('./../lib/helpers/helpers');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const env = require('./helpers/env');
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = require('./../lib/helpers/config').facetsSearchUrl;
+const baseUrl = require('./../lib/helpers/config').FACETS_SEARCH_URL;
 
 describe('Facets API Client', () => {
   let logMessageStub;
