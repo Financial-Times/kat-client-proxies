@@ -8,5 +8,7 @@ module.exports = {
   USER_EMAIL: process.env.USER_EMAIL || 'ciprian.lujeru@ft.com',
   LICENCE_UUID: process.env.LICENCE_UUID || '8eb26ed7-68c8-44c6-b6ce-52d61500f301',
   INVALID_EMAIL: process.env.INVALID_EMAIL || 'v.lenin@ft.com',
-  VALID_TOPIC: process.env.VALID_TOPIC || 'YzEwYmY1N2YtYzJkNS00MzAxLWFkYmMtZmRjYzRjZDA4Y2Y0-VG9waWNz'
+  VALID_TOPIC: process.env.VALID_TOPIC || 'YzEwYmY1N2YtYzJkNS00MzAxLWFkYmMtZmRjYzRjZDA4Y2Y0-VG9waWNz',
+  VALID_FT_SESSION: process.env.VALID_FT_SESSION,
+  VALID_SECURE_FT_SESSION: process.env.VALID_SECURE_FT_SESSION
 };

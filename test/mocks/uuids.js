@@ -11,5 +11,9 @@ module.exports = {
   invalidLicence: '69e5b8b3-9d05-4e6c-b48a-fd6d3de20ad3',
   invalidKey: '08032ca5-9197-4b3b-8810-0a81d31c1eb8',
   validTopic: env.VALID_TOPIC,
-  invalidTopic: 'YzEwYmY1N2YtYzJkNS00MzAxLWFkYmMtZmRjYzRjZDA4Y2Y0-TESTING'
+  invalidTopic: 'YzEwYmY1N2YtYzJkNS00MzAxLWFkYmMtZmRjYzRjZDA4Y2Y0-TESTING',
+  validFTSession: env.VALID_FT_SESSION || 'valid-test123test',
+  invalidFTSession: 'invalid-test123test',
+  validFTSessionSecure: env.VALID_SECURE_FT_SESSION || 'valid-secure-test123test',
+  invalidFTSessionSecure: 'invalid-secure-test123test'
 };
