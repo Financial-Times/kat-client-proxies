@@ -15,5 +15,7 @@ module.exports = {
   validFTSession: env.VALID_FT_SESSION || 'valid-test123test',
   invalidFTSession: 'invalid-test123test',
   validFTSessionSecure: env.VALID_SECURE_FT_SESSION || 'valid-secure-test123test',
-  invalidFTSessionSecure: 'invalid-secure-test123test'
+  invalidFTSessionSecure: 'invalid-secure-test123test',
+  validApiAuthToken: env.VALID_API_AUTH_TOKEN || 'valid-api-token-test123test',
+  invalidApiAuthToken: env.VALID_API_AUTH_TOKEN || 'invalid-api-token-test123test'
 };
