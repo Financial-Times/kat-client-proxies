@@ -10,7 +10,7 @@ const logger = require('@financial-times/n-logger').default;
 const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = require('./../lib/helpers/config').acqCtxURL;
+const baseUrl = require('./../lib/helpers/config').ACS_API_URL;
 
 describe('Acquisition Context Service Client', () => {
   let logMessageStub;
@@ -26,7 +26,7 @@ describe('Acquisition Context Service Client', () => {
 
   after(done => {
     if (mockAPI) {
-      require('nock').cleanAll();
+      nock.cleanAll();
     }
 
     logMessageStub.restore();
