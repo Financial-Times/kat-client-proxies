@@ -1,0 +1,36 @@
+{
+  "id": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+  "creationDateTime": "2015-09-24T13:34:55.073Z",
+  "products": [
+    {
+      "code": "P2",
+      "name": "FT.com Premium"
+    }
+  ],
+  "issueReason": "Contract Signed",
+  "links": [
+    {
+      "rel": "contract",
+      "href": "#",
+      "id": "FT-123"
+    }
+  ],
+  "status": "active",
+  "seatLimit": 20,
+  "ipAccessEnabled": false,
+  "ipAccessAddresses": [],
+  "lastUpdatedDateTime": "2017-05-03T14:01:37.649Z",
+  "seatsHref": [
+    {
+      "rel": "seats",
+      "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/seats"
+    }
+  ],
+  "adminsHref": [
+    {
+      "rel": "administrators",
+      "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/administrators"
+    }
+  ],
+  "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+}

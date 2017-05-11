@@ -1,92 +1,193 @@
 'use strict';
 
-const accessLicence = require('../index').accessLicenceClient;
-const mocks = require('./mocks');
+const proxies = require('./../index');
+const accessLicence = proxies.accessLicenceClient;
+const uuids = require('./mocks/uuids');
 const expect = require("chai").expect;
-const config = require('../lib/config');
-const statusErrors = require('../lib/statusErrors');
-const env = require('./env');
+const sinon = require('sinon');
+const nock = require('nock');
+const logger = require('@financial-times/n-logger').default;
+const clientErrors = proxies.clientErrors;
+const env = require('./helpers/env');
+const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
+const mockAPI = env.USE_MOCK_API;
+const baseUrl = require('./../lib/helpers/config').ALS_API_URL;
 
-const expectOwnProperties = require('./expectExtensions').expectOwnProperties;
+describe('Access Licence Service Client', () => {
+  let logMessageStub;
+  const logMessages = [];
 
-describe('Access Licence Service Client', function () {
+  before(done => {
+    logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+      logMessages.push(params);
+    });
 
-	const mockAPI = env.USE_MOCK_API;
+    done();
+  });
 
-	before(function() {
-		if (mockAPI) {
-			mocks.registerAccessLicence();
-		}
-	});
-	this.timeout('3s');
+  after(done => {
+    if (mockAPI) {
+      nock.cleanAll();
+    }
 
-	after(function() {
-		if (mockAPI) {
-			require('fetch-mock').restore();
-		}
-	});
+    logMessageStub.restore();
 
-	describe('getLicences', function () {
+    done();
+  });
 
-		it('Should get a list of Licence IDs for a valid UUID', (done) => {
-			accessLicence.getLicences({userid:mocks.uuids.validUser})
-			.then((licences)=>{
-				console.log(JSON.stringify(licences));
-				expect(licences).to.be.an('array');
-				licences.forEach(licence=>{
-					expect(licence).to.have.ownProperty('id');
-				});
-				done();
-			})
-			.catch((err)=>{
-				done(err);
-			});
-		});
+  describe('getLicences', () => {
 
-		it('Should get an empty array for a invalid user UUID', (done) => {
-			accessLicence.getLicences({userid:mocks.uuids.invalidUser})
-			.then((licences)=>{
-				console.log(JSON.stringify(licences));
-				expect(licences).to.be.an('array');
-				expect(licences).to.have.lengthOf(0);
-				done();
-			})
-			.catch((err)=>{
-				done(err);
-			});
-		});
-	});
+    it('Should get a list of Licence IDs for a valid UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences?userid=${uuids.validUser}`)
+          .reply(200, () => require('./mocks/fixtures/accessLicenceGetLicence'));
+      }
 
-	describe('getSeats', function () {
+      accessLicence.getLicences({userid: uuids.validUser})
+        .then(licences => {
+          expect(licences).to.be.an('array');
+          expect(licences.length).to.be.at.least(1);
+          expectOwnProperties(licences, ['id']);
 
-		it('Should get a list of seats for a valid licence UUID', (done) => {
-			accessLicence.getSeats(mocks.uuids.validLicence)
-			.then((seats)=>{
-				// console.log(JSON.stringify(seats));
-				expect(seats).to.be.an('array');
-				seats.forEach(seat=>{
-					expect(seat).to.have.ownProperty('userId');
-					expect(seat).to.have.ownProperty('accessLicenceId');
-				});
-				done();
-			})
-			.catch((err)=>{
-				done(err);
-			});
-		});
+          done();
+        })
+        .catch(done);
+    });
 
-		it('Should get an empty array for a invalid licence UUID', (done) => {
-			accessLicence.getSeats(mocks.uuids.invalidLicence)
-			.then((seats)=>{
-				// console.log(JSON.stringify(seats));
-				expect(seats).to.be.an('array');
-				expect(seats).to.have.lengthOf(0);
-				done();
-			})
-			.catch((err)=>{
-				done(err);
-			});
-		});
-	});
+    it('Should get an empty array for a invalid user UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences?userid=${uuids.invalidUser}`)
+          .reply(200, () => ({accessLicences: []}));
+      }
+
+      accessLicence.getLicences({userid: uuids.invalidUser})
+        .then(licences => {
+          expect(licences).to.be.an('array');
+          expect(licences).to.have.lengthOf(0);
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('getSeats', () => {
+
+    it('Should get a list of seats for a valid licence UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.validLicence}/seats`)
+          .reply(200, () => require('./mocks/fixtures/accessLicenceGetSeats'));
+      }
+
+      accessLicence.getSeats(uuids.validLicence)
+        .then(seats => {
+          expect(seats).to.be.an('array');
+          expect(seats.length).to.be.at.least(1);
+          expectOwnProperties(seats, ['userId', 'accessLicenceId']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('Should get an empty array for a invalid licence UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.invalidLicence}/seats`)
+          .reply(200, () => ({seats: [], "allocatedSeatCount": 0}));
+      }
+
+      accessLicence.getSeats(uuids.invalidLicence)
+        .then(seats => {
+          expect(seats).to.be.an('array');
+          expect(seats).to.have.lengthOf(0);
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('getLicenceInfo', () => {
+    it('Should get the info for a valid licence UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/accessLicenceInfo'));
+      }
+
+      accessLicence.getLicenceInfo(uuids.validLicence)
+        .then(response => {
+          expect(response).to.be.an('object');
+          expectOwnProperties(response, ['id', 'creationDateTime', 'status', 'seatLimit', 'seatsHref', 'adminsHref']);
+          expect(response.id).to.equal(uuids.validLicence);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('Should throw a NotFoundError for an invalid licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.invalidLicence}`)
+          .reply(404, () => null);
+      }
+
+      accessLicence.getLicenceInfo(uuids.invalidLicence)
+        .then(() => {
+          done(new Error('Nothing thrown'));
+        })
+        .catch(err => {
+          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+
+          done();
+        });
+    });
+  });
+
+  describe('getAdministrators', () => {
+    it('Should get the administrators for a valid licence UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.validLicence}/administrators`)
+          .reply(200, () => require('./mocks/fixtures/accessLicenceAdmins'));
+      }
+
+      accessLicence.getAdministrators(uuids.validLicence)
+        .then(response => {
+          expect(response).to.be.an('object');
+          expectOwnProperties(response, ['administrators']);
+          expect(response.administrators).to.be.an('array');
+          expect(response.administrators.length).to.be.at.least(1);
+          expectOwnProperties(response.administrators, ['accessLicenceId', 'userId', 'joinedDate']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('Should get an empty array for a invalid user UUID', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/licences/${uuids.invalidLicence}/administrators`)
+          .reply(200, () => ({administrators: []}));
+      }
+
+      accessLicence.getAdministrators(uuids.invalidLicence)
+        .then(response => {
+          expect(response).to.be.an('object');
+          expectOwnProperties(response, ['administrators']);
+          expect(response.administrators).to.be.an('array');
+          expect(response.administrators).to.have.lengthOf(0);
+
+          done();
+        })
+        .catch(done);
+    });
+  });
 
 });
