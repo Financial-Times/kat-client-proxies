@@ -10,9 +10,9 @@ const logger = require('@financial-times/n-logger').default;
 const clientErrors = proxies.clientErrors;
 const env = require('./helpers/env');
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = config.myFTURL;
+const baseUrl = config.MYFT_API_URL;
 const fetchOpt = Object.assign({}, config.fetchOptions);
-fetchOpt.headers = Object.assign({}, fetchOpt.headers, {"X-API-KEY": config.myFTKey});
+fetchOpt.headers = Object.assign({}, fetchOpt.headers, {"X-API-KEY": config.MYFT_API_KEY});
 
 describe('Status Error Parser', () => {
   let logMessageStub;

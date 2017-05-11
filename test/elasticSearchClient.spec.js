@@ -11,7 +11,7 @@ const logger = require('@financial-times/n-logger').default;
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 //const env = require('./helpers/env');
 //const mockAPI = env.USE_MOCK_API;
-//const baseUrl = require('./../lib/helpers/config').elasticSearchUrl;
+//const baseUrl = require('./../lib/helpers/config').ELASTIC_SEARCH_URL;
 
 describe('Elastic Search Client', () => {
   let logMessageStub;

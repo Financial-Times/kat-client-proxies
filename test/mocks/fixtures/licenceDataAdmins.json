@@ -1,0 +1,11 @@
+{
+  "administrators": [
+    {
+      "id": "c62c4485-7183-494c-a947-d754f5cd0a15",
+      "lastName": "TestLN",
+      "firstName": "TestFN",
+      "email": "test@test.com",
+      "joinedDate": "2016-10-21T13:29:22.412Z"
+    }
+  ]
+}
