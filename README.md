@@ -9,7 +9,7 @@ To get a copy of the project up and running on your local machine for developmen
 Use the `.env` file saved in LastPass to set up necessary environmental variables (feel free to approach KAT team via `#ft-syndikat` slack channel if you have any questions or access issues).
 
 ## Testing
-`npm test` will by default use the mocked APIs and associated fixtures. It is possible to test against the actual APIs by setting the following environment variables:
+`$ npm test` will by default use the mocked APIs and associated fixtures. It is possible to test against the actual APIs by setting the following environment variables:
 
 ```
 USE_MOCK_API=false
@@ -22,7 +22,7 @@ Where `USER_UUID` is a valid user uuid on FT.com and `LICENCE_UUID` is the uuid 
 ## Deployment
 This component has been created to be included throughout other KAT components.
 
-### How to update a repo that uses the component to the new footer version
+### How to update a repo that uses the component to the new version
 If you want to update connected components with the latest version, you need to follow the following steps:
 1. Create a new repository release on gitHub. Please follow naming convention of previous releases.
 2. Go to `package.json` file of the component you want to update, and change `"kat-client-proxies"` dependency version to the [newly released one](https://github.com/Financial-Times/kat-client-proxies/releases).
