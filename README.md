@@ -8,6 +8,8 @@ To get a copy of the project up and running on your local machine for developmen
 
 Use the `.env` file saved in LastPass to set up necessary environmental variables (feel free to approach KAT team via `#ft-syndikat` slack channel if you have any questions or access issues).
 
+Whenever you are adding a new client proxies, for maintenance don't forget to include it in the list in the end of this README.
+
 ## Testing
 `$ npm test` will by default use the mocked APIs and associated fixtures. It is possible to test against the actual APIs by setting the following environment variables:
 
@@ -44,11 +46,20 @@ In your application wherever you would like to use kat-client-proxies include th
 
 ```js
   //... your app code
-  const [moduleName] = require('kat-client-proxies').[moduleName];;
+  const [moduleName] = require('kat-client-proxies').[moduleName];
   // ... and then e.g.
   [moduleName].[functionName]([args...])
 ```
 
 ## Current proxies
-* myFTClient
+* accessLicenceClient
 * acquisitionCtxClient
+* clientErrors
+* elasticSearchClient
+* emailNotification
+* facetsClient
+* kinesisClient
+* licenceDataClient
+* myFTClient
+* sessionClient
+* userProfileClient
