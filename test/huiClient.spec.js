@@ -79,7 +79,7 @@ describe('HUI Service Client',() => {
 				.then(usageData => {
 					expect(usageData).to.be.an('array');
 					expect(usageData[0]).to.be.an('object');
-					expect(usageData[0]).to.have.property('Wk1/2017');
+					expect(usageData[0]).to.have.property('M1/2017');
 					done();
 				})
 				.catch(done);
