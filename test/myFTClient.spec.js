@@ -15,6 +15,8 @@ const expectOwnProperties = require('./helpers/expectExtensions').expectOwnPrope
 const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
+const myftConst = config.myftClientConstants;
+
 describe('myFT Client proxy', () => {
   let logMessageStub;
   const logMessages = [];
@@ -47,11 +49,11 @@ describe('myFT Client proxy', () => {
     it('Should set an EmailDigestPreference for a valid user uuid', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/user/preferred/preference${extraParams}`)
+          .post(`/${myftConst.userNodeName}/${myftConst.prefRelType}/${myftConst.prefRelName}${extraParams}`)
           .reply(200, () => ({}));
 
         nock(baseUrl)
-          .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
+          .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.prefRelType}/${myftConst.prefRelName}/${myftConst.prefRelId}`)
           .reply(200, () => require('./mocks/fixtures/emailDigestPreference'));
       }
 
@@ -60,8 +62,9 @@ describe('myFT Client proxy', () => {
       myFT.setEmailDigestPreference(uuids.validUser, edpPref)
         .then(() => myFT.getEmailDigestPreference(uuids.validUser))
         .then(edp => {
-          expectOwnProperties(edp, ['uuid']);
-          expect(edp.uuid).to.equal('email-digest');
+          expect(edp).to.be.an('object');
+          expectOwnProperties(edp, ['uuid', '_rel']);
+          expect(edp.uuid).to.equal(myftConst.prefRelId);
           expect(edp["_rel"].isTest).to.equal(true);
 
           done();
@@ -72,14 +75,32 @@ describe('myFT Client proxy', () => {
     it('Should get an EmailDigestPreference for a valid user uuid', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/user/${uuids.validUser}/preferred/preference/email-digest`)
+          .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.prefRelType}/${myftConst.prefRelName}/${myftConst.prefRelId}`)
           .reply(200, () => require('./mocks/fixtures/emailDigestPreference'));
       }
 
       myFT.getEmailDigestPreference(uuids.validUser)
         .then(edp => {
+          expect(edp).to.be.an('object');
           expectOwnProperties(edp, ['uuid']);
-          expect(edp.uuid).to.equal('email-digest');
+          expect(edp.uuid).to.equal(myftConst.prefRelId);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('Should get users with EmailDigestPreference for a valid licence uuid', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.prefRelName}/${myftConst.prefRelId}/${myftConst.prefRelType}/${myftConst.userNodeName}`)
+          .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
+      }
+
+      myFT.getUsersWithEmailDigestPreference(uuids.validLicence)
+        .then(edp => {
+          expect(edp).to.be.an('array');
+          expectOwnProperties(edp, ['uuid']);
 
           done();
         })
@@ -89,7 +110,7 @@ describe('myFT Client proxy', () => {
     it('Should throw a NotFoundError error for EmailDigestPreference for an invalid user uuid', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/user/${uuids.invalidUser}/preferred/preference/email-digest`)
+          .get(`/${myftConst.userNodeName}/${uuids.invalidUser}/${myftConst.prefRelType}/${myftConst.prefRelName}/${myftConst.prefRelId}`)
           .reply(404, () => null);
       }
 
@@ -110,11 +131,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove users from a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/license/${uuids.validLicence}/member/user${extraParams}`)
+          .delete(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}${extraParams}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(404, () => null);
       }
 
@@ -139,11 +160,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add users to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/license/${uuids.validLicence}/member/user${extraParams}`)
+          .post(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}${extraParams}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
@@ -167,11 +188,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove users from a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/group/${uuids.validLicence}/member/user${extraParams}`)
+          .delete(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}${extraParams}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(404, () => null);
       }
 
@@ -196,11 +217,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add users to a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/group/${uuids.validLicence}/member/user${extraParams}`)
+          .post(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}${extraParams}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
@@ -224,11 +245,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to remove groups from a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/license/${uuids.validLicence}/member/group${extraParams}`)
+          .delete(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}${extraParams}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/group/${uuids.validLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
           .reply(404, () => null);
       }
 
@@ -253,11 +274,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add groups to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/license/${uuids.validLicence}/member/group${extraParams}`)
+          .post(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}${extraParams}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/group/${uuids.validLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
           .reply(200, () => require('./mocks/fixtures/getGroupFromLicence'));
       }
 
@@ -281,11 +302,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to add a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/license`)
+          .post(`/${myftConst.licenceNodeName}`)
           .reply(200, () => ({}));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}`)
           .reply(200, () => require('./mocks/fixtures/getLicence'));
       }
 
@@ -307,11 +328,11 @@ describe('myFT Client proxy', () => {
     it ('Should be able to update a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .put(`/license/${uuids.validLicence}`)
+          .put(`/${myftConst.licenceNodeName}/${uuids.validLicence}`)
           .reply(200, () => ({}));
 
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}`)
           .reply(200, () => require('./mocks/fixtures/getLicence'));
       }
       const regDate = new Date().getTime();
@@ -338,7 +359,7 @@ describe('myFT Client proxy', () => {
     it ('Should be able to get a valid licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}`)
           .reply(200, () => require('./mocks/fixtures/getLicence'));
       }
 
@@ -355,7 +376,7 @@ describe('myFT Client proxy', () => {
     it ('Should throw a NotFoundError for an invalid licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.invalidLicence}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.invalidLicence}`)
           .reply(404, () => null);
       }
 
@@ -373,7 +394,7 @@ describe('myFT Client proxy', () => {
     it ('Should get user registered to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
@@ -390,7 +411,7 @@ describe('myFT Client proxy', () => {
     it ('Should throw a NotFoundError for an invalid licence user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/user/${uuids.invalidUser}`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.invalidUser}`)
           .reply(404, () => null);
       }
 
@@ -408,7 +429,7 @@ describe('myFT Client proxy', () => {
     it ('Should get user registered to a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/member/user/${uuids.validUser}`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.validUser}`)
           .reply(200, () => require('./mocks/fixtures/getUserFromLicence'));
       }
 
@@ -425,7 +446,7 @@ describe('myFT Client proxy', () => {
     it ('Should throw a NotFoundError for an invalid group user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/member/user/${uuids.invalidUser}`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}/${uuids.invalidUser}`)
           .reply(404, () => null);
       }
 
@@ -443,7 +464,7 @@ describe('myFT Client proxy', () => {
     it ('Should get users registered to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/user?page=1&limit=500`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/getLicenceMembers'));
       }
 
@@ -461,7 +482,7 @@ describe('myFT Client proxy', () => {
     it ('Should get users registered to a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/member/user?page=1&limit=500`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/getLicenceMembers'));
       }
 
@@ -479,7 +500,7 @@ describe('myFT Client proxy', () => {
     it ('Should get groups registered to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/license/${uuids.validLicence}/member/group?page=1&limit=500`)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/getLicenceGroupMembers'));
       }
 
@@ -503,7 +524,7 @@ describe('myFT Client proxy', () => {
     it ('Should get an array of concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
       }
 
@@ -525,7 +546,7 @@ describe('myFT Client proxy', () => {
     it ('Should get an array of concepts followed by a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
       }
 
@@ -547,11 +568,11 @@ describe('myFT Client proxy', () => {
     it ('Should remove and get concepts followed by a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/group/${uuids.validLicence}/followed/concept${extraParams}`)
+          .delete(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => ([]));
       }
 
@@ -573,11 +594,11 @@ describe('myFT Client proxy', () => {
     it ('Should set and get concepts followed by a group', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/group/followed/concept${extraParams}`)
+          .post(`/${myftConst.groupNodeName}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
-          .get(`/group/${uuids.validLicence}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
       }
 
@@ -604,11 +625,11 @@ describe('myFT Client proxy', () => {
     it ('Should remove and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .delete(`/user/${uuids.validUser}/followed/concept${extraParams}`)
+          .delete(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
           .reply(204, () => ({}));
 
         nock(baseUrl)
-          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => ([]));
       }
 
@@ -630,11 +651,11 @@ describe('myFT Client proxy', () => {
     it ('Should set and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .post(`/user/followed/concept${extraParams}`)
+          .post(`/${myftConst.userNodeName}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
           .reply(200, () => ([]));
 
         nock(baseUrl)
-          .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
+          .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
           .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
       }
 
@@ -652,6 +673,74 @@ describe('myFT Client proxy', () => {
           }
 
           expectOwnProperties(followResponse, ['uuid']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get a list of user IDs that follow a valid topic', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
+      }
+
+      myFT.getUsersFollowingConcept(uuids.validLicence, uuids.validTopic)
+        .then(respone => {
+          expect(respone).to.be.an('array');
+          expectOwnProperties(respone, ['uuid']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get an empty list of user IDs that follow an invalid valid topic', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .reply(200, () => []);
+      }
+
+      myFT.getUsersFollowingConcept(uuids.validLicence, uuids.invalidTopic)
+        .then(respone => {
+          expect(respone).to.be.an('array');
+          expect(respone).to.be.empty;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get a list of group IDs that follow a valid topic', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/${myftConst.followedRelName}/${myftConst.groupNodeName}`)
+          .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
+      }
+
+      myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.validTopic)
+        .then(respone => {
+          expect(respone).to.be.an('array');
+          expectOwnProperties(respone, ['uuid']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get an empty list of group IDs that follow an invalid valid topic', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/${myftConst.followedRelName}/${myftConst.groupNodeName}`)
+          .reply(200, () => []);
+      }
+
+      myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.invalidTopic)
+        .then(respone => {
+          expect(respone).to.be.an('array');
+          expect(respone).to.be.empty;
 
           done();
         })
