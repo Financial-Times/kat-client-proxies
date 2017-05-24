@@ -3,27 +3,43 @@ const hui = proxies.huiClient;
 const moment = require('moment');
 const expect = require('chai').expect;
 const nock = require('nock');
+const logger = require('@financial-times/n-logger').default;
+const sinon = require('sinon');
 const env = require('./helpers/env');
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = require('./../lib/helpers/config').HUI_API_URL;
+const baseUrl = require('./../lib/helpers/config').HUI_BASE_PATH;
 
 describe('HUI Service Client',() => {
 	const weekDateFormat = '[wk]W/GGGG';
 	const monthDateFormat = '[m]M/GGGG';
 	const licenceId = '8eb26ed7-68c8-44c6-b6ce-52d61500f301';
 	const startDate = moment('2016-12-01');
-	const weekStartDate = startDate.format(weekDateFormat);
-	const monthStartDate = startDate.format(monthDateFormat);
+	const weekStartDate = startDate.clone().startOf('isoweek').subtract(1, 'week').format(weekDateFormat);
+	const monthStartDate = startDate.clone().startOf('month').subtract(1, 'month').format(monthDateFormat);
 	const endDate = moment('2017-02-01');
 	const weekEndDate = endDate.format(weekDateFormat);
 	const monthEndDate = endDate.format(monthDateFormat);
-	const type = '';
-	const filter = '';
+	const type = 'device';
+	const filter = 'media player';
+
+	let logMessageStub;
+	const logMessages = [];
+
+	before(done => {
+		// Stop n-logger from making out test output look messy
+		logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+			logMessages.push(params);
+		});
+
+		done();
+	});
 
 	after(done => {
 		if (mockAPI) {
 			nock.cleanAll();
 		}
+
+		logMessageStub.restore();
 
 		done();
 	});
@@ -41,7 +57,7 @@ describe('HUI Service Client',() => {
 			hui.getUsage(licenceId, invalidAggregation, startDate, endDate, type, filter)
 				.then(usageData => {
 					expect(usageData).to.be.an('array');
-					expect(usageData).to.be.empty();
+					expect(usageData).to.be.empty;
 					done();
 				})
 				.catch(done);
@@ -58,6 +74,7 @@ describe('HUI Service Client',() => {
 
 			hui.getUsage(licenceId, aggregation, startDate, endDate, type, filter)
 				.then(usageData => {
+					console.log(usageData);
 					expect(usageData).to.be.an('array');
 					expect(usageData[0]).to.be.an('object');
 					expect(usageData[0]).to.have.property('Wk1/2017');
