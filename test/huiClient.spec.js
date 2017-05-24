@@ -74,7 +74,6 @@ describe('HUI Service Client',() => {
 
 			hui.getUsage(licenceId, aggregation, startDate, endDate, type, filter)
 				.then(usageData => {
-					console.log(usageData);
 					expect(usageData).to.be.an('array');
 					expect(usageData[0]).to.be.an('object');
 					expect(usageData[0]).to.have.property('Wk1/2017');
