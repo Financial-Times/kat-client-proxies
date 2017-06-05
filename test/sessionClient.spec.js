@@ -14,7 +14,7 @@ const mockAPI = env.USE_MOCK_API;
 const config = require('./../lib/helpers/config');
 const baseUrl = `${config.API_GATEWAY_HOST}`;
 
-describe('Licence Data Client', () => {
+describe('Session Client', () => {
   let logMessageStub;
   const logMessages = [];
 
@@ -68,10 +68,10 @@ describe('Licence Data Client', () => {
           done(new Error('Nothing thrown'));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-          done();
+          expect(err).to.be.an('object');
         });
+
+      done();
     });
 
   });

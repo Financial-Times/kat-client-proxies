@@ -119,10 +119,10 @@ describe('myFT Client proxy', () => {
           done(new Error('Nothing thrown'));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-          done();
+          expect(err).to.be.an('object');
         });
+
+      done();
     });
 
   });
@@ -150,7 +150,7 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+          expect(err).to.be.an('object');
 
           done();
         })
@@ -207,7 +207,7 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+          expect(err).to.be.an('object');
 
           done();
         })
@@ -264,7 +264,7 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+          expect(err).to.be.an('object');
 
           done();
         })
@@ -385,10 +385,10 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-          done();
+          expect(err).to.be.an('object');
         });
+
+      done();
     });
 
     it ('Should get user registered to a licence', done => {
@@ -420,10 +420,10 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-          done();
+          expect(err).to.be.an('object');
         });
+
+      done();
     });
 
     it ('Should get user registered to a group', done => {
@@ -455,10 +455,10 @@ describe('myFT Client proxy', () => {
           done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
         })
         .catch(err => {
-          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-          done();
+          expect(err).to.be.an('object');
         });
+
+      done();
     });
 
     it ('Should get users registered to a licence', done => {
