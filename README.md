@@ -58,6 +58,7 @@ In your application wherever you would like to use kat-client-proxies include th
 * elasticSearchClient
 * emailNotification
 * facetsClient
+* huiClient
 * kinesisClient
 * licenceDataClient
 * myFTClient
