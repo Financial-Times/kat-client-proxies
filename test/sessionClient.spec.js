@@ -68,10 +68,10 @@ describe('Session Client', () => {
           done(new Error('Nothing thrown'));
         })
         .catch(err => {
-          expect(err).to.be.an('object');
-        });
+          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
 
-      done();
+          done();
+        });
     });
 
   });

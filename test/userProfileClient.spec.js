@@ -99,16 +99,11 @@ describe('User Profile Service Client', () => {
 
       userProfile.exists(uuids.invalidUser)
         .then(res => {
-          console.log(res);
           expect(res).to.be.false;
 
           done();
         })
-        .catch(err => {
-          expect(err).to.be.an('object');
-        });
-
-      done();
+        .catch(done);
     });
 
   });
