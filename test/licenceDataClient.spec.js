@@ -155,4 +155,23 @@ describe('Licence Data Client', () => {
 
   });
 
+  describe('removeUsers', () => {
+    it('Should be able to remove users from a licence', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .post(`/${uuids.validLicence}/remove`)
+          .reply(200, () => null);
+      }
+
+      ldc.removeUsers(uuids.validLicence, [uuids.validUser])
+        .then(response => {
+          expect(response).to.be.an('object');
+          expect(response.status).to.equal(200);
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
 });
