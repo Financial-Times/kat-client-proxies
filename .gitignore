@@ -39,3 +39,7 @@ jspm_packages
 
 # Environment settings
 *.env*
+
+.eslintrc.js
+.editorconfig
+.pa11yci.js
