@@ -18,7 +18,7 @@
       "taxonomy": "organisations",
       "uuid": "TnN0ZWluX09OX0FGVE1fT05fMTMxMTYz-T04=",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
         "created": 1480504389943,
         "count": 1,
@@ -44,7 +44,7 @@
       "taxonomy": "people",
       "uuid": "TnN0ZWluX1BOXzIwMDkwNjIzXzE2MTY=-UE4=",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "created": 1478779683484,
         "count": 1,
         "updated": 1478779683484,
@@ -57,7 +57,7 @@
       "taxonomy": "regions",
       "uuid": "TnN0ZWluX0dMX0FGVE1fR0xfMTk5ODA=-R0w=",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
         "created": 1478248058858,
         "count": 1,
@@ -71,7 +71,7 @@
       "taxonomy": "regions",
       "uuid": "TnN0ZWluX0dMX0ZJ-R0w=",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
         "created": 1478104572623,
         "count": 1,
