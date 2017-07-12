@@ -36,7 +36,7 @@
       "nodeRank": 8,
       "uuid": "2e0f0540-c517-41bb-9843-3f46f5ba1708",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "created": 1473677239949,
         "count": 1,
         "updated": 1473677239949,
@@ -46,7 +46,7 @@
     {
       "uuid": "78dac1ba-d84f-4bf6-861f-cc1c37e754d4",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "created": 1473677239877,
         "count": 1,
         "updated": 1473677239877,
@@ -56,7 +56,7 @@
     {
       "uuid": "653971cb-0e4b-4f42-8315-5485f3d1025d",
       "_rel": {
-        "byTool": "KMT",
+        "byTool": "KAT",
         "created": 1473677239787,
         "count": 1,
         "updated": 1473677239787,
