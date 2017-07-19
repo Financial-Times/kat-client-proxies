@@ -356,6 +356,34 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
+    it ('Should be able to update a group', done => {
+      const newGroupName = 'All users';
+      if (mockAPI) {
+        nock(baseUrl)
+          .put(`/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(200, () => ({}));
+
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getGroupFromLicence'));
+      }
+
+      myFT.updateGroup(uuids.validLicence, {"name": newGroupName})
+        .then(resp => {
+          expect(resp).to.be.an('object');
+
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
+        })
+        .then(resp => {
+          expectOwnProperties(resp, ['uuid', 'name', '_rel']);
+          expect(resp.uuid).to.equal(uuids.validLicence);
+          expect(resp.name).to.equal(newGroupName);
+
+          done();
+        })
+        .catch(done);
+    });
+
     it ('Should be able to get a valid licence', done => {
       if (mockAPI) {
         nock(baseUrl)
@@ -491,6 +519,30 @@ describe('myFT Client proxy', () => {
           expect(usersResponse).to.be.an('array');
           expectOwnProperties(usersResponse, ['uuid']);
           expect(usersResponse.length).to.be.at.least(1);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get users registered to a group by pages', done => {
+      const page = 1;
+      const limit = 10;
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}?page=${page}&limit=${limit}`)
+          .reply(200, () => require('./mocks/fixtures/getGroupUsersByPage'));
+      }
+
+      myFT.getUsersForGroupByPage(uuids.validLicence, { page, limit })
+        .then(usersResponse => {
+          expect(usersResponse).to.be.an('object');
+          expectOwnProperties(usersResponse, ['group', 'total', 'items', 'count']);
+
+          const items = usersResponse.items;
+          expect(items).to.be.an('array');
+          expect(items.length).to.be.at.least(1);
+          expectOwnProperties(items, ['uuid']);
 
           done();
         })
