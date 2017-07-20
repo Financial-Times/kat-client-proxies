@@ -271,6 +271,35 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
+    it ('Should be able to remove groups node', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(404, () => null);
+      }
+
+      myFT.removeGroup(uuids.validLicence)
+        .then(res => {
+          expect(res).to.be.an('object');
+          expect(res.status).to.equal(204);
+
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
+        })
+        .then(resp => {
+          done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
+        })
+        .catch(err => {
+          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+
+          done();
+        })
+        .catch(done);
+    });
+
     it ('Should be able to add groups to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
