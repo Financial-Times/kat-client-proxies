@@ -768,9 +768,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getUsersFollowingConcept(uuids.validLicence, uuids.validTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expectOwnProperties(respone, ['uuid']);
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
 
           done();
         })
@@ -785,9 +785,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getUsersFollowingConcept(uuids.validLicence, uuids.invalidTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expect(respone).to.be.empty;
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
 
           done();
         })
@@ -802,9 +802,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.validTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expectOwnProperties(respone, ['uuid']);
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
 
           done();
         })
@@ -819,14 +819,49 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.invalidTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expect(respone).to.be.empty;
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get a list of user IDs that follow a valid topic as an individual', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .query({ followType: 'individual' })
+          .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
+      }
+
+      myFT.getUsersFollowingConceptAsIndividual(uuids.validLicence, uuids.validTopic)
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get an empty list of user IDs that follow an invalid topic as an individual', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .query({ followType: 'individual' })
+          .reply(200, () => []);
+      }
+
+      myFT.getUsersFollowingConceptAsIndividual(uuids.validLicence, uuids.invalidTopic)
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
 
           done();
         })
         .catch(done);
     });
   });
-
 });
