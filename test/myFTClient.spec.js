@@ -831,7 +831,7 @@ describe('myFT Client proxy', () => {
     it ('Should get a list of user IDs that follow a valid topic as an individual', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/followers/${myftConst.userNodeName}`)
           .query({ followType: 'individual' })
           .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
       }
@@ -849,7 +849,7 @@ describe('myFT Client proxy', () => {
     it ('Should get an empty list of user IDs that follow an invalid topic as an individual', done => {
       if (mockAPI) {
         nock(baseUrl)
-          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/${myftConst.followedRelName}/${myftConst.userNodeName}`)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/followers/${myftConst.userNodeName}`)
           .query({ followType: 'individual' })
           .reply(200, () => []);
       }
