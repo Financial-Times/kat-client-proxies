@@ -320,8 +320,9 @@ describe('myFT Client proxy', () => {
           return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
         })
         .then(getResponse => {
-          expectOwnProperties(getResponse, ['uuid', '_rel']);
+          expectOwnProperties(getResponse, ['uuid', '_rel', 'name']);
           expect(getResponse.uuid).to.equal(uuids.validLicence);
+          expect(getResponse.name).to.equal('All users');
 
           done();
         })
