@@ -879,7 +879,7 @@ describe('myFT Client proxy', () => {
       it('Should set and get concepts followed by a user ', done => {
         if (mockAPI) {
           nock(baseUrl)
-            .post(`kat/${myftConst.userNodeName}/follows/`)
+            .post(`/kat/${myftConst.userNodeName}/follows`)
             .reply(200, () => ([]));
 
           nock(baseUrl)
@@ -887,21 +887,10 @@ describe('myFT Client proxy', () => {
             .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
         }
 
-        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
+        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
-
-            return myFT.getConceptsFollowedByKatUser(uuids.validUser);
-          })
-          .then(followResponse => {
-            expect(followResponse).to.be.an('array');
-
-            if (mockAPI) {
-              expect(followResponse).to.have.lengthOf(5);
-            }
-
-            expectOwnProperties(followResponse, ['uuid']);
-
+            expect(addResp).to.be.empty;
             done();
           })
           .catch(done);
