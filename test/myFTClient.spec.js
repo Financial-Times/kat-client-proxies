@@ -9,22 +9,25 @@ const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const config = require('./../lib/helpers/config');
 const clientErrors = proxies.clientErrors;
-const env = require('./helpers/env');
-const mockAPI = env.USE_MOCK_API;
+//const env = require('./helpers/env');
+const mockAPI = false; //env.USE_MOCK_API;
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
   const logMessages = [];
 
   before(done => {
-    logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
-      logMessages.push(params);
-    });
+    if(suppressLogs) {
+      logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+        logMessages.push(params);
+      });
+    }
 
     done();
   });
@@ -34,8 +37,9 @@ describe('myFT Client proxy', () => {
       nock.cleanAll();
     }
 
-    logMessageStub.restore();
-
+    if(suppressLogs) {
+      logMessageStub.restore();
+    }
     done();
   });
 
@@ -864,5 +868,43 @@ describe('myFT Client proxy', () => {
         })
         .catch(done);
     });
+  });
+
+    //new orgainic v3/kat methods
+    describe.only('Followed_by_Kat concepts', () => {
+      const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
+      const userConcepts = require('./mocks/fixtures/userFollowedConcept');
+    //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
+
+      it('Should set and get concepts followed by a user ', done => {
+        if (mockAPI) {
+          nock(baseUrl)
+            .post(`kat/${myftConst.userNodeName}/follows/`)
+            .reply(200, () => ([]));
+
+          nock(baseUrl)
+            .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
+            .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
+        }
+
+        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
+          .then(addResp => {
+            expect(addResp).to.be.an('array');
+
+            return myFT.getConceptsFollowedByKatUser(uuids.validUser);
+          })
+          .then(followResponse => {
+            expect(followResponse).to.be.an('array');
+
+            if (mockAPI) {
+              expect(followResponse).to.have.lengthOf(5);
+            }
+
+            expectOwnProperties(followResponse, ['uuid']);
+
+            done();
+          })
+          .catch(done);
+      });
   });
 });
