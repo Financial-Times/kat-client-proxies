@@ -879,11 +879,11 @@ describe('myFT Client proxy', () => {
       it('Should set and get concepts followed by a user ', done => {
         if (mockAPI) {
           nock(baseUrl)
-            .post(`/kat/${myftConst.userNodeName}/follows`)
+            .post(`/kat/user/follows`)
             .reply(200, () => ([]));
 
           nock(baseUrl)
-            .get(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}?page=1&limit=500`)
+            .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
             .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
         }
 
