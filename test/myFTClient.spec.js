@@ -889,6 +889,7 @@ describe('myFT Client proxy', () => {
 
         myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts, relProps)
           .then(addResp => {
+            expect(addResp.status).to.equal(200);
             expect(addResp).to.be.an('array');
             expect(addResp).to.be.empty;
             done();
