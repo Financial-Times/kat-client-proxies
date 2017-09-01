@@ -880,18 +880,18 @@ describe('myFT Client proxy', () => {
         if (mockAPI) {
           nock(baseUrl)
             .post(`/kat/user/follows`)
-            .reply(200, () => ([]));
+            .reply(200, () => require('./mocks/fixtures/followByKatResp.json'));
 
           nock(baseUrl)
             .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
             .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
         }
 
-        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts, relProps)
+        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
             expect(addResp.status).to.equal(200);
             expect(addResp).to.be.an('array');
-            expect(addResp).to.be.empty;
+            //TODO specify what to expect from addResp
             done();
           })
           .catch(done);
