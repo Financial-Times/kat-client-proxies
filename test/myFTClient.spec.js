@@ -734,7 +734,7 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should set and get concepts followed by a user', done => {
+    it('Should set and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
           .post(`/${myftConst.userNodeName}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
@@ -871,7 +871,7 @@ describe('myFT Client proxy', () => {
   });
 
     //new orgainic v3/kat methods
-    xdescribe('Followed_by_Kat concepts', () => {
+    describe.only('Followed_by_Kat concepts', () => {
 
       after(done => {
         if (mockAPI) {
