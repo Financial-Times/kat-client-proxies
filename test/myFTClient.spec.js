@@ -871,7 +871,7 @@ describe('myFT Client proxy', () => {
   });
 
     //new orgainic v3/kat methods
-    describe.only('Followed_by_Kat concepts', () => {
+    describe('Followed_by_Kat concepts', () => {
 
       after(done => {
         if (mockAPI) {
@@ -882,7 +882,7 @@ describe('myFT Client proxy', () => {
       });
 
       const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
-      const userConcepts = require('./mocks/fixtures/userFollowsConceptByKat');
+      const userConcepts = require('./mocks/fixtures/userFollowedConcept');
     //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
       it('Should set and get concepts followed by a user ', done => {
