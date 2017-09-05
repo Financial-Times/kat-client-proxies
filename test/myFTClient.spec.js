@@ -16,7 +16,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
@@ -32,10 +32,13 @@ describe('myFT Client proxy', () => {
     done();
   });
 
-  after(done => {
-    if (mockAPI) {
+  afterEach(done => {
       nock.cleanAll();
-    }
+      done();
+  });
+
+  after(done => {
+
 
     if(suppressLogs) {
       logMessageStub.restore();
@@ -873,13 +876,6 @@ describe('myFT Client proxy', () => {
     //new orgainic v3/kat methods
     describe('Followed_by_Kat concepts', () => {
 
-      after(done => {
-        if (mockAPI) {
-          nock.cleanAll();
-        }
-
-        done();
-      });
 
       const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
       const userConcepts = require('./mocks/fixtures/userFollowedConcept');
@@ -889,7 +885,8 @@ describe('myFT Client proxy', () => {
         if (mockAPI) {
           nock(baseUrl)
             .post(`/kat/user/follows`)
-            .reply(200, () => []);
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(200, () => require('./mocks/fixtures/followByKatResp'));
 
           nock(baseUrl)
             .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
@@ -900,7 +897,7 @@ describe('myFT Client proxy', () => {
         myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
             //expect(addResp.status).to.equal(200);
-            //expect(addResp).to.be.an('array');
+            expect(addResp).to.be.an('array');
             //TODO specify what to expect from addResp
             done();
           })
