@@ -3,7 +3,7 @@
 const proxies = require('./../index');
 const accessLicence = proxies.accessLicenceClient;
 const uuids = require('./mocks/uuids');
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
@@ -97,7 +97,7 @@ describe('Access Licence Service Client', () => {
       if (mockAPI) {
         nock(baseUrl)
           .get(`/licences/${uuids.invalidLicence}/seats`)
-          .reply(200, () => ({seats: [], "allocatedSeatCount": 0}));
+          .reply(200, () => ({seats: [], 'allocatedSeatCount': 0}));
       }
 
       accessLicence.getSeats(uuids.invalidLicence)

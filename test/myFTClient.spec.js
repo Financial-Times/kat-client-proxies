@@ -65,7 +65,7 @@ describe('myFT Client proxy', () => {
           expect(edp).to.be.an('object');
           expectOwnProperties(edp, ['uuid', '_rel']);
           expect(edp.uuid).to.equal(myftConst.prefRelId);
-          expect(edp["_rel"].isTest).to.equal(true);
+          expect(edp['_rel'].isTest).to.equal(true);
 
           done();
         })
@@ -337,7 +337,7 @@ describe('myFT Client proxy', () => {
       }
       const regDate = new Date().getTime();
 
-      myFT.updateLicence(uuids.validLicence, {"kmtRegistrationDate": regDate})
+      myFT.updateLicence(uuids.validLicence, {'kmtRegistrationDate': regDate})
         .then(resp => {
           expect(resp).to.be.an('object');
 
