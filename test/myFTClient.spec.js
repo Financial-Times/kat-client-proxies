@@ -135,7 +135,7 @@ describe('myFT Client proxy', () => {
   });
 
   describe('Licence management', () => {
-    it ('Should be able to remove users from a licence', done => {
+    it('Should be able to remove users from a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
           .delete(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}${extraParams}`)
@@ -876,29 +876,78 @@ describe('myFT Client proxy', () => {
     //new orgainic v3/kat methods
     describe('Followed_by_Kat concepts', () => {
 
+      afterEach(done => {
+          nock.cleanAll();
+          done();
+      });
+
 
       const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
       const userConcepts = require('./mocks/fixtures/userFollowedConcept');
     //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
-      it('Should set and get concepts followed by a user ', done => {
-        if (mockAPI) {
+      it('Should set concept follows by a user ', done => {
           nock(baseUrl)
             .post(`/kat/user/follows`)
             .query({noEvent: 'true', waitForPurge: 'false'})
             .reply(200, () => require('./mocks/fixtures/followByKatResp'));
 
-          nock(baseUrl)
-            .get(`/user/${uuids.validUser}/followed/concept?page=1&limit=500`)
-            .reply(200, () => require('./mocks/fixtures/userFollowedConcept'));
-        }
-
-
         myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
-            //expect(addResp.status).to.equal(200);
             expect(addResp).to.be.an('array');
             //TODO specify what to expect from addResp
+            done();
+          })
+          .catch(done);
+      });
+
+      it('Should set concept follows by a group ', done => {
+
+          nock(baseUrl)
+            .post(`/kat/group/follows`)
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(200, () => require('./mocks/fixtures/followByKatResp'));
+
+        myFT.addConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items, relProps)
+          .then(addResp => {
+            expect(addResp).to.be.an('array');
+            //TODO specify what to expect from addResp
+            done();
+          })
+          .catch(done);
+      });
+
+      it('Should remove concepts followed by a user', done => {
+
+          nock(baseUrl)
+            .delete(`/kat/user/follows`)
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(204, () => ({}));
+
+
+        myFT.removeConceptsFollowedByKatUser(uuids.validUser, userConcepts.items)
+          .then(addResp => {
+            expect(addResp).to.be.an('Object');
+            expect(addResp.status).to.equal(204);
+
+            done();
+          })
+          .catch(done);
+      });
+
+      it('Should remove concepts followed by a group', done => {
+
+          nock(baseUrl)
+            .delete(`/kat/group/follows`)
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(204, () => ({}));
+
+
+        myFT.removeConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items)
+          .then(addResp => {
+            expect(addResp).to.be.an('Object');
+            expect(addResp.status).to.equal(204);
+
             done();
           })
           .catch(done);
