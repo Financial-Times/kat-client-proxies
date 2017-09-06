@@ -12,7 +12,7 @@ const env = require('./helpers/env');
 const mockAPI = env.USE_MOCK_API;
 const baseUrl = config.MYFT_API_URL;
 const fetchOpt = Object.assign({}, config.fetchOptions);
-fetchOpt.headers = Object.assign({}, fetchOpt.headers, {"X-API-KEY": config.MYFT_API_KEY});
+fetchOpt.headers = Object.assign({}, fetchOpt.headers, {'X-API-KEY': config.MYFT_API_KEY});
 
 describe('Status Error Parser', () => {
   let logMessageStub;
@@ -125,7 +125,7 @@ describe('Status Error Parser', () => {
 
   describe('NotFoundError', () => {
 
-    it("Should throw an NotFoundError when something doesn't exist", done => {
+    it('Should throw an NotFoundError when something doesn\'t exist', done => {
       if (mockAPI) {
         nock(baseUrl)
           .get('/doesNotExist')

@@ -3,7 +3,7 @@
 const proxies = require('./../index');
 const sessionClient = proxies.sessionClient;
 const uuids = require('./mocks/uuids');
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
@@ -104,7 +104,7 @@ describe('Session Client', () => {
         nock(baseUrl)
           .get(urlPath)
           .reply(200, () => ({
-            url: `https://www.ft.com/#error=invalid_grant&error_description=Invalid%20FT%20user%20session.`,
+            url: 'https://www.ft.com/#error=invalid_grant&error_description=Invalid%20FT%20user%20session.',
             status: 200
           }));
       }
@@ -125,7 +125,7 @@ describe('Session Client', () => {
         nock(baseUrl)
           .get(urlPath)
           .reply(200, () => ({
-            url: `https://www.ft.com/#unexpected-error=invalid_grant&error_description=Invalid%20FT%20user%20session.`,
+            url: 'https://www.ft.com/#unexpected-error=invalid_grant&error_description=Invalid%20FT%20user%20session.',
             status: 200
           }));
 

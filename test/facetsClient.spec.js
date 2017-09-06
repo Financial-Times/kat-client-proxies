@@ -2,7 +2,7 @@
 
 const proxies = require('./../index');
 const facets = proxies.facetsClient;
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
