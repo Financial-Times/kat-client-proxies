@@ -271,6 +271,35 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
+    it ('Should be able to remove groups node', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .delete(`/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(204, () => ({}));
+
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(404, () => null);
+      }
+
+      myFT.removeGroup(uuids.validLicence)
+        .then(res => {
+          expect(res).to.be.an('object');
+          expect(res.status).to.equal(204);
+
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
+        })
+        .then(resp => {
+          done(new Error(`Shouldn't have got a resp: ${JSON.stringify(resp)}`));
+        })
+        .catch(err => {
+          expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
+
+          done();
+        })
+        .catch(done);
+    });
+
     it ('Should be able to add groups to a licence', done => {
       if (mockAPI) {
         nock(baseUrl)
@@ -350,6 +379,34 @@ describe('myFT Client proxy', () => {
           if (mockAPI !== true) {
             expect(resp.kmtRegistrationDate).to.equal(regDate);
           }
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should be able to update a group', done => {
+      const newGroupName = 'All users';
+      if (mockAPI) {
+        nock(baseUrl)
+          .put(`/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(200, () => ({}));
+
+        nock(baseUrl)
+          .get(`/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.groupNodeName}/${uuids.validLicence}`)
+          .reply(200, () => require('./mocks/fixtures/getGroupFromLicence'));
+      }
+
+      myFT.updateGroup(uuids.validLicence, {"name": newGroupName})
+        .then(resp => {
+          expect(resp).to.be.an('object');
+
+          return myFT.getGroupFromLicence(uuids.validLicence, uuids.validLicence);
+        })
+        .then(resp => {
+          expectOwnProperties(resp, ['uuid', 'name', '_rel']);
+          expect(resp.uuid).to.equal(uuids.validLicence);
+          expect(resp.name).to.equal(newGroupName);
 
           done();
         })
@@ -491,6 +548,30 @@ describe('myFT Client proxy', () => {
           expect(usersResponse).to.be.an('array');
           expectOwnProperties(usersResponse, ['uuid']);
           expect(usersResponse.length).to.be.at.least(1);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get users registered to a group by pages', done => {
+      const page = 1;
+      const limit = 10;
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/${myftConst.groupNodeName}/${uuids.validLicence}/${myftConst.memberRelName}/${myftConst.userNodeName}?page=${page}&limit=${limit}`)
+          .reply(200, () => require('./mocks/fixtures/getGroupUsersByPage'));
+      }
+
+      myFT.getUsersForGroupByPage(uuids.validLicence, { page, limit })
+        .then(usersResponse => {
+          expect(usersResponse).to.be.an('object');
+          expectOwnProperties(usersResponse, ['group', 'total', 'items', 'count']);
+
+          const items = usersResponse.items;
+          expect(items).to.be.an('array');
+          expect(items.length).to.be.at.least(1);
+          expectOwnProperties(items, ['uuid']);
 
           done();
         })
@@ -687,9 +768,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getUsersFollowingConcept(uuids.validLicence, uuids.validTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expectOwnProperties(respone, ['uuid']);
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
 
           done();
         })
@@ -704,9 +785,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getUsersFollowingConcept(uuids.validLicence, uuids.invalidTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expect(respone).to.be.empty;
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
 
           done();
         })
@@ -721,9 +802,9 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.validTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expectOwnProperties(respone, ['uuid']);
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
 
           done();
         })
@@ -738,14 +819,49 @@ describe('myFT Client proxy', () => {
       }
 
       myFT.getGroupsFollowingConcept(uuids.validLicence, uuids.invalidTopic)
-        .then(respone => {
-          expect(respone).to.be.an('array');
-          expect(respone).to.be.empty;
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get a list of user IDs that follow a valid topic as an individual', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.validTopic}/followers/${myftConst.userNodeName}`)
+          .query({ followType: 'individual' })
+          .reply(200, () => require('./mocks/fixtures/uuidArray.json'));
+      }
+
+      myFT.getUsersFollowingConceptAsIndividual(uuids.validLicence, uuids.validTopic)
+        .then(response => {
+          expect(response).to.be.an('array');
+          expectOwnProperties(response, ['uuid']);
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it ('Should get an empty list of user IDs that follow an invalid topic as an individual', done => {
+      if (mockAPI) {
+        nock(baseUrl)
+          .get(`/kat/${myftConst.licenceNodeName}/${uuids.validLicence}/${myftConst.topicNodeName}/${uuids.invalidTopic}/followers/${myftConst.userNodeName}`)
+          .query({ followType: 'individual' })
+          .reply(200, () => []);
+      }
+
+      myFT.getUsersFollowingConceptAsIndividual(uuids.validLicence, uuids.invalidTopic)
+        .then(response => {
+          expect(response).to.be.an('array');
+          expect(response).to.be.empty;
 
           done();
         })
         .catch(done);
     });
   });
-
 });

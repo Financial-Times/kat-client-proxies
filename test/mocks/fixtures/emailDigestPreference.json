@@ -2,7 +2,7 @@
   "name": "Digest email",
   "uuid": "email-digest",
   "_rel": {
-    "byTool": "KMT",
+    "byTool": "KAT",
     "created": 1480504162182,
     "timezone": "Europe/London",
     "count": 1,
