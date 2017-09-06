@@ -1,0 +1,31 @@
+[
+    [
+        {
+            "katRel": {
+                "_id": 8663,
+                "type": "followed_by_kat",
+                "properties": {
+                    "byTool": "KAT",
+                    "created": 1504282935045,
+                    "count": 1,
+                    "updated": 1504282935045,
+                    "group_follow_count": 0,
+                    "individual_follow": true,
+                    "byUser": "00000000-0000-0000-0000-000000000004"
+                },
+                "_fromId": 4197,
+                "_toId": 4198
+            },
+            "subject": {
+                "_id": 4198,
+                "labels": [
+                    "Concept"
+                ],
+                "properties": {
+                    "name": "SpiderPig",
+                    "uuid": "00000000-0000-0000-0000-000000000999"
+                }
+            }
+        }
+    ]
+]
