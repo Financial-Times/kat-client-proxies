@@ -972,7 +972,7 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it.only('Should remove concept(s) follows for user of a group', done => {
+      xit('Should remove concept(s) follows for user of a group', done => {
 
           nock(baseUrl)
             .delete(`/kat/group/user/follows`)
