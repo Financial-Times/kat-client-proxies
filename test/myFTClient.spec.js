@@ -884,13 +884,14 @@ describe('myFT Client proxy', () => {
 
       const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
       const userConcepts = require('./mocks/fixtures/userFollowedConcept');
+      const followedByKatRes = require('./mocks/fixtures/followByKatResp');
     //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
-      it('Should set concept follows by a user ', done => {
+      it('Should set concept(s) follows by a user ', done => {
           nock(baseUrl)
             .post(`/kat/user/follows`)
             .query({noEvent: 'true', waitForPurge: 'false'})
-            .reply(200, () => require('./mocks/fixtures/followByKatResp'));
+            .reply(200, () => followedByKatRes);
 
         myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
@@ -901,12 +902,12 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it('Should set concept follows by a group ', done => {
+      it('Should set concept(s) follows by a group ', done => {
 
           nock(baseUrl)
             .post(`/kat/group/follows`)
             .query({noEvent: 'true', waitForPurge: 'false'})
-            .reply(200, () => require('./mocks/fixtures/followByKatResp'));
+            .reply(200, () => followedByKatRes);
 
         myFT.addConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
@@ -917,7 +918,7 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it('Should remove concepts followed by a user', done => {
+      it('Should remove concept(s) followed by a user', done => {
 
           nock(baseUrl)
             .delete(`/kat/user/follows`)
@@ -935,7 +936,7 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it('Should remove concepts followed by a group', done => {
+      it('Should remove concept(s) followed by a group', done => {
 
           nock(baseUrl)
             .delete(`/kat/group/follows`)
@@ -946,6 +947,41 @@ describe('myFT Client proxy', () => {
         myFT.removeConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
+            expect(addResp.status).to.equal(204);
+
+            done();
+          })
+          .catch(done);
+      });
+
+      it('Should add concept(s) follows for members of a group', done => {
+
+          nock(baseUrl)
+            .post(`/kat/group/user/follows`)
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(200, () => followedByKatRes);
+
+
+        myFT.addConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
+          .then(addResp => {
+            expect(addResp).to.be.an('array');
+            //TODO specify what to expect from addResp
+
+            done();
+          })
+          .catch(done);
+      });
+
+      it.only('Should remove concept(s) follows for user of a group', done => {
+
+          nock(baseUrl)
+            .delete(`/kat/group/user/follows`)
+            .query({noEvent: 'true', waitForPurge: 'false'})
+            .reply(204, () => ({}));
+
+
+        myFT.removeConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
+          .then(addResp => {
             expect(addResp.status).to.equal(204);
 
             done();
