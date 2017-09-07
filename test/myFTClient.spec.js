@@ -896,7 +896,7 @@ describe('myFT Client proxy', () => {
         myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
-            //TODO specify what to expect from addResp
+            expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
             done();
           })
           .catch(done);
@@ -912,6 +912,8 @@ describe('myFT Client proxy', () => {
         myFT.addConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
+            expect(addResp[0][0][0]).to.be.an('Object');
+            expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
             //TODO specify what to expect from addResp
             done();
           })
@@ -959,30 +961,30 @@ describe('myFT Client proxy', () => {
           nock(baseUrl)
             .post(`/kat/group/user/follows`)
             .query({noEvent: 'true', waitForPurge: 'false'})
-            .reply(200, () => followedByKatRes);
+            .reply(200, () => []);
 
 
         myFT.addConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
           .then(addResp => {
             expect(addResp).to.be.an('array');
-            //TODO specify what to expect from addResp
+            //TODO specify what to expect from addResp Postman returns an empty array in an empty array?
 
             done();
           })
           .catch(done);
       });
 
-      xit('Should remove concept(s) follows for user of a group', done => {
+      it('Should remove concept(s) follows for user of a group', done => {
 
           nock(baseUrl)
             .delete(`/kat/group/user/follows`)
             .query({noEvent: 'true', waitForPurge: 'false'})
-            .reply(204, () => ({}));
+            .reply(204, () => []);
 
 
         myFT.removeConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
           .then(addResp => {
-            expect(addResp.status).to.equal(204);
+            expect(addResp).to.be.an('array');
 
             done();
           })
