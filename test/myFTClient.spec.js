@@ -16,7 +16,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = true; //for local test if you want logs when test are run
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
@@ -874,7 +874,7 @@ describe('myFT Client proxy', () => {
   });
 
     //new orgainic v3/kat methods
-    describe('Followed_by_Kat concepts', () => {
+    describe.only('Followed_by_Kat concepts', () => {
 
       afterEach(done => {
           nock.cleanAll();
@@ -884,6 +884,7 @@ describe('myFT Client proxy', () => {
 
       const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
       const userConcepts = require('./mocks/fixtures/userFollowedConcept');
+      const katConcepts = require('./mocks/fixtures/userFollowsConceptByKat');
       const followedByKatRes = require('./mocks/fixtures/followByKatResp');
     //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
@@ -893,7 +894,7 @@ describe('myFT Client proxy', () => {
             .query({noEvent: 'true', waitForPurge: 'false'})
             .reply(200, () => followedByKatRes);
 
-        myFT.addConceptsFollowedByKatUser(uuids.validUser, userConcepts.items, relProps)
+        myFT.addConceptsFollowedByKatUser(katConcepts.ids, katConcepts.subjects, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
@@ -909,7 +910,7 @@ describe('myFT Client proxy', () => {
             .query({noEvent: 'true', waitForPurge: 'false'})
             .reply(200, () => followedByKatRes);
 
-        myFT.addConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items, relProps)
+        myFT.addConceptsFollowedByKatGroup(katConcepts.ids, katConcepts.subjects, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             expect(addResp[0][0][0]).to.be.an('Object');
@@ -928,7 +929,7 @@ describe('myFT Client proxy', () => {
             .reply(204, () => ({}));
 
 
-        myFT.removeConceptsFollowedByKatUser(uuids.validUser, userConcepts.items)
+        myFT.removeConceptsFollowedByKatUser(katConcepts.ids, katConcepts.subjects)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
             expect(addResp.status).to.equal(204);
@@ -946,7 +947,7 @@ describe('myFT Client proxy', () => {
             .reply(204, () => ({}));
 
 
-        myFT.removeConceptsFollowedByKatGroup(uuids.validUser, userConcepts.items)
+        myFT.removeConceptsFollowedByKatGroup(katConcepts.ids, katConcepts.subjects)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
             expect(addResp.status).to.equal(204);
@@ -964,7 +965,7 @@ describe('myFT Client proxy', () => {
             .reply(200, () => []);
 
 
-        myFT.addConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
+        myFT.addConceptsFollowedByKatGroupMembers(katConcepts.ids, katConcepts.subjects)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             //TODO specify what to expect from addResp Postman returns an empty array in an empty array?
@@ -982,13 +983,30 @@ describe('myFT Client proxy', () => {
             .reply(204, () => []);
 
 
-        myFT.removeConceptsFollowedByKatGroupMembers(uuids.validUser, userConcepts.items)
+        myFT.removeConceptsFollowedByKatGroupMembers(katConcepts.ids, katConcepts.subjects)
           .then(addResp => {
             expect(addResp).to.be.an('array');
 
             done();
           })
           .catch(done);
+      });
+
+      xit('Should add follows to an array users added to a group', done => {
+        const groupId = '00000000-0000-0000-0000-000000000666';
+
+        nock(baseUrl)
+          .post(`/kat/group/groupId/follows`)
+          .query({noEvent: 'true', waitForPurge: 'false'})
+          .reply(200, () => []);
+
+          myFT.addConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
+            .then(addResp => {
+              expect(addResp).to.be.an('array');
+
+              done();
+            })
+            .catch(done);
       });
 
   });
