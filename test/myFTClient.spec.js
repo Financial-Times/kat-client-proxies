@@ -992,11 +992,28 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      xit('Should add follows to an array users added to a group', done => {
+      it.skip('Should add follows to an array users added to a group', done => {
         const groupId = '00000000-0000-0000-0000-000000000666';
 
         nock(baseUrl)
           .post(`/kat/group/groupId/follows`)
+          .query({noEvent: 'true', waitForPurge: 'false'})
+          .reply(200, () => []);
+
+          myFT.addConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
+            .then(addResp => {
+              expect(addResp).to.be.an('array');
+
+              done();
+            })
+            .catch(done);
+      });
+
+      it.skip('Should remove follows from an array users associated with a group', done => {
+        const groupId = '00000000-0000-0000-0000-000000000666';
+
+        nock(baseUrl)
+          .delete(`/kat/group/groupId/follows`)
           .query({noEvent: 'true', waitForPurge: 'false'})
           .reply(200, () => []);
 
