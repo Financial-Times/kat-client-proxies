@@ -16,7 +16,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
@@ -992,11 +992,11 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it.skip('Should add follows to an array users added to a group', done => {
+      it('Should add follows to an array users added to a group', done => {
         const groupId = '00000000-0000-0000-0000-000000000666';
 
         nock(baseUrl)
-          .post(`/kat/group/groupId/follows`)
+          .post(`/kat/group/${groupId}/user/follows`)
           .query({noEvent: 'true', waitForPurge: 'false'})
           .reply(200, () => []);
 
@@ -1009,15 +1009,15 @@ describe('myFT Client proxy', () => {
             .catch(done);
       });
 
-      it.skip('Should remove follows from an array users associated with a group', done => {
-        const groupId = '00000000-0000-0000-0000-000000000666';
+      it('Should remove follows from an array users associated with a group', done => {
+        const groupId = '00000000-0000-0000-0000-000000000555';
 
         nock(baseUrl)
-          .delete(`/kat/group/groupId/follows`)
+          .delete(`/kat/group/${groupId}/user/follows`)
           .query({noEvent: 'true', waitForPurge: 'false'})
-          .reply(200, () => []);
+          .reply(204, () => []);
 
-          myFT.addConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
+          myFT.removeConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
             .then(addResp => {
               expect(addResp).to.be.an('array');
 
