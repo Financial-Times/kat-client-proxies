@@ -8,7 +8,10 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint lib",
-    "test": "mocha test"
+    "test": "mocha test",
+    "precommit": "make verify && node_modules/.bin/secret-squirrel",
+    "prepush": "make unit-test && make verify -j3",
+    "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg"
   },
   "repository": {
     "type": "git",
@@ -26,8 +29,11 @@
   },
   "homepage": "https://github.com/Financial-Times/kat-client-proxies#readme",
   "devDependencies": {
+    "@financial-times/n-gage": "^1.8.21",
+    "@financial-times/secret-squirrel": "^2.5.10",
     "chai": "^3.5.0",
     "eslint": "~3.7.1",
+    "husky": "^0.14.3",
     "mocha": "^3.2.0",
     "moment": "^2.18.1",
     "nock": "^9.0.13",
