@@ -874,19 +874,16 @@ describe('myFT Client proxy', () => {
   });
 
     //new orgainic v3/kat methods
-    describe.only('Followed_by_Kat concepts', () => {
+    describe('Followed_by_Kat concepts', () => {
+      const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
+      const userConcepts = require('./mocks/fixtures/userFollowedConcept');
+      const {ids, subjects} = require('./mocks/fixtures/userFollowsConceptByKat');
+      const followedByKatRes = require('./mocks/fixtures/followByKatResp');
 
       afterEach(done => {
           nock.cleanAll();
           done();
       });
-
-
-      const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
-      const userConcepts = require('./mocks/fixtures/userFollowedConcept');
-      const katConcepts = require('./mocks/fixtures/userFollowsConceptByKat');
-      const followedByKatRes = require('./mocks/fixtures/followByKatResp');
-    //  const groupConcepts = require('./mocks/fixtures/groupFollowedConcept');
 
       it('Should set concept(s) follows by a user ', done => {
           nock(baseUrl)
@@ -894,7 +891,7 @@ describe('myFT Client proxy', () => {
             .query(true)
             .reply(200, () => followedByKatRes);
 
-        myFT.addConceptsFollowedByKatUser(katConcepts.ids, katConcepts.subjects, relProps)
+        myFT.addConceptsFollowedByKatUser(ids, subjects, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
@@ -907,10 +904,10 @@ describe('myFT Client proxy', () => {
 
           nock(baseUrl)
             .post(`/kat/group/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(200, () => followedByKatRes);
 
-        myFT.addConceptsFollowedByKatGroup(katConcepts.ids, katConcepts.subjects, relProps)
+        myFT.addConceptsFollowedByKatGroup(ids, subjects, relProps)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             expect(addResp[0][0][0]).to.be.an('Object');
@@ -925,11 +922,11 @@ describe('myFT Client proxy', () => {
 
           nock(baseUrl)
             .delete(`/kat/user/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(204, () => ({}));
 
 
-        myFT.removeConceptsFollowedByKatUser(katConcepts.ids, katConcepts.subjects)
+        myFT.removeConceptsFollowedByKatUser(ids, subjects)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
             expect(addResp.status).to.equal(204);
@@ -943,11 +940,11 @@ describe('myFT Client proxy', () => {
 
           nock(baseUrl)
             .delete(`/kat/group/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(204, () => ({}));
 
 
-        myFT.removeConceptsFollowedByKatGroup(katConcepts.ids, katConcepts.subjects)
+        myFT.removeConceptsFollowedByKatGroup(ids, subjects)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
             expect(addResp.status).to.equal(204);
@@ -961,11 +958,11 @@ describe('myFT Client proxy', () => {
 
           nock(baseUrl)
             .post(`/kat/group/user/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(200, () => []);
 
 
-        myFT.addConceptsFollowedByKatGroupMembers(katConcepts.ids, katConcepts.subjects)
+        myFT.addConceptsFollowedByKatGroupMembers(ids, subjects)
           .then(addResp => {
             expect(addResp).to.be.an('array');
             //TODO specify what to expect from addResp Postman returns an empty array in an empty array?
@@ -979,11 +976,11 @@ describe('myFT Client proxy', () => {
 
           nock(baseUrl)
             .delete(`/kat/group/user/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(204, () => []);
 
 
-        myFT.removeConceptsFollowedByKatGroupMembers(katConcepts.ids, katConcepts.subjects)
+        myFT.removeConceptsFollowedByKatGroupMembers(ids, subjects)
           .then(addResp => {
             expect(addResp).to.be.an('array');
 
@@ -997,10 +994,10 @@ describe('myFT Client proxy', () => {
 
         nock(baseUrl)
           .post(`/kat/group/${groupId}/user/follows`)
-          .query({noEvent: 'true', waitForPurge: 'false'})
+          .query(true)
           .reply(200, () => []);
 
-          myFT.addConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
+          myFT.addConceptsFollowedByKatGroupMembSpec(ids, subjects,relProps,groupId)
             .then(addResp => {
               expect(addResp).to.be.an('array');
 
@@ -1014,10 +1011,10 @@ describe('myFT Client proxy', () => {
 
         nock(baseUrl)
           .delete(`/kat/group/${groupId}/user/follows`)
-          .query({noEvent: 'true', waitForPurge: 'false'})
+          .query(true)
           .reply(204, () => []);
 
-          myFT.removeConceptsFollowedByKatGroupMembSpec(katConcepts.ids, katConcepts.subjects,relProps,groupId)
+          myFT.removeConceptsFollowedByKatGroupMembSpec(ids, subjects,relProps,groupId)
             .then(addResp => {
               expect(addResp).to.be.an('array');
 
