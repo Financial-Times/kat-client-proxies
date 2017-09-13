@@ -16,7 +16,7 @@
       "nodeRank": 133,
       "name": "GB Airways",
       "taxonomy": "organisations",
-      "uuid": "TnN0ZWluX09OX0FGVE1fT05fMTMxMTYz-T04=",
+      "uuid": "00000000-0000-0000-0000-000000000004",
       "_rel": {
         "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
@@ -31,7 +31,7 @@
       "name": "World",
       "taxonomy": "sections",
       "type": "Concept",
-      "uuid": "MQ==-U2VjdGlvbnM=",
+      "uuid": "00000000-0000-0000-0000-000000000005",
       "_rel": {
         "created": 1480005819072,
         "count": 1,
@@ -42,7 +42,7 @@
       "nodeRank": 12153,
       "name": "Donald Trump",
       "taxonomy": "people",
-      "uuid": "TnN0ZWluX1BOXzIwMDkwNjIzXzE2MTY=-UE4=",
+      "uuid": "00000000-0000-0000-0000-000000000008",
       "_rel": {
         "byTool": "KAT",
         "created": 1478779683484,
@@ -55,7 +55,7 @@
       "nodeRank": 996,
       "name": "Bucharest",
       "taxonomy": "regions",
-      "uuid": "TnN0ZWluX0dMX0FGVE1fR0xfMTk5ODA=-R0w=",
+      "uuid": "00000000-0000-0000-0000-000000000006",
       "_rel": {
         "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
@@ -69,7 +69,7 @@
       "nodeRank": 1931,
       "name": "Finland",
       "taxonomy": "regions",
-      "uuid": "TnN0ZWluX0dMX0ZJ-R0w=",
+      "uuid": "00000000-0000-0000-0000-000000000007",
       "_rel": {
         "byTool": "KAT",
         "asMemberOf": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
