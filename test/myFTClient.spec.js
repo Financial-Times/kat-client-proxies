@@ -874,7 +874,7 @@ describe('myFT Client proxy', () => {
   });
 
     //new orgainic v3/kat methods
-    describe('Followed_by_Kat concepts', () => {
+    describe.only('Followed_by_Kat concepts', () => {
 
       afterEach(done => {
           nock.cleanAll();
@@ -891,7 +891,7 @@ describe('myFT Client proxy', () => {
       it('Should set concept(s) follows by a user ', done => {
           nock(baseUrl)
             .post(`/kat/user/follows`)
-            .query({noEvent: 'true', waitForPurge: 'false'})
+            .query(true)
             .reply(200, () => followedByKatRes);
 
         myFT.addConceptsFollowedByKatUser(katConcepts.ids, katConcepts.subjects, relProps)
