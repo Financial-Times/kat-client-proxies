@@ -10,7 +10,7 @@ const logger = require('@financial-times/n-logger').default;
 const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = `${require('./../lib/helpers/config').ACS_API_URL}/acquisition-contexts`;
+const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/acquisition-contexts`;
 
 describe('Acquisition Context Service Client', () => {
   let logMessageStub;

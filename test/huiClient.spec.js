@@ -7,7 +7,7 @@ const logger = require('@financial-times/n-logger').default;
 const sinon = require('sinon');
 const env = require('./helpers/env');
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = require('./../lib/helpers/config').HUI_BASE_PATH;
+const baseUrl = require('./../lib/helpers/config').API_GATEWAY_HOST;
 
 describe('HUI Service Client',() => {
 	const weekDateFormat = '[wk]W/GGGG';
@@ -49,7 +49,7 @@ describe('HUI Service Client',() => {
 			const invalidAggregation = 'invalidaggregation';
 
 			if (mockAPI) {
-				nock(baseUrl)
+				nock(`${baseUrl}/hui`)
 					.get(`/licences/${licenceId}?aggregation=${invalidAggregation}&from=${weekStartDate}&to=${weekEndDate}&device=media%20player`)
 					.reply(400, 'Bad Request');
 			}
@@ -67,7 +67,7 @@ describe('HUI Service Client',() => {
 			const aggregation = 'week';
 
 			if (mockAPI) {
-				nock(baseUrl)
+				nock(`${baseUrl}/hui`)
 					.get(`/licences/${licenceId}?aggregation=${aggregation}&from=${weekStartDate}&to=${weekEndDate}&device=media%20player`)
 					.reply(200, require('./mocks/fixtures/getUsageByWeek'));
 			}
@@ -86,7 +86,7 @@ describe('HUI Service Client',() => {
 			const aggregation = 'month';
 
 			if (mockAPI) {
-				nock(baseUrl)
+				nock(`${baseUrl}/hui`)
 					.get(`/licences/${licenceId}?aggregation=${aggregation}&from=${monthStartDate}&to=${monthEndDate}&device=media%20player`)
 					.reply(200, require('./mocks/fixtures/getUsageByMonth'));
 			}
