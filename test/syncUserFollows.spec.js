@@ -15,9 +15,10 @@ const expectOwnProperties = require('./helpers/expectExtensions').expectOwnPrope
 const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 const syncUserFollowers = proxies.syncUserFollowers;
+const uuidv4 = require('uuid/v4');
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 //TODO spec out tests for syncUserFollowers
 describe.only('syncUserFollowers', () => {
@@ -48,18 +49,29 @@ describe.only('syncUserFollowers', () => {
     done();
   });
 
-  const groupId = '00000000-0000-0000-0000-000000000123';
-  const uuid = '00000000-0000-0000-0000-000000000001';
+  const fakeGroupId = '00000000-0000-0000-0000-000000000123';
+  const fakeUserId = '00000000-0000-0000-0000-000000000001';
+  const uuid = env.USER_UUID;
+  const groupId = env.LICENCE_UUID;
 
   //Happy empyty path
   it('should return status synchronisationIgnored and reason noGroupConceptsToFollow in object for no topics', (done)=> {
 
-    nock(baseUrl)
-      .get(`/group/${groupId}/followed/concept`)
-      .query(true)
-      .reply(200, () => []);
+    const fakeRes = {
+      user: {
+        uuid: '00000000-0000-0000-0000-000000000001',
+        group: '00000000-0000-0000-0000-000000000123',
+        status: 'synchronisationIgnored',
+        reason: 'noGroupConceptsToFollow'
+      }
+   }
 
-    syncUserFollowers(groupId, uuid).then(res => {
+    nock(baseUrl)
+      .get(`/group/${fakeGroupId}/followed/concept`)
+      .query(true)
+      .reply(200, () => fakeRes);
+
+    syncUserFollowers(fakeGroupId, fakeUserId).then(res => {
       console.log(res);
       expect(res).to.be.an('object');
       expect(res).to.have.deep.property('user.status', 'synchronisationIgnored');
@@ -69,9 +81,28 @@ describe.only('syncUserFollowers', () => {
 
   });
 
-  xit('should return synchronisationIgnored if there are no topics to follow', (done)=> {
+  it('should return status synchronisationIgnored and reason noNewConceptsToFollow in object for no topics', (done)=> {
+
+    // nock(baseUrl)
+    //   .get(`/group/${fakeGroupId}/followed/concept`)
+    //   .query(true)
+    //   .reply(200, () => []);
 
     syncUserFollowers(groupId, uuid).then(res => {
+      console.log(res);
+      expect(res).to.be.an('object');
+      expect(res).to.have.deep.property('user.status', 'synchronisationIgnored');
+      expect(res).to.have.deep.property('user.reason', 'noNewConceptsToFollow');
+      done();
+    }).catch(done);
+
+  });
+
+  xit('should return synchronisationIgnored if there are no topics to follow', (done)=> {
+
+    const newUuid = uuidv4();
+
+    syncUserFollowers(groupId, newUuid).then(res => {
       console.log(res);
       done();
     }).catch(done);
