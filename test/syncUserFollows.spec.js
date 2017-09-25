@@ -18,7 +18,7 @@ const syncUserFollowers = proxies.syncUserFollowers;
 const uuidv4 = require('uuid/v4');
 const syncUserFollowsFix = require('./mocks/fixtures/syncUserFollows');
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
-const edpFix = require('./mocks/fixtures/EmailDigestPreference.json');
+const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
 const myftConst = config.myftClientConstants;
 const suppressLogs = true; //for local test if you want logs when test are run
