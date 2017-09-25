@@ -1,8 +1,8 @@
 {
   "seats": [
     {
-      "accessLicenceId": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
-      "userId": "9289e58a-2e61-42c7-a92f-4bfc170634e4",
+      "accessLicenceId": "00000000-0000-0000-0000-000000000001",
+      "userId": "00000000-0000-0000-0000-000000002222",
       "joinedDate": "2016-09-02T10:41:20.374Z",
       "seatExpiryDate": null
     }

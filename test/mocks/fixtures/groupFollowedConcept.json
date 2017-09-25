@@ -5,22 +5,22 @@
       "Group"
     ],
     "properties": {
-      "uuid": "8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+      "uuid": "00000000-0000-0000-0000-000000000001"
     }
   },
   "total": 1,
   "items": [
     {
       "nodeRank": 80,
-      "name": "Fontainebleau (Seine-et-Marne)",
+      "name": "kat group follow concept fixture",
       "taxonomy": "regions",
-      "uuid": "TnN0ZWluX0dMX0ZSX1NvdXMtcHLDqWZlY3R1cmVfMTMwNTg=-R0w=",
+      "uuid": "00000000-0000-0000-0000-000000007777",
       "_rel": {
         "byTool": "KAT",
         "created": 1475739693510,
         "count": 2,
         "updated": 1475739756117,
-        "byUser": "9289e58a-2e61-42c7-a92f-4bfc170634e4"
+        "byUser": "00000000-0000-0000-0000-000000002222"
       }
     }
   ],

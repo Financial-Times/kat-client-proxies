@@ -16,7 +16,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = true; //for local test if you want logs when test are run
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
   let logMessageStub;
@@ -711,7 +711,7 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should remove and get concepts followed by a user', done => {
+    it('Should remove and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
           .delete(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
