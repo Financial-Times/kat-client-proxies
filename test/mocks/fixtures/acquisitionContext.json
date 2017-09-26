@@ -2,7 +2,7 @@
   "items": [
     {
       "signupContext": {
-        "accessLicenceId": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+        "accessLicenceId": "00000000-0000-0000-0000-000000000001",
         "allowedEmailDomains": [],
         "restrictEmailDomains": false,
         "blockedEmailDomains": [],
@@ -16,7 +16,7 @@
         "redirectUrl": null,
         "displaySignupUrl": false
       },
-      "id": "70b5cae7-43c6-48c3-910a-7b1fb3b50308",
+      "id": "00000000-0000-0000-0000-000000000333",
       "name": "KAT Context name",
       "allowedIPRanges": [],
       "restrictIPRanges": false,

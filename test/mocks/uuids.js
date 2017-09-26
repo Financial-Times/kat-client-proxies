@@ -3,7 +3,7 @@
 const env = require('./../helpers/env');
 
 module.exports = {
-  validUser: env.USER_UUID,
+  validUser: '00000000-0000-0000-0000-000000000003',
   validLicence: env.LICENCE_UUID,
   validUserEmail: env.USER_EMAIL,
   invalidUserEmail: env.INVALID_EMAIL,
@@ -11,7 +11,7 @@ module.exports = {
   invalidLicence: 'licencetest',
   invalidKey: 'invalidkey123',
   validTopic: env.VALID_TOPIC,
-  invalidTopic: 'YzEwYmY1N2YtYzJkNS00MzAxLWFkYmMtZmRjYzRjZDA4Y2Y0-TESTING',
+  invalidTopic: '00000000-0000-0000-0000-000000000006',
   validFTSession: env.VALID_FT_SESSION,
   invalidFTSession: 'invalid-test123test',
   validFTSessionSecure: env.VALID_SECURE_FT_SESSION || 'valid-secure-test123test',

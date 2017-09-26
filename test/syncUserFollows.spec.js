@@ -25,7 +25,7 @@ const suppressLogs = true; //for local test if you want logs when test are run
 //TODO spec out tests for syncUserFollowers
 //TODO write stubs for:
 
-describe.only('syncUserFollowers', () => {
+describe('syncUserFollowers', () => {
   const fakeGroupId = '00000000-0000-0000-0000-000000000123';
   const fakeUserId = '00000000-0000-0000-0000-000000000001';
   const uuid = env.USER_UUID;
@@ -113,7 +113,7 @@ describe.only('syncUserFollowers', () => {
   });
 
   //Happy empyty path
-  it('should return synchronisationCompleted if there topics to follow', (done)=> {
+  xit('should return synchronisationCompleted if there topics to follow', (done)=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
 
     syncUserFollowers(groupId, uuid).then(res => {
