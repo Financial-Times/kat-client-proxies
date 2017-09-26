@@ -113,7 +113,7 @@ describe('syncUserFollowers', () => {
   });
 
   //Happy empyty path
-  xit('should return synchronisationCompleted if there topics to follow', (done)=> {
+  it('should return synchronisationCompleted if there topics to follow', (done)=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
 
     syncUserFollowers(groupId, uuid).then(res => {
