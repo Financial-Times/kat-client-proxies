@@ -1,5 +1,5 @@
 {
-  "id": "8619e7a0-65b7-446b-9931-4197b3fe0cbf",
+  "id": "00000000-0000-0000-0000-000000000001",
   "creationDateTime": "2015-09-24T13:34:55.073Z",
   "products": [
     {
@@ -23,14 +23,14 @@
   "seatsHref": [
     {
       "rel": "seats",
-      "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/seats"
+      "href": "/licences/00000000-0000-0000-0000-000000000001/seats"
     }
   ],
   "adminsHref": [
     {
       "rel": "administrators",
-      "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf/administrators"
+      "href": "/licences/00000000-0000-0000-0000-000000000001/administrators"
     }
   ],
-  "href": "/licences/8619e7a0-65b7-446b-9931-4197b3fe0cbf"
+  "href": "/licences/00000000-0000-0000-0000-000000000001"
 }

@@ -711,7 +711,7 @@ describe('myFT Client proxy', () => {
         .catch(done);
     });
 
-    it ('Should remove and get concepts followed by a user', done => {
+    it('Should remove and get concepts followed by a user', done => {
       if (mockAPI) {
         nock(baseUrl)
           .delete(`/${myftConst.userNodeName}/${uuids.validUser}/${myftConst.followedRelName}/${myftConst.topicNodeName}${extraParams}`)
