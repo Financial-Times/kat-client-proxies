@@ -22,8 +22,6 @@ const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
 const myftConst = config.myftClientConstants;
 const suppressLogs = true; //for local test if you want logs when test are run
-//TODO spec out tests for syncUserFollowers
-//TODO write stubs for:
 
 describe('syncUserFollowers', () => {
   const fakeGroupId = '00000000-0000-0000-0000-000000000123';
