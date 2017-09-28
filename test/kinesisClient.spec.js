@@ -17,6 +17,7 @@ const suppressLogs = false;
 
 describe.only('kinesisClient', (done) => {
 
+
   let logMessageStub;
   const logMessages = [];
 
@@ -73,7 +74,8 @@ describe.only('kinesisClient', (done) => {
     console.log('writeToKinesis called');
     kinesis.write(uuids, event, concepts)
     .then((res) => {
-      expect(res).to.be.an('object');
+      expect(res).to.be.an('array');
+
     });
 
     done();

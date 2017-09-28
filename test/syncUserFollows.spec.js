@@ -22,7 +22,7 @@ const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
 const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = true; //for local test if you want logs when test are run
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('syncUserFollowers', () => {
   const fakeGroupId = '00000000-0000-0000-0000-000000000123';
@@ -120,7 +120,7 @@ describe('syncUserFollowers', () => {
   });
 
   //Happy empyty path
-  it.only('should return synchronisationCompleted if there topics to follow', (done)=> {
+  it('should return synchronisationCompleted if there topics to follow', (done)=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
     kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
