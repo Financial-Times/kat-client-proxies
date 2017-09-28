@@ -15,6 +15,7 @@ const expectOwnProperties = require('./helpers/expectExtensions').expectOwnPrope
 const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 const syncUserFollowers = proxies.syncUserFollowers;
+const kinesisClient = proxies.kinesisClient;
 const uuidv4 = require('uuid/v4');
 const syncUserFollowsFix = require('./mocks/fixtures/syncUserFollows');
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
@@ -29,6 +30,14 @@ describe('syncUserFollowers', () => {
   const uuid = env.USER_UUID;
   const groupId = env.LICENCE_UUID;
 
+  const kinesisRes = [
+    { FailedRecordCount:0,
+      Records:[{
+        SequenceNumber:"fifty-digit-no-00005",
+        ShardId:"shardId-000000000000"}
+      ]
+    }]
+
   const followProps = {
     byTool:"KAT",
     byUser:"mock-admin-user"
@@ -39,7 +48,7 @@ describe('syncUserFollowers', () => {
   let addConceptsFollowedByKatUserStub;
   let getEDPStub;
   let noGroupConceptsToFollowStub;
-
+  let kinesisWriteStub;
   let logMessageStub;
   const logMessages = [];
 
@@ -111,8 +120,9 @@ describe('syncUserFollowers', () => {
   });
 
   //Happy empyty path
-  it('should return synchronisationCompleted if there topics to follow', (done)=> {
+  it.only('should return synchronisationCompleted if there topics to follow', (done)=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
+    kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
     syncUserFollowers(groupId, uuid).then(res => {
 
@@ -125,6 +135,7 @@ describe('syncUserFollowers', () => {
     }).then(() => {
       //clean up
       getGroupConceptStub.restore();
+      kinesisWriteStub.restore();
       done();
     }).catch(done);
   });
