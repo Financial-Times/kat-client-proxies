@@ -1,6 +1,6 @@
 {
   "name": "kat-client-proxies",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A library of client proxies for various ft platform apis",
   "main": "index.js",
   "engines": {
