@@ -5,7 +5,7 @@ node_modules/@financial-times/n-gage/index.mk:
 -include node_modules/@financial-times/n-gage/index.mk
 
 unit-test:
-	mocha 'test/**/*.js' --inline-diffs  --timeout 10000
+	export KAT_FT_TOOL_ADMIN_ID=00000000-0000-0000-0000-012345678910; mocha 'test/**/*.js' --inline-diffs  --timeout 10000
 
 test:
 	make verify

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint lib",
-    "test": "mocha test",
+    "test": "make test",
     "precommit": "make verify && node_modules/.bin/secret-squirrel",
     "prepush": "make unit-test && make verify -j3",
     "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg"

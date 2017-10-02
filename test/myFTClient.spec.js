@@ -48,6 +48,8 @@ describe('myFT Client proxy', () => {
 
   it ('should have default properties', () => {
     expectOwnProperties(myFT.followedProperties, ['byTool', 'byUser']);
+    expect(myFT.followedProperties.byTool).to.not.be.undefined;
+    expect(myFT.followedProperties.byUser).to.not.be.undefined;
     //expect(myFT.entityProperties[config.FT_TOOL_DATE_ID]).to.be.a('string');// TODO: WIP
   });
 
