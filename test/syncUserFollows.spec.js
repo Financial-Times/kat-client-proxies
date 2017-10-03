@@ -81,11 +81,9 @@ describe('syncUserFollowers', () => {
       expect(res).to.be.an('object');
       expect(res).to.have.deep.property('user.status', 'synchronisationIgnored');
       expect(res).to.have.deep.property('user.reason', 'noGroupConceptsToFollow');
-
-    }).then(() => {
-      //clean up
-      noGroupConceptsToFollowStub.restore();
-      done();
+        //clean up
+        noGroupConceptsToFollowStub.restore();
+        done();
     }).catch(done);
 
   });
@@ -97,11 +95,9 @@ describe('syncUserFollowers', () => {
       expect(res).to.be.an('object');
       expect(res).to.have.deep.property('user.status', 'synchronisationIgnored');
       expect(res).to.have.deep.property('user.reason', 'noNewConceptsToFollow');
-
-    }).then(() => {
-      //clean up
-      getGroupSyncedConceptStub.restore();
-      done();
+       //clean up
+       getGroupSyncedConceptStub.restore();
+       done();
     }).catch(done);
 
   });
@@ -119,11 +115,11 @@ describe('syncUserFollowers', () => {
       expect(res.user.newConceptsToFollow).to.be.an('array');
       expect(res.user.newConceptsToFollow[0].uuid).to.equal(uuids.mockNewTopic);
       expect(res.user.newConceptsToFollow).to.be.an('array');
-    }).then(() => {
-      //clean up
-      getGroupConceptStub.restore();
-      kinesisWriteStub.restore();
-      done();
+
+       //clean up
+       getGroupConceptStub.restore();
+       kinesisWriteStub.restore();
+       done();
     }).catch(done);
   });
 });
