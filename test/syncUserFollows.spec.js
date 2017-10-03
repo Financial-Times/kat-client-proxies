@@ -7,21 +7,12 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
-const config = require('./../lib/helpers/config');
-const clientErrors = proxies.clientErrors;
 const env = require('./helpers/env');
-const mockAPI = env.USE_MOCK_API;
-const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const baseUrl = config.MYFT_API_URL;
-const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 const syncUserFollowers = proxies.syncUserFollowers;
 const kinesisClient = proxies.kinesisClient;
-const uuidv4 = require('uuid/v4');
-const syncUserFollowsFix = require('./mocks/fixtures/syncUserFollows');
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
 const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
-const myftConst = config.myftClientConstants;
 const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('syncUserFollowers', () => {
@@ -33,15 +24,11 @@ describe('syncUserFollowers', () => {
   const kinesisRes = [
     { FailedRecordCount:0,
       Records:[{
-        SequenceNumber:"fifty-digit-no-00005",
-        ShardId:"shardId-000000000000"}
+        SequenceNumber:'fifty-digit-no-00005',
+        ShardId:'shardId-000000000000'}
       ]
-    }]
+    }];
 
-  const followProps = {
-    byTool:"KAT",
-    byUser:"mock-admin-user"
-  };
   let getGroupConceptStub;
   let getGroupSyncedConceptStub;
   let getConceptsFollowedByUserStub;
@@ -120,7 +107,7 @@ describe('syncUserFollowers', () => {
   });
 
   //Happy empyty path
-  it.only('should return synchronisationCompleted if there topics to follow', (done)=> {
+  it('should return synchronisationCompleted if there topics to follow', (done)=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
     kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
