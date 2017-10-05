@@ -13,7 +13,7 @@ const kinesisClient = proxies.kinesisClient;
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
 const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
-const suppressLogs = true; //for local test if you want logs when test are run
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('syncUserFollowers', () => {
   const fakeGroupId = '00000000-0000-0000-0000-000000000123';
@@ -39,56 +39,53 @@ describe('syncUserFollowers', () => {
   let logMessageStub;
   const logMessages = [];
 
-  before(done => {
+  before(() => {
     if(suppressLogs) {
       logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
         logMessages.push(params);
       });
     }
-
-    done();
   });
 
-  beforeEach((done) => {
-    //myFT.getConceptsFollowedByGroup
+  beforeEach(() => {
     getConceptsFollowedByUserStub = sinon.stub(myFT, 'getConceptsFollowedByUser').resolves(syncConceptFollowsFix.userConcepts);
     addConceptsFollowedByKatUserStub = sinon.stub(myFT, 'addConceptsFollowedByKatUser').resolves(true);
     getEDPStub = sinon.stub(myFT, 'getEmailDigestPreference').resolves(edpFix);
-    done();
   });
 
-  afterEach(done => {
+  afterEach(() => {
       nock.cleanAll();
       getConceptsFollowedByUserStub.restore();
       addConceptsFollowedByKatUserStub.restore();
+  
       getEDPStub.restore();
-      done();
+ 
   });
 
-  after(done => {
+  after(() => {
 
     if(suppressLogs) {
       logMessageStub.restore();
     }
-    done();
+
   });
 
   //Happy empty path
-  it('should return status synchronisationIgnored and reason noGroupConceptsToFollow in object for no topics', (done)=> {
+  it('should return status synchronisationIgnored and reason noGroupConceptsToFollow in object for no topics', ()=> {
     noGroupConceptsToFollowStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.noGroupConcepts);
 
-    syncUserFollowers(fakeGroupId, fakeUserId).then(res => {
+    return syncUserFollowers(fakeGroupId, fakeUserId).then(res => {
       expect(res).to.be.an('object');
       expect(res).to.have.deep.property('user.status', 'synchronisationIgnored');
       expect(res).to.have.deep.property('user.reason', 'noGroupConceptsToFollow');
-        //clean up
-        noGroupConceptsToFollowStub.restore();
-        done();
-    }).catch(done);
+      //clean up
+      noGroupConceptsToFollowStub.restore();
+
+    });
 
   });
 
-  it('should return status synchronisationIgnored and reason noNewConceptsToFollow in object for no topics', (done)=> {
+  it('should return status synchronisationIgnored and reason noNewConceptsToFollow in object for no topics', ()=> {
     getGroupSyncedConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.syncedConcepts);
 
     syncUserFollowers(groupId, uuid).then(res => {
@@ -97,18 +94,17 @@ describe('syncUserFollowers', () => {
       expect(res).to.have.deep.property('user.reason', 'noNewConceptsToFollow');
        //clean up
        getGroupSyncedConceptStub.restore();
-       done();
-    }).catch(done);
+
+    });
 
   });
 
   //Happy empyty path
-  it('should return synchronisationCompleted if there topics to follow', (done)=> {
+  it('should return synchronisationCompleted if there topics to follow', ()=> {
     getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
     kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
     syncUserFollowers(groupId, uuid).then(res => {
-
       expect(res).to.have.deep.property('user.status', 'synchronisationCompleted');
       expect(res).to.have.deep.property('user.uuid', uuid);
       expect(res).to.have.deep.property('user.group', groupId);
@@ -119,7 +115,6 @@ describe('syncUserFollowers', () => {
        //clean up
        getGroupConceptStub.restore();
        kinesisWriteStub.restore();
-       done();
-    }).catch(done);
+    });
   });
 });
