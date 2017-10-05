@@ -57,9 +57,7 @@ describe('syncUserFollowers', () => {
       nock.cleanAll();
       getConceptsFollowedByUserStub.restore();
       addConceptsFollowedByKatUserStub.restore();
-  
       getEDPStub.restore();
- 
   });
 
   after(() => {
