@@ -48,6 +48,8 @@ describe('myFT Client proxy', () => {
 
   it ('should have default properties', () => {
     expectOwnProperties(myFT.followedProperties, ['byTool', 'byUser']);
+    expect(myFT.followedProperties.byTool).to.not.be.undefined;
+    expect(myFT.followedProperties.byUser).to.not.be.undefined;
     //expect(myFT.entityProperties[config.FT_TOOL_DATE_ID]).to.be.a('string');// TODO: WIP
   });
 
@@ -917,16 +919,17 @@ describe('myFT Client proxy', () => {
           .catch(done);
       });
 
-      it('Should remove concept(s) followed by a user', done => {
+      it('Should remove concept(s) followed by a single user', done => {
+        const userId = '00000000-0000-0000-0000-000000000002';
         nock(baseUrl)
           .delete('/kat/user/follows',{
-            ids: ids,
+            ids: [userId], // The next-myft-api expects an array of user IDs
             subjects: subjects
           })
           .query(true)
           .reply(204, () => ({}));
 
-        myFT.removeConceptsFollowedByKatUser(ids, subjects)
+        myFT.removeConceptsFollowedByKatUser(userId, subjects)
           .then(addResp => {
             expect(addResp).to.be.an('Object');
             expect(addResp.status).to.equal(204);
@@ -937,7 +940,6 @@ describe('myFT Client proxy', () => {
       });
 
       it('Should remove concept(s) followed by a group', done => {
-
           nock(baseUrl)
             .delete('/kat/group/follows')
             .query(true)
