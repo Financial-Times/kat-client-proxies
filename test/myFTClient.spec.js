@@ -873,6 +873,18 @@ describe('myFT Client proxy', () => {
         })
         .catch(done);
     });
+
+    it ('Should call the correct MyFT API endpoint to get a list of group IDs that follow a valid topic as an individual', () => {
+      const getGroupsFollowingConceptAPIMock = nock(baseUrl)
+        .get(`/kat/license/${uuids.validLicence}/concept/${uuids.validTopic}/followers/group`)
+        .query({ followType: 'individual' })
+        .reply(200, {});
+
+      return myFT.getGroupsFollowingConceptAsIndividual(uuids.validLicence, uuids.validTopic)
+        .then(() => {
+          expect(getGroupsFollowingConceptAPIMock.isDone()).to.equal(true);
+        });
+    });
   });
 
     //new orgainic v3/kat methods
