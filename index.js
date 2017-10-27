@@ -8,9 +8,9 @@ const paths = [
 ];
 
 paths.forEach(path => {
-  fs.readdirSync(path).forEach(file => {
-    if (file.indexOf('.js') > 0) {
-      module.exports[file.replace(/\.js/, '')] = require(`${path}/${file}`);
-    }
-  });
+	fs.readdirSync(path).forEach(file => {
+		if (file.indexOf('.js') > 0) {
+			module.exports[file.replace(/\.js/, '')] = require(`${path}/${file}`);
+		}
+	});
 });

@@ -13,55 +13,55 @@ const mockAPI = env.USE_MOCK_API;
 const baseUrl = require('./../lib/helpers/config').FACETS_SEARCH_URL;
 
 describe('Facets API Client', () => {
-  let logMessageStub;
-  const logMessages = [];
+	let logMessageStub;
+	const logMessages = [];
 
-  before(done => {
-    logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
-      logMessages.push(params);
-    });
+	before(done => {
+		logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+			logMessages.push(params);
+		});
 
-    done();
-  });
+		done();
+	});
 
-  after(done => {
-    if (mockAPI) {
-      nock.cleanAll();
-    }
+	after(done => {
+		if (mockAPI) {
+			nock.cleanAll();
+		}
 
-    logMessageStub.restore();
+		logMessageStub.restore();
 
-    done();
-  });
+		done();
+	});
 
-  describe('getTopics', () => {
+	describe('getTopics', () => {
 
-    it('Should get topics based on a search string', done => {
-      const maxResults = 6;
-      const queryString = 'Fiction';
-      const params = {
-        tagged: '',
-        count: maxResults,
-        partial: queryString
-      };
+		it('Should get topics based on a search string', done => {
+			const maxResults = 6;
+			const queryString = 'Fiction';
+			const params = {
+				tagged: '',
+				count: maxResults,
+				partial: queryString
+			};
 
-      if (mockAPI) {
-        nock(baseUrl)
-          .get(`/${helpers.createParams(params)}`)
-          .reply(200, () => []);
-      }
+			if (mockAPI) {
+				nock(baseUrl)
+					.get(`/${helpers.createParams(params)}`)
+					.reply(200, () => []);
+			}
 
-      facets.getTopics(params)
-        .then(res => {
-          expect(res).to.be.an('array');
-          expectOwnProperties(res, ['count', 'id', 'name', 'taxonomy', 'url']);
-          expect(res.length).to.be.at.most(maxResults);
+			facets.getTopics(params)
+				.then(res => {
+					expect(res).to.be.an('array');
+					expectOwnProperties(res, ['count', 'id', 'name', 'taxonomy', 'url']);
+					expect(res.length).to.be.at.most(maxResults);
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-  });
+	});
 
 });

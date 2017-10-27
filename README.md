@@ -30,9 +30,9 @@ If you want to update connected components with the latest version, you need to 
 2. Go to `package.json` file of the component you want to update, and change `"kat-client-proxies"` dependency version to the [newly released one](https://github.com/Financial-Times/kat-client-proxies/releases).
 
 The following KAT components are currently using `kat-client-proxies`:
- - [kmt-overview](https://github.com/Financial-Times/kmt-overview)
- - [kmt-myft](https://github.com/Financial-Times/kmt-myft)
- - [kat-usage-report](https://github.com/Financial-Times/kat-usage-report)
+- [kmt-overview](https://github.com/Financial-Times/kmt-overview)
+- [kmt-myft](https://github.com/Financial-Times/kmt-myft)
+- [kat-usage-report](https://github.com/Financial-Times/kat-usage-report)
 
 ### How to use the module
 
@@ -45,10 +45,10 @@ Include `"kat-client-proxies": "financial-times/kat-client-proxies#v[LATEST_RELE
 In your application wherever you would like to use kat-client-proxies include the path to the code you want to use:
 
 ```js
-  //... your app code
-  const [moduleName] = require('kat-client-proxies').[moduleName];
-  // ... and then e.g.
-  [moduleName].[functionName]([args...])
+//... your app code
+const [moduleName] = require('kat-client-proxies').[moduleName];
+// ... and then e.g.
+[moduleName].[functionName]([args...])
 ```
 
 ## Current proxies

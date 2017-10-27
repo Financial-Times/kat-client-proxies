@@ -14,98 +14,98 @@ const mockAPI = env.USE_MOCK_API;
 const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/users`;
 
 describe('User Profile Service Client', () => {
-  let logMessageStub;
-  const logMessages = [];
+	let logMessageStub;
+	const logMessages = [];
 
-  before(done => {
-    logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
-      logMessages.push(params);
-    });
+	before(done => {
+		logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+			logMessages.push(params);
+		});
 
-    done();
-  });
+		done();
+	});
 
-  after(done => {
-    if (mockAPI) {
-      nock.cleanAll();
-    }
+	after(done => {
+		if (mockAPI) {
+			nock.cleanAll();
+		}
 
-    logMessageStub.restore();
+		logMessageStub.restore();
 
-    done();
-  });
+		done();
+	});
 
-  describe('getUUID', () => {
+	describe('getUUID', () => {
 
-    it('Should get an users UUID for a valid email address', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .get(`?${qs.stringify({email: uuids.validUserEmail})}`)
-          .reply(200, () => require('./mocks/fixtures/userProfile'));
-      }
+		it('Should get an users UUID for a valid email address', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.get(`?${qs.stringify({email: uuids.validUserEmail})}`)
+					.reply(200, () => require('./mocks/fixtures/userProfile'));
+			}
 
-      userProfile.getUUID(uuids.validUserEmail)
-        .then(userProfile => {
-          expectOwnProperties(userProfile, ['id']);
-          expect(userProfile.email).to.be.null;
+			userProfile.getUUID(uuids.validUserEmail)
+				.then(userProfile => {
+					expectOwnProperties(userProfile, ['id']);
+					expect(userProfile.email).to.be.null;
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-    it('Should get a null for an invalid email address', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .get(`?${qs.stringify({email: uuids.invalidUserEmail})}`)
-          .reply(200, () => ({items: []}));
-      }
+		it('Should get a null for an invalid email address', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.get(`?${qs.stringify({email: uuids.invalidUserEmail})}`)
+					.reply(200, () => ({items: []}));
+			}
 
-      userProfile.getUUID(uuids.invalidUserEmail)
-        .then(userProfile => {
-          expect(userProfile).to.be.null;
+			userProfile.getUUID(uuids.invalidUserEmail)
+				.then(userProfile => {
+					expect(userProfile).to.be.null;
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-  });
+	});
 
-  describe('exists', () => {
+	describe('exists', () => {
 
-    it('Should get true for a valid user id', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .head(`?${qs.stringify({id: uuids.validUser})}`)
-          .reply(200, () => null);
-      }
+		it('Should get true for a valid user id', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.head(`?${qs.stringify({id: uuids.validUser})}`)
+					.reply(200, () => null);
+			}
 
-      userProfile.exists(uuids.validUser)
-        .then(res => {
-          expect(res).to.be.true;
+			userProfile.exists(uuids.validUser)
+				.then(res => {
+					expect(res).to.be.true;
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-    it('Should get false for an invalid user id', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .head(`?${qs.stringify({id: uuids.invalidUser})}`)
-          .reply(404, () => null);
-      }
+		it('Should get false for an invalid user id', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.head(`?${qs.stringify({id: uuids.invalidUser})}`)
+					.reply(404, () => null);
+			}
 
-      userProfile.exists(uuids.invalidUser)
-        .then(res => {
-          expect(res).to.be.false;
+			userProfile.exists(uuids.invalidUser)
+				.then(res => {
+					expect(res).to.be.false;
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-  });
+	});
 
 });
