@@ -108,7 +108,6 @@ describe('sync.userFollows', () => {
 			expect(res).to.have.deep.property('user.group', groupId);
 			expect(res.user.newConceptsToFollow).to.be.an('array');
 			expect(res.user.newConceptsToFollow[0].uuid).to.equal(uuids.mockNewTopic);
-			expect(res.user.newConceptsToFollow).to.be.an('array');
 
 			//clean up
 			getGroupConceptStub.restore();
