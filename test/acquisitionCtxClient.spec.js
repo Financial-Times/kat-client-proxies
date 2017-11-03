@@ -13,69 +13,69 @@ const mockAPI = env.USE_MOCK_API;
 const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/acquisition-contexts`;
 
 describe('Acquisition Context Service Client', () => {
-  let logMessageStub;
-  const logMessages = [];
+	let logMessageStub;
+	const logMessages = [];
 
-  before(done => {
-    logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
-      logMessages.push(params);
-    });
+	before(done => {
+		logMessageStub = sinon.stub(logger, 'log').callsFake((...params) => {
+			logMessages.push(params);
+		});
 
-    done();
-  });
+		done();
+	});
 
-  after(done => {
-    if (mockAPI) {
-      nock.cleanAll();
-    }
+	after(done => {
+		if (mockAPI) {
+			nock.cleanAll();
+		}
 
-    logMessageStub.restore();
+		logMessageStub.restore();
 
-    done();
-  });
+		done();
+	});
 
-  describe('getContexts', () => {
+	describe('getContexts', () => {
 
-    it('Should get an Acquisition Context for a valid licence uuid', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .get(`?access-licence-id=${uuids.validLicence}`)
-          .reply(200, () => require('./mocks/fixtures/acquisitionContext'));
-      }
+		it('Should get an Acquisition Context for a valid licence uuid', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.get(`?access-licence-id=${uuids.validLicence}`)
+					.reply(200, () => require('./mocks/fixtures/acquisitionContext'));
+			}
 
-      acqCtx.getContexts({'access-licence-id': uuids.validLicence})
-        .then(ctxList => {
-          expect(ctxList).to.be.an('array');
-          expectOwnProperties(ctxList, ['id', 'name', 'displayName', 'marketable', 'lastUpdated', 'signupContext', 'barrierContext']);
+			acqCtx.getContexts({'access-licence-id': uuids.validLicence})
+				.then(ctxList => {
+					expect(ctxList).to.be.an('array');
+					expectOwnProperties(ctxList, ['id', 'name', 'displayName', 'marketable', 'lastUpdated', 'signupContext', 'barrierContext']);
 
-          if (mockAPI) {
-            expect(ctxList).to.have.lengthOf(1);
-          }
+					if (mockAPI) {
+						expect(ctxList).to.have.lengthOf(1);
+					}
 
-          expect(ctxList[0].signupContext.accessLicenceId).to.equal(uuids.validLicence);
+					expect(ctxList[0].signupContext.accessLicenceId).to.equal(uuids.validLicence);
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-    it('Should get an empty Acquisition Context list for a invalid licence uuid', done => {
-      if (mockAPI) {
-        nock(baseUrl)
-          .get(`?access-licence-id=${uuids.invalidLicence}`)
-          .reply(200, () => ({items: []}));
-      }
+		it('Should get an empty Acquisition Context list for a invalid licence uuid', done => {
+			if (mockAPI) {
+				nock(baseUrl)
+					.get(`?access-licence-id=${uuids.invalidLicence}`)
+					.reply(200, () => ({items: []}));
+			}
 
-      acqCtx.getContexts({'access-licence-id': uuids.invalidLicence})
-        .then(ctxList => {
-          expect(ctxList).to.be.an('array');
-          expect(ctxList).to.have.lengthOf(0);
+			acqCtx.getContexts({'access-licence-id': uuids.invalidLicence})
+				.then(ctxList => {
+					expect(ctxList).to.be.an('array');
+					expect(ctxList).to.have.lengthOf(0);
 
-          done();
-        })
-        .catch(done);
-    });
+					done();
+				})
+				.catch(done);
+		});
 
-  });
+	});
 
 });

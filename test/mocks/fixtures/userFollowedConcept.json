@@ -1,84 +1,84 @@
 {
   "user": {
-    "_id": 407764,
-    "labels": [
-      "User",
-      "Flagged"
-    ],
-    "properties": {
-      "nodeRank": 8,
-      "uuid": "00000000-0000-0000-0000-000000002222"
-    }
+      "_id": 407764,
+      "labels": [
+          "User",
+          "Flagged"
+      ],
+      "properties": {
+          "nodeRank": 8,
+          "uuid": "00000000-0000-0000-0000-000000002222"
+      }
   },
   "total": 5,
   "items": [
-    {
-      "nodeRank": 133,
-      "name": "GB Airways",
-      "taxonomy": "organisations",
-      "uuid": "00000000-0000-0000-0000-000000000004",
-      "_rel": {
-        "byTool": "KAT",
-        "asMemberOf": "00000000-0000-0000-0000-000000000001",
-        "created": 1480504389943,
-        "count": 1,
-        "updated": 1480504389943,
-        "byUser": "00000000-0000-0000-0000-000000002222"
+      {
+          "nodeRank": 133,
+          "name": "GB Airways",
+          "taxonomy": "organisations",
+          "uuid": "00000000-0000-0000-0000-000000000004",
+          "_rel": {
+              "byTool": "KAT",
+              "asMemberOf": "00000000-0000-0000-0000-000000000001",
+              "created": 1480504389943,
+              "count": 1,
+              "updated": 1480504389943,
+              "byUser": "00000000-0000-0000-0000-000000002222"
+          }
+      },
+      {
+          "nodeRank": 66986,
+          "name": "World",
+          "taxonomy": "sections",
+          "type": "Concept",
+          "uuid": "00000000-0000-0000-0000-000000000005",
+          "_rel": {
+              "created": 1480005819072,
+              "count": 1,
+              "updated": 1480005819072
+          }
+      },
+      {
+          "nodeRank": 12153,
+          "name": "Donald Trump",
+          "taxonomy": "people",
+          "uuid": "00000000-0000-0000-0000-000000000008",
+          "_rel": {
+              "byTool": "KAT",
+              "created": 1478779683484,
+              "count": 1,
+              "updated": 1478779683484,
+              "byUser": "00000000-0000-0000-0000-000000002222"
+          }
+      },
+      {
+          "nodeRank": 996,
+          "name": "Bucharest",
+          "taxonomy": "regions",
+          "uuid": "00000000-0000-0000-0000-000000000006",
+          "_rel": {
+              "byTool": "KAT",
+              "asMemberOf": "00000000-0000-0000-0000-000000000001",
+              "created": 1478248058858,
+              "count": 1,
+              "updated": 1478248058858,
+              "byUser": "00000000-0000-0000-0000-000000000007"
+          }
+      },
+      {
+          "nodeRank": 1931,
+          "name": "Finland",
+          "taxonomy": "regions",
+          "uuid": "00000000-0000-0000-0000-000000000007",
+          "_rel": {
+              "byTool": "KAT",
+              "asMemberOf": "00000000-0000-0000-0000-000000000001",
+              "created": 1478104572623,
+              "count": 1,
+              "updated": 1478104572623,
+              "byUser": "2a41e5cb-491a-4192-a253-eda16533a0c6"
+          }
       }
-    },
-    {
-      "nodeRank": 66986,
-      "name": "World",
-      "taxonomy": "sections",
-      "type": "Concept",
-      "uuid": "00000000-0000-0000-0000-000000000005",
-      "_rel": {
-        "created": 1480005819072,
-        "count": 1,
-        "updated": 1480005819072
-      }
-    },
-    {
-      "nodeRank": 12153,
-      "name": "Donald Trump",
-      "taxonomy": "people",
-      "uuid": "00000000-0000-0000-0000-000000000008",
-      "_rel": {
-        "byTool": "KAT",
-        "created": 1478779683484,
-        "count": 1,
-        "updated": 1478779683484,
-        "byUser": "00000000-0000-0000-0000-000000002222"
-      }
-    },
-    {
-      "nodeRank": 996,
-      "name": "Bucharest",
-      "taxonomy": "regions",
-      "uuid": "00000000-0000-0000-0000-000000000006",
-      "_rel": {
-        "byTool": "KAT",
-        "asMemberOf": "00000000-0000-0000-0000-000000000001",
-        "created": 1478248058858,
-        "count": 1,
-        "updated": 1478248058858,
-        "byUser": "00000000-0000-0000-0000-000000000007"
-      }
-    },
-    {
-      "nodeRank": 1931,
-      "name": "Finland",
-      "taxonomy": "regions",
-      "uuid": "00000000-0000-0000-0000-000000000007",
-      "_rel": {
-        "byTool": "KAT",
-        "asMemberOf": "00000000-0000-0000-0000-000000000001",
-        "created": 1478104572623,
-        "count": 1,
-        "updated": 1478104572623,
-        "byUser": "2a41e5cb-491a-4192-a253-eda16533a0c6"
-      }
-    }
-	],
+  ],
   "count": 5
 }
