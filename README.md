@@ -74,4 +74,3 @@ const [moduleName] = require('kat-client-proxies').[moduleName];
 * sessionClient
 * syncUserFollows
 * userProfileClient
-
