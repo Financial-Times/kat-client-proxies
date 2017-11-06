@@ -955,7 +955,7 @@ describe('myFT Client proxy', () => {
 					nock(baseUrl)
 						.delete('/kat/group/follows')
 						.query(true)
-						.reply(204, () => ({}));
+						.reply(204);
 
 
 				myFT.removeConceptsFollowedByKatGroup(ids, subjects)
@@ -991,7 +991,7 @@ describe('myFT Client proxy', () => {
 					nock(baseUrl)
 						.delete('/kat/group/user/follows')
 						.query(true)
-						.reply(204, () => []);
+						.reply(204);
 
 
 				myFT.removeConceptsFollowedByKatGroupMembers(ids, subjects)
