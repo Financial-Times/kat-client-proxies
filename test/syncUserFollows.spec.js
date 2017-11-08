@@ -70,7 +70,7 @@ describe('sync.userFollows', () => {
 
 	//Happy empty path
 	it('should return status synchronisationIgnored and reason noGroupConceptsToFollow in object for no topics', ()=> {
-		noGroupConceptsToFollowStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.noGroupConcepts);
+		noGroupConceptsToFollowStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.noGroupConcepts);
 
 		return sync.userFollows(fakeGroupId, fakeUserId).then(res => {
 			expect(res).to.be.an('object');
@@ -84,7 +84,7 @@ describe('sync.userFollows', () => {
 	});
 
 	it('should return status synchronisationIgnored and reason noNewConceptsToFollow in object for no topics', ()=> {
-		getGroupSyncedConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.syncedConcepts);
+		getGroupSyncedConceptStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.syncedConcepts);
 
 		sync.userFollows(groupId, uuid).then(res => {
 			expect(res).to.be.an('object');
