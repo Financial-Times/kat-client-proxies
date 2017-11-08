@@ -889,7 +889,7 @@ describe('myFT Client proxy', () => {
 	});
 
 		//new orgainic v3/kat methods
-		describe.only('Followed_by_Kat concepts', () => {
+		describe('Followed_by_Kat concepts', () => {
 			const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
 			const {ids, subjects} = require('./mocks/fixtures/userFollowsConceptByKat');
 			const followedByKatRes = require('./mocks/fixtures/followByKatResp');
@@ -914,7 +914,7 @@ describe('myFT Client proxy', () => {
 					.catch(done);
 			});
 
-			it.only ('Should get an array of concepts followed by a group', done => {
+			it('Should get an array of concepts followed by a group', done => {
 				if (mockAPI) {
 					nock(baseUrl)
 						.get(`/group/${uuids.validLicence}/followed_by_kat/concept?page=1&limit=500`)
