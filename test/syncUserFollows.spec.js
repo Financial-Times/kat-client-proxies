@@ -99,7 +99,7 @@ describe('sync.userFollows', () => {
 
 	//Happy empyty path
 	it('should return synchronisationCompleted if there topics to follow', ()=> {
-		getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
+		getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.groupConcepts);
 		kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
 		sync.userFollows(groupId, uuid).then(res => {
