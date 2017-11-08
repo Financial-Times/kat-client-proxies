@@ -656,6 +656,7 @@ describe('myFT Client proxy', () => {
 				.catch(done);
 		});
 
+
 		it ('Should remove and get concepts followed by a group', done => {
 			if (mockAPI) {
 				nock(baseUrl)
@@ -888,7 +889,7 @@ describe('myFT Client proxy', () => {
 	});
 
 		//new orgainic v3/kat methods
-		describe('Followed_by_Kat concepts', () => {
+		describe.only('Followed_by_Kat concepts', () => {
 			const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
 			const {ids, subjects} = require('./mocks/fixtures/userFollowsConceptByKat');
 			const followedByKatRes = require('./mocks/fixtures/followByKatResp');
@@ -908,6 +909,28 @@ describe('myFT Client proxy', () => {
 					.then(addResp => {
 						expect(addResp).to.be.an('array');
 						expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
+						done();
+					})
+					.catch(done);
+			});
+
+			it.only ('Should get an array of concepts followed by a group', done => {
+				if (mockAPI) {
+					nock(baseUrl)
+						.get(`/group/${uuids.validLicence}/followed_by_kat/concept?page=1&limit=500`)
+						.reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
+				}
+
+				myFT.getConceptsFollowedByKatGroup(uuids.validLicence)
+					.then(followResponse => {
+						expect(followResponse).to.be.an('array');
+
+						if (mockAPI) {
+							expect(followResponse).to.have.lengthOf(1);
+						}
+
+						expectOwnProperties(followResponse, ['uuid']);
+
 						done();
 					})
 					.catch(done);
