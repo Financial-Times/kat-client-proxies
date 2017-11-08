@@ -13,7 +13,7 @@ const kinesisClient = proxies.kinesisClient;
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
 const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('sync.userFollows', () => {
 	const fakeGroupId = '00000000-0000-0000-0000-000000000123';
