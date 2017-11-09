@@ -9,7 +9,6 @@ const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const config = require('./../lib/helpers/config');
 const clientErrors = proxies.clientErrors;
-const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
