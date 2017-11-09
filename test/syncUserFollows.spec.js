@@ -13,7 +13,7 @@ const kinesisClient = proxies.kinesisClient;
 const syncConceptFollowsFix = require('./mocks/fixtures/syncConceptFollows');
 const edpFix = require('./mocks/fixtures/emailDigestPreference.json');
 
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('sync.userFollows', () => {
 	const fakeGroupId = '00000000-0000-0000-0000-000000000123';
@@ -70,7 +70,7 @@ describe('sync.userFollows', () => {
 
 	//Happy empty path
 	it('should return status synchronisationIgnored and reason noGroupConceptsToFollow in object for no topics', ()=> {
-		noGroupConceptsToFollowStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.noGroupConcepts);
+		noGroupConceptsToFollowStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.noGroupConcepts);
 
 		return sync.userFollows(fakeGroupId, fakeUserId).then(res => {
 			expect(res).to.be.an('object');
@@ -84,7 +84,7 @@ describe('sync.userFollows', () => {
 	});
 
 	it('should return status synchronisationIgnored and reason noNewConceptsToFollow in object for no topics', ()=> {
-		getGroupSyncedConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.syncedConcepts);
+		getGroupSyncedConceptStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.syncedConcepts);
 
 		sync.userFollows(groupId, uuid).then(res => {
 			expect(res).to.be.an('object');
@@ -99,7 +99,7 @@ describe('sync.userFollows', () => {
 
 	//Happy empyty path
 	it('should return synchronisationCompleted if there topics to follow', ()=> {
-		getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByGroup').resolves(syncConceptFollowsFix.groupConcepts);
+		getGroupConceptStub = sinon.stub(myFT, 'getConceptsFollowedByKatGroup').resolves(syncConceptFollowsFix.groupConcepts);
 		kinesisWriteStub = sinon.stub(kinesisClient, 'write').resolves(kinesisRes);
 
 		sync.userFollows(groupId, uuid).then(res => {
