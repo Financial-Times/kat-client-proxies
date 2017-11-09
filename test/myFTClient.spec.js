@@ -349,7 +349,7 @@ describe('myFT Client proxy', () => {
 				.catch(done);
 		});
 
-		it.only ('Should be able to update a licence', done => {
+		it('Should be able to update a licence', done => {
 
 			nock(baseUrl)
 				.put(`/${myftConst.licenceNodeName}/${uuids.validLicence}`)
