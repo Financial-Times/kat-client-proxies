@@ -835,6 +835,31 @@ describe('myFT Client proxy', () => {
 		});
 	});
 
+	//v3/kat remove users endpoint
+	describe('Remove user from a licence', () => {
+
+		afterEach(done => {
+			nock.cleanAll();
+			done();
+		});
+
+		it('should return 204 with empty object when calling /kat/user/remove remove all of a users relationships related to a given licence', () => {
+
+			nock(baseUrl)
+			.delete('/kat/user/remove')
+			.query(true)
+			.reply(204);
+
+			return myFT.removeKatUsersFromLicence (uuids.validLicence, uuids.validUser)
+			.then((resp) => {
+				expect(resp).to.be.an('Object');
+				expect(resp.status).to.equal(204);
+			});
+
+		});
+
+	});
+
 	//new orgainic v3/kat methods
 	describe('Followed_by_Kat concepts', () => {
 		const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
