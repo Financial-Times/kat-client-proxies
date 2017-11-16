@@ -10,7 +10,7 @@ const logger = require('@financial-times/n-logger').default;
 const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const mockAPI = env.USE_MOCK_API;
-const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/acquisition-contexts`;
+const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/acquisition-contexts/v1`;
 
 describe('Acquisition Context Service Client', () => {
 	let logMessageStub;
@@ -45,14 +45,14 @@ describe('Acquisition Context Service Client', () => {
 
 			acqCtx.getContexts({'access-licence-id': uuids.validLicence})
 				.then(ctxList => {
-					expect(ctxList).to.be.an('array');
+					expect(ctxList).to.be.an('object');
 					expectOwnProperties(ctxList, ['id', 'name', 'displayName', 'marketable', 'lastUpdated', 'signupContext', 'barrierContext']);
 
 					if (mockAPI) {
-						expect(ctxList).to.have.lengthOf(1);
+						expect(Object.keys(ctxList).length).to.equal(10);
 					}
 
-					expect(ctxList[0].signupContext.accessLicenceId).to.equal(uuids.validLicence);
+					expect(ctxList.signupContext.accessLicenceId).to.equal(uuids.validLicence);
 
 					done();
 				})
@@ -68,8 +68,7 @@ describe('Acquisition Context Service Client', () => {
 
 			acqCtx.getContexts({'access-licence-id': uuids.invalidLicence})
 				.then(ctxList => {
-					expect(ctxList).to.be.an('array');
-					expect(ctxList).to.have.lengthOf(0);
+					expect(ctxList).to.be.an('undefined');
 
 					done();
 				})

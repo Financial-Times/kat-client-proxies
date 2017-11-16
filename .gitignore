@@ -43,3 +43,5 @@ jspm_packages
 .eslintrc.js
 .editorconfig
 .pa11yci.js
+
+package-lock.json
