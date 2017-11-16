@@ -59,7 +59,7 @@ describe('Acquisition Context Service Client', () => {
 				.catch(done);
 		});
 
-		it.only('Should get an empty Acquisition Context list for a invalid licence uuid', done => {
+		it('Should get an empty Acquisition Context list for a invalid licence uuid', done => {
 			if (mockAPI) {
 				nock(baseUrl)
 					.get(`?access-licence-id=${uuids.invalidLicence}`)
