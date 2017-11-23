@@ -14,7 +14,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = true; //for local test if you want logs when test are run
+const suppressLogs = false; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
 	let logMessageStub;
@@ -840,20 +840,18 @@ describe('myFT Client proxy', () => {
 
 		afterEach(() => nock.cleanAll());
 
-		it('should return 204 with empty object when calling /kat/user/remove remove all of a users relationships related to a given licence', () => {
-			nock(baseUrl)
-			.delete('/kat/user/remove')
-			.query(true)
-			.reply(204);
+		it('should return status of 204 calling /kat/user/remove remove all of a users relationships related to a given licence', () => {
+			const removeKatUser = nock(baseUrl)
+				.delete('/kat/user/remove')
+				.query(true)
+				.reply(204);
 
 			return myFT.removeKatUsersFromLicence(uuids.validLicence, uuids.validUser)
 			.then((resp) => {
-				expect(resp).to.be.an('Object');
+				expect(removeKatUser.isDone()).to.equal(true);
 				expect(resp.status).to.equal(204);
 			});
-
 		});
-
 	});
 
 	//new orgainic v3/kat methods
