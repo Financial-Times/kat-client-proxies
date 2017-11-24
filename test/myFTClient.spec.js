@@ -55,7 +55,7 @@ describe('myFT Client proxy', () => {
 		it('Should set an EmailDigestPreference for a valid user uuid', done => {
 
 			nock(baseUrl)
-				.post(`/${myftConst.userNodeName}/${myftConst.prefRelType}/${myftConst.prefRelName}${extraParams}`)
+				.post(`/kat/user/email-digest${extraParams}`)
 				.reply(200, () => ({}));
 
 			nock(baseUrl)
