@@ -10,4 +10,3 @@ unit-test:
 test:
 	make verify
 	make unit-test
-	# make a11y
