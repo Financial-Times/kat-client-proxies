@@ -1,6 +1,7 @@
 require('dotenv').config({silent: true});
 
 module.exports = {
+	accessLicenceClient: require('./lib/accessLicenceClient'),
 	acquisitionCtxClient: require('./lib/acquisitionCtxClient'),
 	clientErrors: require('./lib/clientErrors'),
 	elasticSearchClient: require('./lib/elasticSearchClient'),
@@ -12,5 +13,4 @@ module.exports = {
 	sessionClient: require('./lib/sessionClient'),
 	syncUserFollows: require('./lib/syncUserFollows'),
 	userProfileClient: require('./lib/userProfileClient'),
-	accessLicenceClient: require('./lib/accessLicenceClient')
 };
