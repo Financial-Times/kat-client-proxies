@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 8.2.1
+    version: 6.11.1
 
 deployment:
   release:
