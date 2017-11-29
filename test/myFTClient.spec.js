@@ -14,7 +14,7 @@ const baseUrl = config.MYFT_API_URL;
 const extraParams = `?noEvent=${config.MYFT_NO_EVENT}&waitForPurge=${config.MYFT_WAIT_FOR_PURGE_ADD}`;
 
 const myftConst = config.myftClientConstants;
-const suppressLogs = false; //for local test if you want logs when test are run
+const suppressLogs = true; //for local test if you want logs when test are run
 
 describe('myFT Client proxy', () => {
 	let logMessageStub;
@@ -835,172 +835,188 @@ describe('myFT Client proxy', () => {
 		});
 	});
 
-		//new orgainic v3/kat methods
-		describe('Followed_by_Kat concepts', () => {
-			const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec', isTest: true});
-			const {ids, subjects} = require('./mocks/fixtures/userFollowsConceptByKat');
-			const followedByKatRes = require('./mocks/fixtures/followByKatResp');
+	//v3/kat remove users endpoint
+	describe('Remove user from a licence', () => {
 
-			afterEach(done => {
-					nock.cleanAll();
-					done();
+		afterEach(() => nock.cleanAll());
+
+		it('should return status of 204 calling /kat/license/:licenceId/member/user remove all of a users relationships related to a given licence', () => {
+			const removeKatUser = nock(baseUrl)
+				.delete(`/kat/license/${uuids.validLicence}/member/user`)
+				.query(true)
+				.reply(204);
+
+			return myFT.removeKatUsersFromLicence(uuids.validLicence, uuids.validUser)
+			.then((resp) => {
+				expect(removeKatUser.isDone()).to.equal(true);
+				expect(resp.status).to.equal(204);
 			});
+		});
+	});
 
-			it('Should set concept(s) follows by a user ', done => {
-					nock(baseUrl)
-						.post('/kat/user/follows')
-						.query(true)
-						.reply(200, () => followedByKatRes);
+	//new orgainic v3/kat methods
+	describe('Followed_by_Kat concepts', () => {
+		const relProps = Object.assign({}, myFT.followedProperties, {byTool: 'myFTClient.spec'});
+		const {ids, subjects} = require('./mocks/fixtures/userFollowsConceptByKat');
+		const followedByKatRes = require('./mocks/fixtures/followByKatResp');
 
-				myFT.addConceptsFollowedByKatUser(ids, subjects, relProps)
-					.then(addResp => {
-						expect(addResp).to.be.an('array');
-						expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
-						done();
-					})
-					.catch(done);
-			});
+		afterEach(() => nock.cleanAll());
 
-			it('Should get an array of concepts followed by a group', done => {
-					nock(baseUrl)
-						.get(`/group/${uuids.validLicence}/followed_by_kat/concept?page=1&limit=500`)
-						.reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
-
-
-				myFT.getConceptsFollowedByKatGroup(uuids.validLicence)
-					.then(followResponse => {
-						expect(followResponse).to.be.an('array');
-						expect(followResponse).to.have.lengthOf(1);
-						expectOwnProperties(followResponse, ['uuid']);
-
-						done();
-					})
-					.catch(done);
-			});
-
-			it('Should set concept(s) follows by a group ', done => {
-
-					nock(baseUrl)
-						.post('/kat/group/follows')
-						.query(true)
-						.reply(200, () => followedByKatRes);
-
-				myFT.addConceptsFollowedByKatGroup(ids, subjects, relProps)
-					.then(addResp => {
-						expect(addResp).to.be.an('array');
-						expect(addResp[0][0][0]).to.be.an('Object');
-						expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
-						//TODO specify what to expect from addResp
-						done();
-					})
-					.catch(done);
-			});
-
-			it('Should remove concept(s) followed by a single user', done => {
-				const userId = '00000000-0000-0000-0000-000000000002';
+		it('Should set concept(s) follows by a user ', done => {
 				nock(baseUrl)
-					.delete('/kat/user/follows',{
-						ids: [userId], // The next-myft-api expects an array of user IDs
-						subjects: subjects
-					})
+					.post('/kat/user/follows')
 					.query(true)
-					.reply(204, () => ({}));
+					.reply(200, () => followedByKatRes);
 
-				myFT.removeConceptsFollowedByKatUser(userId, subjects)
-					.then(addResp => {
-						expect(addResp).to.be.an('Object');
-						expect(addResp.status).to.equal(204);
+			myFT.addConceptsFollowedByKatUser(ids, subjects, relProps)
+				.then(addResp => {
+					expect(addResp).to.be.an('array');
+					expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
+					done();
+				})
+				.catch(done);
+		});
 
-						done();
-					})
-					.catch(done);
-			});
-
-			it('Should remove concept(s) followed by a group', done => {
-					nock(baseUrl)
-						.delete('/kat/group/follows')
-						.query(true)
-						.reply(204);
+		it('Should get an array of concepts followed by a group', done => {
+				nock(baseUrl)
+					.get(`/group/${uuids.validLicence}/followed_by_kat/concept?page=1&limit=500`)
+					.reply(200, () => require('./mocks/fixtures/groupFollowedConcept'));
 
 
-				myFT.removeConceptsFollowedByKatGroup(ids, subjects)
-					.then(addResp => {
-						expect(addResp).to.be.an('Object');
-						expect(addResp.status).to.equal(204);
+			myFT.getConceptsFollowedByKatGroup(uuids.validLicence)
+				.then(followResponse => {
+					expect(followResponse).to.be.an('array');
+					expect(followResponse).to.have.lengthOf(1);
+					expectOwnProperties(followResponse, ['uuid']);
 
-						done();
-					})
-					.catch(done);
-			});
+					done();
+				})
+				.catch(done);
+		});
 
-			it('Should add concept(s) follows for members of a group', done => {
-
-					nock(baseUrl)
-						.post('/kat/group/user/follows')
-						.query(true)
-						.reply(200, () => []);
-
-
-				myFT.addConceptsFollowedByKatGroupMembers(ids, subjects)
-					.then(addResp => {
-						expect(addResp).to.be.an('array');
-						//TODO specify what to expect from addResp Postman returns an empty array in an empty array?
-
-						done();
-					})
-					.catch(done);
-			});
-
-			it('Should remove concept(s) follows for user of a group', done => {
-
-					nock(baseUrl)
-						.delete('/kat/group/user/follows')
-						.query(true)
-						.reply(204);
-
-
-				myFT.removeConceptsFollowedByKatGroupMembers(ids, subjects)
-					.then(addResp => {
-						expect(addResp).to.be.an('array');
-
-						done();
-					})
-					.catch(done);
-			});
-
-			it('Should add follows to an array users added to a group', done => {
-				const groupId = '00000000-0000-0000-0000-000000000666';
+		it('Should set concept(s) follows by a group ', done => {
 
 				nock(baseUrl)
-					.post(`/kat/group/${groupId}/user/follows`)
+					.post('/kat/group/follows')
+					.query(true)
+					.reply(200, () => followedByKatRes);
+
+			myFT.addConceptsFollowedByKatGroup(ids, subjects, relProps)
+				.then(addResp => {
+					expect(addResp).to.be.an('array');
+					expect(addResp[0][0][0]).to.be.an('Object');
+					expect(addResp[0][0][0]).to.have.deep.property('katRel.type', 'followed_by_kat');
+					//TODO specify what to expect from addResp
+					done();
+				})
+				.catch(done);
+		});
+
+		it('Should remove concept(s) followed by a single user', done => {
+			const userId = '00000000-0000-0000-0000-000000000002';
+			nock(baseUrl)
+				.delete('/kat/user/follows',{
+					ids: [userId], // The next-myft-api expects an array of user IDs
+					subjects: subjects
+				})
+				.query(true)
+				.reply(204, () => ({}));
+
+			myFT.removeConceptsFollowedByKatUser(userId, subjects)
+				.then(addResp => {
+					expect(addResp).to.be.an('Object');
+					expect(addResp.status).to.equal(204);
+
+					done();
+				})
+				.catch(done);
+		});
+
+		it('Should remove concept(s) followed by a group', done => {
+				nock(baseUrl)
+					.delete('/kat/group/follows')
+					.query(true)
+					.reply(204);
+
+
+			myFT.removeConceptsFollowedByKatGroup(ids, subjects)
+				.then(addResp => {
+					expect(addResp).to.be.an('Object');
+					expect(addResp.status).to.equal(204);
+
+					done();
+				})
+				.catch(done);
+		});
+
+		it('Should add concept(s) follows for members of a group', done => {
+
+				nock(baseUrl)
+					.post('/kat/group/user/follows')
 					.query(true)
 					.reply(200, () => []);
 
-					myFT.addConceptsFollowedByKatGroupMembSpec(ids, subjects,relProps,groupId)
-						.then(addResp => {
-							expect(addResp).to.be.an('array');
 
-							done();
-						})
-						.catch(done);
-			});
+			myFT.addConceptsFollowedByKatGroupMembers(ids, subjects)
+				.then(addResp => {
+					expect(addResp).to.be.an('array');
+					//TODO specify what to expect from addResp Postman returns an empty array in an empty array?
 
-			it('Should remove follows from an array users associated with a group', done => {
-				const groupId = '00000000-0000-0000-0000-000000000555';
+					done();
+				})
+				.catch(done);
+		});
+
+		it('Should remove concept(s) follows for user of a group', done => {
 
 				nock(baseUrl)
-					.delete(`/kat/group/${groupId}/user/follows`)
+					.delete('/kat/group/user/follows')
 					.query(true)
-					.reply(204, () => []);
+					.reply(204);
 
-				myFT.removeConceptsFollowedByKatGroupMembSpec(ids, subjects, relProps, groupId)
+
+			myFT.removeConceptsFollowedByKatGroupMembers(ids, subjects)
+				.then(addResp => {
+					expect(addResp).to.be.an('array');
+
+					done();
+				})
+				.catch(done);
+		});
+
+		it('Should add follows to an array users added to a group', done => {
+			const groupId = '00000000-0000-0000-0000-000000000666';
+
+			nock(baseUrl)
+				.post(`/kat/group/${groupId}/user/follows`)
+				.query(true)
+				.reply(200, () => []);
+
+				myFT.addConceptsFollowedByKatGroupMembSpec(ids, subjects,relProps,groupId)
 					.then(addResp => {
 						expect(addResp).to.be.an('array');
 
 						done();
 					})
 					.catch(done);
-			});
+		});
+
+		it('Should remove follows from an array users associated with a group', done => {
+			const groupId = '00000000-0000-0000-0000-000000000555';
+
+			nock(baseUrl)
+				.delete(`/kat/group/${groupId}/user/follows`)
+				.query(true)
+				.reply(204, () => []);
+
+			myFT.removeConceptsFollowedByKatGroupMembSpec(ids, subjects, relProps, groupId)
+				.then(addResp => {
+					expect(addResp).to.be.an('array');
+
+					done();
+				})
+				.catch(done);
+		});
 
 	});
 });
