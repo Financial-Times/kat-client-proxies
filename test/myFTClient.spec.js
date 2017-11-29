@@ -840,9 +840,9 @@ describe('myFT Client proxy', () => {
 
 		afterEach(() => nock.cleanAll());
 
-		it('should return status of 204 calling /kat/user/remove remove all of a users relationships related to a given licence', () => {
+		it.only('should return status of 204 calling /kat/license/:licenceId/member/user remove all of a users relationships related to a given licence', () => {
 			const removeKatUser = nock(baseUrl)
-				.delete('/kat/user/remove')
+				.delete(`/kat/license/${uuids.validLicence}/member/user`)
 				.query(true)
 				.reply(204);
 
