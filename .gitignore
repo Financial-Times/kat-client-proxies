@@ -40,6 +40,8 @@ jspm_packages
 # Environment settings
 *.env*
 
+.vscode
+
 .eslintrc.js
 .editorconfig
 .pa11yci.js
