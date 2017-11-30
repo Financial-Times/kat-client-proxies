@@ -2,6 +2,9 @@ machine:
   node:
     version: 6.11.1
 
-dependencies:
-  override:
-    - npm prune && npm install
+deployment:
+  release:
+    tag: /^v?\d+\.\d+\.\d+(?:-beta\.\d+)?$/
+    owner: Financial-Times
+    commands:
+      - make npm-publish
