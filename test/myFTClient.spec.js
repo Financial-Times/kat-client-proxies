@@ -71,6 +71,7 @@ describe('myFT Client proxy', () => {
 					expectOwnProperties(edp, ['uuid', '_rel']);
 					expect(edp.uuid).to.equal(myftConst.prefRelId);
 					expect(edp['_rel'].isTest).to.equal(true);
+					expect(edp['_rel'].type).to.equal('weekly');
 
 					done();
 				})
