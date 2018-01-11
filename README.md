@@ -67,7 +67,6 @@ const [moduleName] = require('kat-client-proxies').[moduleName];
 * elasticSearchClient
 * emailNotification
 * facetsClient
-* huiClient
 * kinesisClient
 * licenceDataClient
 * myFTClient

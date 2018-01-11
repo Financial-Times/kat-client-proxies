@@ -6,7 +6,6 @@ module.exports = {
 	clientErrors: require('./lib/clientErrors'),
 	elasticSearchClient: require('./lib/elasticSearchClient'),
 	facetsClient: require('./lib/facetsClient'),
-	huiClient: require('./lib/huiClient'),
 	kinesisClient: require('./lib/kinesisClient'),
 	licenceDataClient: require('./lib/licenceDataClient'),
 	myFTClient: require('./lib/myFTClient'),

@@ -16,7 +16,6 @@ module.exports = {
 			'40c48260-0f57-4017-a7e4-90e71902f74c', // test/mocks/fixtures/getLicenceMembers.json:26
 			'78dac1ba-d84f-4bf6-861f-cc1c37e754d4', // test/mocks/fixtures/getLicenceMembers.json:47
 			'653971cb-0e4b-4f42-8315-5485f3d1025d', // test/mocks/fixtures/getLicenceMembers.json:57
-			'8eb26ed7-68c8-44c6-b6ce-52d61500f301', // test/mocks/fixtures/getUsageByMonth.json:2, test/mocks/fixtures/getUsageByWeek.json:2
 			'test@test.com', // test/mocks/fixtures/licenceDataAdmins.json:7, test/mocks/fixtures/licenceSeatHolders.json:11
 			'TnN0ZWluX09OX0FGVE1fT05fMTMxMTYz', // test/mocks/fixtures/userFollowedConcept.json:19
 			'729e2a70-ee89-41fc-b0aa-c735bfd44a71', // test/mocks/fixtures/userFollowedConcept.json:65
