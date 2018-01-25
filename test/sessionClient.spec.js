@@ -12,7 +12,7 @@ const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
 const mockAPI = env.USE_MOCK_API;
 const config = require('./../lib/helpers/config');
-const baseUrl = `${config.API_GATEWAY_HOST}`;
+const baseUrl = 'https://api.ft.com';
 
 describe('Session Client', () => {
 	let logMessageStub;
@@ -38,14 +38,14 @@ describe('Session Client', () => {
 
 	describe('verify', () => {
 
-		it('Should get user login info for a valid session', done => {
+		it('Should get user login info for a valid secure session', done => {
 			if (mockAPI) {
 				nock(baseUrl)
-					.get(`/sessions/${uuids.validFTSession}`)
+					.get(`/sessions/s/${uuids.validFTSessionSecure}`)
 					.reply(200, () => require('./mocks/fixtures/sessionVerify'));
 			}
 
-			sessionClient.verify(uuids.validFTSession)
+			sessionClient.verify(uuids.validFTSessionSecure)
 				.then(response => {
 					expect(response).to.be.an('object');
 					expectOwnProperties(response, ['uuid', 'creationTime', 'rememberMe']);
@@ -59,7 +59,7 @@ describe('Session Client', () => {
 		it('Should throw a NotFoundError for an invalid session', done => {
 			if (mockAPI) {
 				nock(baseUrl)
-					.get(`/sessions/${uuids.invalidFTSession}`)
+					.get(`/sessions/s/${uuids.invalidFTSession}`)
 					.reply(404, () => null);
 			}
 
