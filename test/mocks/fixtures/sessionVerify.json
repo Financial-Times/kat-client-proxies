@@ -1,5 +1,6 @@
 {
   "uuid": "00000000-0000-0000-0000-000000000003",
   "creationTime": 1494319859974,
-  "rememberMe": true
+  "rememberMe": true,
+  "mfa": true
 }
