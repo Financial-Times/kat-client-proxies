@@ -12,4 +12,5 @@ module.exports = {
 	sessionClient: require('./lib/sessionClient'),
 	syncUserFollows: require('./lib/syncUserFollows'),
 	userProfileClient: require('./lib/userProfileClient'),
+	getSalesforceApiData: require('./lib/getSalesforceApiData')
 };
