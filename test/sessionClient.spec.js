@@ -35,45 +35,12 @@ describe('Session Client', () => {
 
 	describe('verify', () => {
 
-		it('Should get user login info for a valid session when kat2fa flag is off', done => {
-			nock(baseUrl)
-				.get(`/sessions/${uuids.validFTSessionSecure}`)
-				.reply(200, () => require('./mocks/fixtures/sessionVerify'));
-
-			sessionClient.verify(uuids.validFTSessionSecure)
-				.then(response => {
-					expect(response).to.be.an('object');
-					expectOwnProperties(response, ['uuid', 'creationTime', 'rememberMe']);
-					expect(response.uuid).to.equal(uuids.validUser);
-
-					done();
-				})
-				.catch(done);
-		});
-
-		it('Should throw a NotFoundError for an invalid session when kat2fa flag is off', done => {
-			nock(baseUrl)
-				.get(`/sessions/${uuids.invalidFTSession}`)
-				.reply(404, () => null);
-
-			sessionClient.verify(uuids.invalidFTSession)
-				.then(() => {
-					done(new Error('Nothing thrown'));
-				})
-				.catch(err => {
-					expect(err).to.be.an.instanceof(clientErrors.NotFoundError);
-
-					done();
-				});
-		});
-
-
-		it('Should get user login info for a valid secure session when kat2fa flag is on', () => {
+		it('Should get user login info for a valid secure session', () => {
 			nock(baseUrl)
 				.get(`/sessions/s/${uuids.validFTSessionSecure}`)
 				.reply(200, () => require('./mocks/fixtures/sessionVerify'));
 
-			return sessionClient.verify(uuids.validFTSessionSecure, { kat2fa: true })
+			return sessionClient.verify(uuids.validFTSessionSecure)
 				.then(response => {
 					expect(response).to.be.an('object');
 					expectOwnProperties(response, ['uuid', 'creationTime', 'rememberMe']);
@@ -81,12 +48,12 @@ describe('Session Client', () => {
 				});
 		});
 
-		it('Should throw a NotFoundError for an invalid session when kat2fa flag is on', done => {
+		it('Should throw a NotFoundError for an invalid session', done => {
 			nock(baseUrl)
 				.get(`/sessions/s/${uuids.invalidFTSession}`)
 				.reply(404, () => null);
 
-			sessionClient.verify(uuids.invalidFTSession, { kat2fa: true })
+			sessionClient.verify(uuids.invalidFTSession)
 				.then(() => {
 					done(new Error('Nothing thrown'));
 				})
