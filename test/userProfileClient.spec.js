@@ -7,10 +7,8 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
-const env = require('./helpers/env');
 const qs = require('querystring');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const mockAPI = env.USE_MOCK_API;
 const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/users`;
 
 describe('User Profile Service Client', () => {
@@ -26,9 +24,7 @@ describe('User Profile Service Client', () => {
 	});
 
 	after(done => {
-		if (mockAPI) {
-			nock.cleanAll();
-		}
+		nock.cleanAll();
 
 		logMessageStub.restore();
 
@@ -38,11 +34,9 @@ describe('User Profile Service Client', () => {
 	describe('getUUID', () => {
 
 		it('Should get an users UUID for a valid email address', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`?${qs.stringify({email: uuids.validUserEmail})}`)
-					.reply(200, () => require('./mocks/fixtures/userProfile'));
-			}
+			nock(baseUrl)
+				.get(`?${qs.stringify({email: uuids.validUserEmail})}`)
+				.reply(200, () => require('./mocks/fixtures/userProfile'));
 
 			userProfile.getUUID(uuids.validUserEmail)
 				.then(userProfile => {
@@ -55,11 +49,9 @@ describe('User Profile Service Client', () => {
 		});
 
 		it('Should get a null for an invalid email address', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`?${qs.stringify({email: uuids.invalidUserEmail})}`)
-					.reply(200, () => ({items: []}));
-			}
+			nock(baseUrl)
+				.get(`?${qs.stringify({email: uuids.invalidUserEmail})}`)
+				.reply(200, () => ({items: []}));
 
 			userProfile.getUUID(uuids.invalidUserEmail)
 				.then(userProfile => {
@@ -75,11 +67,9 @@ describe('User Profile Service Client', () => {
 	describe('exists', () => {
 
 		it('Should get true for a valid user id', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.head(`?${qs.stringify({id: uuids.validUser})}`)
-					.reply(200, () => null);
-			}
+			nock(baseUrl)
+				.head(`?${qs.stringify({id: uuids.validUser})}`)
+				.reply(200, () => null);
 
 			userProfile.exists(uuids.validUser)
 				.then(res => {
@@ -91,11 +81,9 @@ describe('User Profile Service Client', () => {
 		});
 
 		it('Should get false for an invalid user id', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.head(`?${qs.stringify({id: uuids.invalidUser})}`)
-					.reply(404, () => null);
-			}
+			nock(baseUrl)
+				.head(`?${qs.stringify({id: uuids.invalidUser})}`)
+				.reply(404, () => null);
 
 			userProfile.exists(uuids.invalidUser)
 				.then(res => {

@@ -8,9 +8,7 @@ const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const clientErrors = proxies.clientErrors;
-const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const mockAPI = env.USE_MOCK_API;
 const config = require('./../lib/helpers/config');
 const baseUrl = 'https://api.ft.com';
 
@@ -78,6 +76,8 @@ describe('Session Client', () => {
 					status: 200
 				}));
 
+			const mockAPI = true;
+
 			sessionClient.getAuthToken(uuids.validFTSessionSecure, scope, mockAPI)
 				.then(response => {
 					expect(response).to.be.an('string');
@@ -94,6 +94,8 @@ describe('Session Client', () => {
 					url: 'https://www.ft.com/#error=invalid_grant&error_description=Invalid%20FT%20user%20session.',
 					status: 200
 				}));
+
+			const mockAPI = true;
 
 			sessionClient.getAuthToken(uuids.invalidFTSessionSecure, scope, mockAPI)
 				.then(() => {
@@ -113,6 +115,8 @@ describe('Session Client', () => {
 					url: 'https://www.ft.com/#unexpected-error=invalid_grant&error_description=Invalid%20FT%20user%20session.',
 					status: 200
 				}));
+
+			const mockAPI = true;
 
 			sessionClient.getAuthToken(uuids.invalidFTSessionSecure, scope, mockAPI)
 				.then(() => {

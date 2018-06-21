@@ -8,8 +8,6 @@ const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const helpers = require('./../lib/helpers/helpers');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const env = require('./helpers/env');
-const mockAPI = env.USE_MOCK_API;
 const baseUrl = require('./../lib/helpers/config').FACETS_SEARCH_URL;
 
 describe('Facets API Client', () => {
@@ -25,9 +23,7 @@ describe('Facets API Client', () => {
 	});
 
 	after(done => {
-		if (mockAPI) {
-			nock.cleanAll();
-		}
+		nock.cleanAll();
 
 		logMessageStub.restore();
 
@@ -45,11 +41,9 @@ describe('Facets API Client', () => {
 				partial: queryString
 			};
 
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${helpers.createParams(params)}`)
-					.reply(200, () => []);
-			}
+			nock(baseUrl)
+				.get(`/${helpers.createParams(params)}`)
+				.reply(200, () => []);
 
 			facets.getTopics(params)
 				.then(res => {

@@ -6,12 +6,10 @@ const elasticSearch = proxies.elasticSearchClient;
 const uuids = require('./mocks/uuids');
 const expect = require("chai").expect;
 const sinon = require('sinon');
-//const nock = require('nock');
+const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-//const env = require('./helpers/env');
-//const mockAPI = env.USE_MOCK_API;
-//const baseUrl = require('./../lib/helpers/config').ELASTIC_SEARCH_URL;
+const baseUrl = require('./../lib/helpers/config').ELASTIC_SEARCH_URL;
 
 describe('Elastic Search Client', () => {
   let logMessageStub;
@@ -26,9 +24,7 @@ describe('Elastic Search Client', () => {
   });
 
   after(done => {
-    //if (mockAPI) {
-    //  nock.cleanAll();
-    //}
+    nock.cleanAll();
 
     logMessageStub.restore();
 
@@ -66,11 +62,9 @@ describe('Elastic Search Client', () => {
         body: JSON.stringify(reqBody)
       };
 
-      //if (mockAPI) {
-      //  nock(baseUrl)
-      //    .get(`test`)
-      //    .reply(200, () => []);
-      //}
+       nock(baseUrl)
+         .get(`test`)
+         .reply(200, () => []);
 
       elasticSearch.getTopicHeadlines(query)
         .then(res => {
@@ -90,11 +84,9 @@ describe('Elastic Search Client', () => {
         body: JSON.stringify(reqBody)
       };
 
-      //if (mockAPI) {
-      //  nock(baseUrl)
-      //    .get(`test`)
-      //    .reply(200, () => []);
-      //}
+      nock(baseUrl)
+        .get(`test`)
+        .reply(200, () => []);
 
       elasticSearch.getTopicHeadlines(query)
         .then(res => {

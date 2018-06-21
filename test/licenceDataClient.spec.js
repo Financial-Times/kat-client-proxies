@@ -7,9 +7,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
-const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const mockAPI = env.USE_MOCK_API;
 const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/licence-seat-holders`;
 
 describe('Licence Data Client', () => {
@@ -25,9 +23,7 @@ describe('Licence Data Client', () => {
 	});
 
 	after(done => {
-		if (mockAPI) {
-			nock.cleanAll();
-		}
+		nock.cleanAll();
 
 		logMessageStub.restore();
 
@@ -37,11 +33,9 @@ describe('Licence Data Client', () => {
 	describe('getFilteredUserList', () => {
 
 		it('Should get the seat holder list for a valid licence uuid and a valid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.validLicence}`)
-					.reply(200, () => require('./mocks/fixtures/licenceSeatHolders'));
-			}
+			nock(baseUrl)
+				.get(`/${uuids.validLicence}`)
+				.reply(200, () => require('./mocks/fixtures/licenceSeatHolders'));
 
 			ldc.getFilteredUserList(uuids.validLicence, uuids.validApiAuthToken)
 				.then(response => {
@@ -57,11 +51,9 @@ describe('Licence Data Client', () => {
 		});
 
 		it('Should thrown an Error for an invalid licence uuid and a valid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.invalidLicence}`)
-					.reply(401, () => null);
-			}
+			nock(baseUrl)
+				.get(`/${uuids.invalidLicence}`)
+				.reply(401, () => null);
 
 			ldc.getFilteredUserList(uuids.invalidLicence, uuids.validApiAuthToken)
 				.then(() => {
@@ -75,11 +67,9 @@ describe('Licence Data Client', () => {
 		});
 
 		it('Should thrown an Error for a valid licence uuid and an invalid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.validLicence}`)
-					.reply(401, () => null);
-			}
+			nock(baseUrl)
+				.get(`/${uuids.validLicence}`)
+				.reply(401, () => null);
 
 			ldc.getFilteredUserList(uuids.validLicence, uuids.invalidApiAuthToken)
 				.then(() => {
@@ -97,11 +87,9 @@ describe('Licence Data Client', () => {
 	describe('getAdminUserList', () => {
 
 		it('Should get the licence admin list for a valid licence uuid and a valid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.validLicence}/admins`)
-					.reply(200, () => require('./mocks/fixtures/licenceDataAdmins'));
-			}
+			nock(baseUrl)
+				.get(`/${uuids.validLicence}/admins`)
+				.reply(200, () => require('./mocks/fixtures/licenceDataAdmins'));
 
 			ldc.getAdminUserList(uuids.validLicence, uuids.validApiAuthToken)
 				.then(response => {
@@ -117,11 +105,9 @@ describe('Licence Data Client', () => {
 		});
 
 		it('Should thrown an Error for an invalid licence uuid and a valid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.invalidLicence}/admins`)
-					.reply(401, () => null);
-			}
+			nock(baseUrl)
+				.get(`/${uuids.invalidLicence}/admins`)
+				.reply(401, () => null);
 
 			ldc.getAdminUserList(uuids.invalidLicence, uuids.validApiAuthToken)
 				.then(() => {
@@ -135,11 +121,9 @@ describe('Licence Data Client', () => {
 		});
 
 		it('Should thrown an Error for a valid licence uuid and an invalid api auth token', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`/${uuids.validLicence}/admins`)
-					.reply(401, () => null);
-			}
+			nock(baseUrl)
+				.get(`/${uuids.validLicence}/admins`)
+				.reply(401, () => null);
 
 			ldc.getAdminUserList(uuids.validLicence, uuids.invalidApiAuthToken)
 				.then(() => {
@@ -156,11 +140,9 @@ describe('Licence Data Client', () => {
 
 	describe('removeUsers', () => {
 		it('Should be able to remove users from a licence', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.post(`/${uuids.validLicence}/remove`)
-					.reply(200, () => null);
-			}
+			nock(baseUrl)
+				.post(`/${uuids.validLicence}/remove`)
+				.reply(200, () => null);
 
 			ldc.removeUsers(uuids.validLicence, [uuids.validUser])
 				.then(response => {
