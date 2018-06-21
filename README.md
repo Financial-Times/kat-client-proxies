@@ -1,75 +1,145 @@
 # kat-client-proxies
-A library of client proxies for use with various APIs used by KAT.
+A library of helper client proxies for use with various APIs used by KAT.
 
 KAT (Knowledge & administration tools) is an ft.com application created for Financial Times B2B clients.
 
+**NOTE:** This component currently is configured to use Node 6 APIs and cannot be updated unless any consuming Lambdas are using >v6
+
 ## Getting started
-
-
-`$ git clone git@github.com:Financial-Times/kat-client-proxies.git`
 
 Standard next app `make` tasks apply:
 
-`make intall`
-`make .env`
-`make test`
+```
+$ git clone git@github.com:Financial-Times/kat-client-proxies.git
+$ cd kat-client-proxies
+$ make install
+$ make .env
+```
 
 Whenever you are adding a new client proxies, for maintenance don't forget to include it in the list in the end of this README.
 
-## Testing
-`$ npm test` will by default use the mocked APIs and associated fixtures. In some cases it is possible to test against the actual APIs by setting the following environment variables:
+### Tests
 
+Tests are run using
 ```
-USE_MOCK_API=false
-USER_UUID=
-LICENCE_UUID=
+$ make test
 ```
 
+Tests will, by default, mock APIs and associated fixtures. It is possible to test against the live APIs by setting the following environment variables:
+
+```
+export USE_MOCK_API=false
+export USER_UUID=<see-below>
+export LICENCE_UUID=<see-below>
+```
 Where `USER_UUID` is a valid user uuid on FT.com and `LICENCE_UUID` is the uuid of the licence associated with `USER_UUID`. Feel free to approach KAT team via `#ft-syndikat` slack channel if you have any questions.
 
 ## Deployment
 This module has been created to be included throughout other KAT components.
 
-### How to update a repo that uses the module to the new version
-If you want to update connected components with the latest version, you need to follow the following steps:
-1. Create a new repository release on GitHub. Please follow naming convention of previous releases.
-2. Go to `package.json` file of the component you want to update, and change `"kat-client-proxies"` dependency version to the [newly released one](https://github.com/Financial-Times/kat-client-proxies/releases).
+Releases of `kat-client-proxies` are made by creating a tagged release of the component following semver. This should trigger a tagged CI build which will deploy as an npm package.
 
-The following KAT components are currently using `kat-client-proxies`:
+The following KAT apps and components are currently using `kat-client-proxies`:
 - [kat-overview](https://github.com/Financial-Times/kat-overview)
+- [kat-users](https://github.com/Financial-Times/kat-users)
+- [kat-groups](https://github.com/Financial-Times/kat-groups)
 - [kat-myft](https://github.com/Financial-Times/kat-myft)
-- [kat-usage-report](https://github.com/Financial-Times/kat-usage-report)
-- [kat-myft-syncher] (https://github.com/Financial-Times/kat-myft-syncher)
-- [kat-api] (https://github.com/Financial-Times/kat-api)
-- [kmt-utilities] (https://github.com/Financial-Times/kmt-utilities)
+- [kat-usage](https://github.com/Financial-Times/kat-usage)
+- [kat-myft-syncher](https://github.com/Financial-Times/kat-myft-syncher)
+- [kat-api](https://github.com/Financial-Times/kat-api)
+- [kmt-utilities](https://github.com/Financial-Times/kmt-utilities)
 
-### How to use the module
+## Usage
 
-#### Installation guide
+### Installation guide
 
-Include `"kat-client-proxies": "financial-times/kat-client-proxies#v[LATEST_RELEASE_VERSION]"` as a dependency in your package.json. [Information about the latest version](https://github.com/Financial-Times/kat-client-proxies/releases).
-
-#### Usage
-
-In your application wherever you would like to use kat-client-proxies include the path to the code you want to use:
-
-```js
-//... your app code
-const [moduleName] = require('kat-client-proxies').[moduleName];
-// ... and then e.g.
-[moduleName].[functionName]([args...])
+`kat-client-proxies` is available as an npm module and can be installed using
+```
+$ npm install --save @financial-times/kat-client-proxies
 ```
 
-## Current proxies
-* accessLicenceClient
-* acquisitionCtxClient
-* clientErrors
-* elasticSearchClient
-* emailNotification
-* facetsClient
-* kinesisClient
-* licenceDataClient
-* myFTClient
-* sessionClient
-* syncUserFollows
-* userProfileClient
+### API
+
+#### `accessLicenceClient`
+```js
+const { accessLicenceClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `acquisitionCtxClient`
+```js
+const { acquisitionCtxClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `clientErrors`
+```js
+const { clientErrors } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `elasticSearchClient`
+```js
+const { elasticSearchClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `emailNotification`
+```js
+const { emailNotification } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `facetsClient`
+```js
+const { facetsClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `kinesisClient`
+```js
+const { kinesisClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `licenceDataClient`
+```js
+const { licenceDataClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `myFTClient`
+```js
+const { myFTClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `sessionClient`
+```js
+const { sessionClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `syncUserFollows`
+```js
+const { syncUserFollows } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
+
+#### `userProfileClient`
+```js
+const { userProfileClient } = require('@financial-times/kat-client-proxies');
+```
+
+🚧👷‍♀️👷🚧
