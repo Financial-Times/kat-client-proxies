@@ -16,16 +16,12 @@ Standard next app `make` tasks apply:
 
 Whenever you are adding a new client proxies, for maintenance don't forget to include it in the list in the end of this README.
 
-## Testing
-`$ npm test` will by default use the mocked APIs and associated fixtures. In some cases it is possible to test against the actual APIs by setting the following environment variables:
+### Tests
 
+Tests are run using
 ```
-USE_MOCK_API=false
-USER_UUID=
-LICENCE_UUID=
+$ make test
 ```
-
-Where `USER_UUID` is a valid user uuid on FT.com and `LICENCE_UUID` is the uuid of the licence associated with `USER_UUID`. Feel free to approach KAT team via `#ft-syndikat` slack channel if you have any questions.
 
 ## Deployment
 This module has been created to be included throughout other KAT components.
