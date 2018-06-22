@@ -79,7 +79,7 @@ Docs can be found [here](./docs/acquisitionCtxClient.md)
 const { clientErrors } = require('@financial-times/kat-client-proxies');
 ```
 
-🚧👷‍♀️👷🚧
+Docs can be found [here](./docs/clientErrors.md)
 
 #### `elasticSearchClient`
 ```js
