@@ -65,7 +65,7 @@ $ npm install --save @financial-times/kat-client-proxies
 const { accessLicenceClient } = require('@financial-times/kat-client-proxies');
 ```
 
-🚧👷‍♀️👷🚧
+Docs can be found [here](./docs/accessLicenceClient.md)
 
 #### `acquisitionCtxClient`
 ```js
