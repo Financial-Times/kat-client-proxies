@@ -5,7 +5,6 @@ require('dotenv').config({silent: true});
 const envVars = process.env;
 
 module.exports = {
-	USE_MOCK_API: envVars.KAT_USE_MOCK_API !== 'false' || envVars.USE_MOCK_API !== 'false',
 	USER_UUID: '00000000-0000-0000-0000-000000000003',
 	USER_EMAIL: envVars.KAT_USER_EMAIL || envVars.USER_EMAIL,
 	LICENCE_UUID: '00000000-0000-0000-0000-000000000001',

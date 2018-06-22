@@ -25,15 +25,6 @@ Tests are run using
 $ make test
 ```
 
-Tests will, by default, mock APIs and associated fixtures. It is possible to test against the live APIs by setting the following environment variables:
-
-```
-export USE_MOCK_API=false
-export USER_UUID=<see-below>
-export LICENCE_UUID=<see-below>
-```
-Where `USER_UUID` is a valid user uuid on FT.com and `LICENCE_UUID` is the uuid of the licence associated with `USER_UUID`. Feel free to approach KAT team via `#ft-syndikat` slack channel if you have any questions.
-
 ## Deployment
 This module has been created to be included throughout other KAT components.
 
