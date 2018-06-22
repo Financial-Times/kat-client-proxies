@@ -86,7 +86,7 @@ Docs can be found [here](./docs/clientErrors.md)
 const { elasticSearchClient } = require('@financial-times/kat-client-proxies');
 ```
 
-🚧👷‍♀️👷🚧
+Docs can be found [here](./docs/elasticSearchClient.md)
 
 #### `emailNotification`
 ```js
