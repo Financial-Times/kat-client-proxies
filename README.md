@@ -72,7 +72,7 @@ Docs can be found [here](./docs/accessLicenceClient.md)
 const { acquisitionCtxClient } = require('@financial-times/kat-client-proxies');
 ```
 
-🚧👷‍♀️👷🚧
+Docs can be found [here](./docs/acquisitionCtxClient.md)
 
 #### `clientErrors`
 ```js
