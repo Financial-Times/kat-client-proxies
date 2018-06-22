@@ -7,9 +7,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const nock = require('nock');
 const logger = require('@financial-times/n-logger').default;
-const env = require('./helpers/env');
 const expectOwnProperties = require('./helpers/expectExtensions').expectOwnProperties;
-const mockAPI = env.USE_MOCK_API;
 const baseUrl = `${require('./../lib/helpers/config').API_GATEWAY_HOST}/acquisition-contexts/v1`;
 
 describe('Acquisition Context Service Client', () => {
@@ -25,9 +23,7 @@ describe('Acquisition Context Service Client', () => {
 	});
 
 	after(done => {
-		if (mockAPI) {
 			nock.cleanAll();
-		}
 
 		logMessageStub.restore();
 
@@ -37,20 +33,16 @@ describe('Acquisition Context Service Client', () => {
 	describe('getContexts', () => {
 
 		it('Should get an Acquisition Context for a valid licence uuid', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`?access-licence-id=${uuids.validLicence}`)
-					.reply(200, () => require('./mocks/fixtures/acquisitionContext'));
-			}
+			nock(baseUrl)
+				.get(`?access-licence-id=${uuids.validLicence}`)
+				.reply(200, () => require('./mocks/fixtures/acquisitionContext'));
 
 			acqCtx.getContexts({'access-licence-id': uuids.validLicence})
 				.then(ctxList => {
 					expect(ctxList).to.be.an('object');
 					expectOwnProperties(ctxList, ['id', 'name', 'displayName', 'marketable', 'lastUpdated', 'signupContext', 'barrierContext']);
 
-					if (mockAPI) {
-						expect(Object.keys(ctxList).length).to.equal(10);
-					}
+					expect(Object.keys(ctxList).length).to.equal(10);
 
 					expect(ctxList.signupContext.accessLicenceId).to.equal(uuids.validLicence);
 
@@ -60,11 +52,9 @@ describe('Acquisition Context Service Client', () => {
 		});
 
 		it('Should get an empty Acquisition Context list for a invalid licence uuid', done => {
-			if (mockAPI) {
-				nock(baseUrl)
-					.get(`?access-licence-id=${uuids.invalidLicence}`)
-					.reply(200, () => ({items: []}));
-			}
+			nock(baseUrl)
+				.get(`?access-licence-id=${uuids.invalidLicence}`)
+				.reply(200, () => ({items: []}));
 
 			acqCtx.getContexts({'access-licence-id': uuids.invalidLicence})
 				.then(ctxList => {
