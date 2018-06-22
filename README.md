@@ -100,7 +100,7 @@ const { emailNotification } = require('@financial-times/kat-client-proxies');
 const { facetsClient } = require('@financial-times/kat-client-proxies');
 ```
 
-🚧👷‍♀️👷🚧
+Docs can be found [here](./docs/facetsClient.md)
 
 #### `kinesisClient`
 ```js
