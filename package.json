@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/Financial-Times/kat-client-proxies#readme",
   "devDependencies": {
-    "@financial-times/n-gage": "3.4.0",
+    "@financial-times/n-gage": "^3.6.0",
     "@financial-times/secret-squirrel": "^2.5.10",
     "chai": "^3.5.0",
     "eslint": "~3.7.1",
