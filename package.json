@@ -11,7 +11,8 @@
     "test": "make test",
     "precommit": "make verify && node_modules/.bin/secret-squirrel",
     "prepush": "make unit-test && make verify -j3",
-    "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg"
+    "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
+    "prepare": "npx snyk protect || npx snyk protect -d || true"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "nock": "^9.0.13",
     "npm-prepublish": "^1.2.3",
     "sinon": "^2.1.0",
+    "snyk": "^1.167.2",
     "uuid": "^3.0.1"
   },
   "dependencies": {
