@@ -1,4 +1,4 @@
-# kat-client-proxies
+# kat-client-proxies – ⚠️ this component is deprecated
 A library of client proxies for use with various APIs used by KAT.
 
 KAT (Knowledge & administration tools) is an ft.com application created for Financial Times B2B clients.
